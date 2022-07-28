@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { CContainer } from '@coreui/react-pro';
 
 import { useNavigate } from 'react-router-dom';
-import { cilPlus, cilSearch } from '@coreui/icons';
+import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { CButton, CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGroup, CInputGroupText, CLoadingButton, CRow } from '@coreui/react-pro'
+import { CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGroup, CInputGroupText, CLoadingButton, CRow } from '@coreui/react-pro'
 
 const Landing = () => {
   const navigate = useNavigate();

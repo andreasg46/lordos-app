@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from "prop-types";
 import CIcon from '@coreui/icons-react';
 import { cisCircle } from '@coreui/icons-pro';
+import { CCol } from '@coreui/react-pro';
 
 const GetStatus = session_status => {
-  console.log(session_status);
   switch (session_status) {
     case 'Active':
       return '#2eb85c'
@@ -20,7 +20,9 @@ const GetStatus = session_status => {
 export const AppHeaderInfo = ({ session_id, user_code, session_status }) => {
   return (
     <>
-      <p className='header-title'>Session ID: <strong>{session_id}</strong> | User Code: <strong>{user_code}</strong> | Status: <CIcon icon={cisCircle} style={{ color: GetStatus(session_status), border: '3px solid #babcbc', borderRadius: '50px' }} /></p>
+      <CCol className='header-info-col'>
+        <p className='header-title'>Session ID: <strong>{session_id}</strong> | User Code: <strong>{user_code}</strong> | Status: <CIcon icon={cisCircle} style={{ color: GetStatus(session_status), border: '3px solid #babcbc', borderRadius: '50px' }} /></p>
+      </CCol>
     </>
   )
 }

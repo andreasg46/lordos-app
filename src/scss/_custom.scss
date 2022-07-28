@@ -59,3 +59,35 @@
 .nav-icon {
   color: #014d4d !important;
 }
+
+.answer-button {
+  width: 100%;
+  padding: 12px !important;
+  margin: 10px 0;
+  background-color: #2c384af2 !important;
+}
+
+.submit-button {
+  padding: 20px;
+  margin: 10px;
+  float: right !important;
+  background-color: #198754 !important;
+}
+
+.header-title {
+  margin: 0 !important;
+}
+
+/* Mobile */
+@media only screen and (max-width: 602px) {
+  .header-info-col {
+    text-align: center;
+  }
+}
+
+/* Desktop */
+@media only screen and (min-width: 602px) {
+  .header-info-col {
+    text-align: end;
+  }
+}

@@ -1,17 +1,16 @@
 {
-  "name": "@coreui/coreui-pro-react-admin-template",
-  "version": "4.2.0",
-  "description": "CoreUI PRO React Admin Template",
+  "name": "lordos-app",
+  "version": "1.0.0",
+  "description": "Lordos Application for parental experimenting",
   "homepage": ".",
   "bugs": {
-    "url": "https://github.com/coreui/coreui-pro-react-admin-template/issues"
+    "url": "https://github.com/andreasg46/lordos-app"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:coreui/coreui-pro-react-admin-template.git"
+    "url": "git@github.com/andreasg46/lordos-app"
   },
-  "license": "SEE LICENSE IN LICENSE",
-  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  "author": "Andreas Georgiou",
   "scripts": {
     "build": "react-scripts build",
     "changelog": "auto-changelog --starting-version 4.2.0 --commit-limit false --hide-credit",

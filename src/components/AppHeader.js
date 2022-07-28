@@ -4,6 +4,7 @@ import {
   CCol,
   CContainer,
   CHeader,
+  CHeaderDivider,
   CImage,
 
 } from '@coreui/react-pro'
@@ -15,27 +16,30 @@ const AppHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <CHeader className="mb-4">
-      <CContainer fluid>
-        <CCol xs={3}>
-          <CImage src='logo.png' height={80} />
-        </CCol>
+    <>
+      <CHeader className="mb-4">
+        <CContainer fluid>
+          <CCol xs={3}>
+            <CImage src='logo.png' height={80} />
+          </CCol>
 
-        <CCol xs={9} style={{ textAlign: 'end' }}>
-          <div style={{ textAlign: 'end', padding: '0px' }}>
-            <AppHeaderInfo session_id='1' user_code='1003' session_status='Pending' />
-            <CButton color='success' variant='outline'
-              onClick={() => {
-                navigate('/landing');
-              }}
-            >Join new session</CButton>
-          </div>
+          <CCol xs={9} style={{ textAlign: 'end' }}>
+            <div style={{ textAlign: 'end', padding: '0px' }}>
+              <CButton color='success' variant='outline'
+                onClick={() => {
+                  navigate('/landing');
+                }}
+              >Join new session</CButton>
+            </div>
 
-        </CCol>
+          </CCol>
+        </CContainer>
+        <CHeaderDivider />
+        <AppHeaderInfo session_id='1' user_code='1003' session_status='Active' />
+        <CHeaderDivider />
+      </CHeader>
 
-      </CContainer>
-
-    </CHeader>
+    </>
   )
 }
 
