@@ -11,6 +11,7 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { AppHeaderInfo } from './header/AppHeaderInfo';
+import { getCookie } from 'src/views/application/components/Cookies';
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const AppHeader = () => {
           </CCol>
         </CContainer>
         <CHeaderDivider />
-        <AppHeaderInfo session_id='1' user_code='1003' session_status='Active' />
+        <AppHeaderInfo session_id={getCookie('session_id')} user_code={getCookie('code')} session_status={getCookie('status')} />
         <CHeaderDivider />
       </CHeader>
 

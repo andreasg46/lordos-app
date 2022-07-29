@@ -5,7 +5,6 @@ import {
   CCardBody,
   CCardFooter,
   CCardHeader,
-  CCardText,
   CCardTitle,
 } from '@coreui/react-pro'
 
