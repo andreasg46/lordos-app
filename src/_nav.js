@@ -12,6 +12,7 @@ import {
   cilGrid,
   cilHome,
   cilLayers,
+  cilList,
   cilLockLocked,
   cilMap,
   cilNotes,
@@ -49,6 +50,12 @@ const _nav = [
     name: 'Home',
     to: '/home',
     icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Questions',
+    to: '/questions',
+    icon: <CIcon icon={cilList} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,

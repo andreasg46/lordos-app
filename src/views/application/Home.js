@@ -1,28 +1,27 @@
 import React from 'react'
 import {
-  CButton,
   CCard,
-  CCardBody,
   CCardFooter,
-  CCardHeader,
-  CCardTitle,
 } from '@coreui/react-pro'
+import { CheckSession } from './functions/general'
+import { cilBell } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 
 const Home = () => {
+  CheckSession();
   return (
-    <CCard>
-      <CCardHeader>Question 1 <span className='float-end'><strong>1/10</strong></span></CCardHeader>
-      <CCardBody>
-        <CCardTitle>Who is CEO of Tesla?</CCardTitle>
-        <CButton className='answer-button'>Jeff Bezos</CButton>
-        <CButton className='answer-button'>Elon Musk</CButton>
-        <CButton className='answer-button'>Bill Gates</CButton>
-        <CButton className='answer-button'>Tony Stark</CButton>
-      </CCardBody>
-      <CCardFooter>
-        <CButton className='submit-button' href="#">Next</CButton>
-      </CCardFooter>
-    </CCard >
+    <>
+      <div className="center">
+        <div className='home-card'>
+          <CCard style={{ backgroundColor: 'rgba(0,0,0,0.5)', padding: '120px 20px' }}>
+            <h1 style={{ color: 'white' }}>Thank you for joining Lordos Application!</h1>
+            <CCardFooter style={{ padding: '10px 0px 0 0' }}>
+              <p style={{ color: 'white', padding: '0' }}>You will receive a push notification when a question is available <CIcon icon={cilBell} /></p>
+            </CCardFooter>
+          </CCard>
+        </div >
+      </div>
+    </>
   )
 }
 

@@ -33,6 +33,18 @@ export async function PostApi(url, object) {
   return data;
 }
 
+export async function PutApi(url, object) {
+  var data = "";
+
+  await axios.put(url, object).then(function (response) {
+    data = response.data;
+    return data;
+  }).catch(function (error) {
+    Alert(error.response.data.error, 'error');
+    console.log(error.response.data);
+  });
+  return data;
+}
 
 export async function DeleteApi(url) {
   var data = "";
