@@ -45,8 +45,9 @@ export function SendPushBySession(session_id, headings, subtitle, campaign, date
 
   let body = {
     session_id: session_id,
-    headings: headings,
-    subtitle: subtitle,
+    headings: { en: headings },
+    subtitle: { en: subtitle },
+    contents: { en: subtitle },
     campaign: campaign,
     datetime: datetime,
     topic: topic,
@@ -71,6 +72,7 @@ export function SendPushBySession(session_id, headings, subtitle, campaign, date
       external_id: '',
       headings: { en: headings },
       subtitle: { en: subtitle },
+      contents: { en: subtitle },
       name: campaign,
       web_push_topic: topic,
       url: click_url,

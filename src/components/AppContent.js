@@ -1,14 +1,15 @@
 import React, { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { CContainer, CSpinner } from '@coreui/react-pro'
+import { CContainer } from '@coreui/react-pro'
 
 // routes config
 import routes from '../routes'
+import { CLoadingPages } from 'src/views/application/components/CLoadingPages'
 
 const AppContent = () => {
   return (
     <CContainer lg>
-      <Suspense fallback={<CSpinner color="primary" />}>
+      <Suspense fallback={<CLoadingPages />}>
         <Routes>
           {routes.map((route, idx) => {
             return (

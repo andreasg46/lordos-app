@@ -8,20 +8,22 @@ import {
   CCardTitle,
 } from '@coreui/react-pro'
 
-export const CQuestion = () => {
+export const CQuestion = (props) => {
   return (
-    <CCard>
-      <CCardHeader>Question 1 <span className='float-end'><strong>1/10</strong></span></CCardHeader>
-      <CCardBody>
-        <CCardTitle>Who is CEO of Tesla?</CCardTitle>
-        <CButton className='answer-button'>Jeff Bezos</CButton>
-        <CButton className='answer-button'>Elon Musk</CButton>
-        <CButton className='answer-button'>Bill Gates</CButton>
-        <CButton className='answer-button'>Tony Stark</CButton>
-      </CCardBody>
-      <CCardFooter>
-        <CButton className='submit-button' href="#">Next</CButton>
-      </CCardFooter>
-    </CCard >
+    <>
+      <CCard>
+        <CCardHeader>Question {props.index}<span className='float-end'><strong>{props.index}/{props.total}</strong></span></CCardHeader>
+        <CCardBody>
+          <CCardTitle>{props.title}</CCardTitle>
+          <CButton className='answer-button'>Jeff Bezos</CButton>
+          <CButton className='answer-button'>Elon Musk</CButton>
+          <CButton className='answer-button'>Bill Gates</CButton>
+          <CButton className='answer-button'>Tony Stark</CButton>
+        </CCardBody>
+        <CCardFooter>
+          <CButton className='submit-button' href="#">Next</CButton>
+        </CCardFooter>
+      </CCard >
+    </>
   )
 }

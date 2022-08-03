@@ -3,12 +3,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import OneSignal from 'react-onesignal';
 import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
-const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
-)
+import { CLoadingPages } from './views/application/components/CLoadingPages';
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -28,7 +23,7 @@ const App = () => {
 
   return (
     <HashRouter>
-      <Suspense fallback={loading}>
+      <Suspense fallback={<CLoadingPages />}>
         <Routes>
           <Route exact path="/landing" name="Landing Page" element={<Landing />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />
