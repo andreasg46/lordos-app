@@ -14,6 +14,7 @@ import { AddTags } from '../application/Administrator/OneSignalServer';
 setCookie('session_id', '', 7);
 setCookie('code', '', 7);
 setCookie('status', '', 7);
+setCookie('is_admin', '', 7);
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -45,6 +46,8 @@ const Landing = () => {
         if (value) {
           Alert('Session found!', 'success')
           setCookie('session_id', value.id, 180);
+
+          setCookie('is_admin', (value.id === 1000) ? true : false, '7');
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true });
 
           AddTags(userId, value.id, code);

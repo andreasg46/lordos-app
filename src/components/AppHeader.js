@@ -5,13 +5,14 @@ import {
   CContainer,
   CHeader,
   CHeaderDivider,
-  CImage,
-
+  CImage
 } from '@coreui/react-pro'
 
 import { useNavigate } from 'react-router-dom';
 import { AppHeaderInfo } from './header/AppHeaderInfo';
 import { getCookie } from 'src/views/application/functions/cookies';
+import CIcon from '@coreui/icons-react';
+import { cilLockLocked } from '@coreui/icons';
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const AppHeader = () => {
             <CImage src='logo.png' height={80} />
           </CCol>
 
-          <CCol xs={9} style={{ textAlign: 'end' }}>
+          <CCol xs={7} style={{ textAlign: 'end' }}>
             <div style={{ textAlign: 'end', padding: '0px' }}>
               <CButton color='success' variant='outline'
                 onClick={() => {
@@ -32,12 +33,13 @@ const AppHeader = () => {
                 }}
               >Join new session</CButton>
             </div>
-
           </CCol>
+
         </CContainer>
-        <CHeaderDivider />
-        <AppHeaderInfo session_id={getCookie('session_id')} user_code={getCookie('code')} session_status={getCookie('status')} />
-        <CHeaderDivider />
+
+        <CCol style={{ display: getCookie('is_admin') === 'true' ? 'block' : 'none' }}><CIcon icon={cilLockLocked} size={'lg'} ></CIcon><strong>Admin Mode</strong></CCol>
+
+        <CHeaderDivider /><AppHeaderInfo session_id={getCookie('session_id')} user_code={getCookie('code')} session_status={getCookie('status')} /><CHeaderDivider />
       </CHeader>
 
     </>

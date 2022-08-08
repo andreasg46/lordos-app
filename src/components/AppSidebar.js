@@ -1,15 +1,15 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { CSidebar, CSidebarNav, CSidebarToggler } from '@coreui/react-pro'
-
 import { AppSidebarNav } from './AppSidebarNav'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
+import navigation_admin from '../_nav'
 import navigation from '../_nav'
+import { getCookie } from 'src/views/application/functions/cookies'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
