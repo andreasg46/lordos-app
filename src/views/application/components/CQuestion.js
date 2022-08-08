@@ -15,14 +15,13 @@ export const CQuestion = (props) => {
         <CCardHeader>Question {props.index}<span className='float-end'><strong>{props.index}/{props.total}</strong></span></CCardHeader>
         <CCardBody>
           <CCardTitle>{props.title}</CCardTitle>
-          <CButton className='answer-button'>Jeff Bezos</CButton>
-          <CButton className='answer-button'>Elon Musk</CButton>
-          <CButton className='answer-button'>Bill Gates</CButton>
-          <CButton className='answer-button'>Tony Stark</CButton>
+          {props.options.map((option, index) => {
+            return (<CButton key={index}
+              className='answer-button'
+              onClick={() => { props.submitAnswer(option) }}
+            >{option}</CButton>)
+          })}
         </CCardBody>
-        <CCardFooter>
-          <CButton className='submit-button' href="#">Next</CButton>
-        </CCardFooter>
       </CCard >
     </>
   )

@@ -11,7 +11,7 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 import { AppHeaderInfo } from './header/AppHeaderInfo';
-import { getCookie } from 'src/views/application/components/Cookies';
+import { getCookie } from 'src/views/application/functions/cookies';
 
 const AppHeader = () => {
   const navigate = useNavigate();

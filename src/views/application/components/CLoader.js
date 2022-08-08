@@ -1,24 +1,23 @@
 import React from 'react'
 import {
+  CCard,
   CCol,
-  CContainer,
-  CImage,
   CRow,
   CSpinner,
 } from '@coreui/react-pro'
 
-export const CLoadingPages = () => {
+export const CLoader = () => {
 
   return (
     <>
       <div className="center">
-        <div className='home-card'>
+        <CCard className='loader-card'>
           <CRow className="justify-content-center">
             <CCol md={12}>
-              <CSpinner variant='grow' color='dark' />
+              <CSpinner variant='grow' color='light' />
             </CCol>
           </CRow>
-        </div >
+        </CCard >
       </div>
     </>
   )

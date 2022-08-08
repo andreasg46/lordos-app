@@ -20,6 +20,8 @@ export async function GetDevices() {
 }
 
 export async function AddTags(userId, session_id, code) {
+  // Check if user exists
+
   const options = {
     method: 'PUT',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },

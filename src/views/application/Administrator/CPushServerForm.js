@@ -147,7 +147,7 @@ const CPushServerForm = () => {
                 </CRow>
               </CCardBody>
               <CCardFooter style={{ textAlign: 'end' }}>
-                <CButton type={"submit"}>Send Push <CIcon icon={cilSend} /></CButton>
+                <CButton type={"submit"} size='sm'>Send Push <CIcon icon={cilSend} /></CButton>
               </CCardFooter>
             </CCard>
           </CForm>

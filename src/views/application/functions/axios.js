@@ -1,7 +1,7 @@
 
 import axios from "axios";
 import { Alert } from "../components/Alerts";
-import { getCookie } from "../components/Cookies";
+import { getCookie } from "./cookies";
 
 
 export async function GetApi(url) {

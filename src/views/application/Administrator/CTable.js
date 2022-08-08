@@ -1,7 +1,7 @@
 import React from 'react'
 import { CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow, CSmartTable } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
-import { cilSend, cilTrash } from '@coreui/icons'
+import { cilNoteAdd, cilSend, cilTrash } from '@coreui/icons'
 import { DeleteApi } from '../functions/axios'
 import { api_server_url } from 'src/config/urls'
 
@@ -33,6 +33,7 @@ export const CTable = (props) => {
               />
             </CCardBody>
             <CCardFooter>
+
               <CButton
                 style={{ display: (props.resetData) ? 'block' : 'none' }}
                 size="sm"
@@ -45,11 +46,11 @@ export const CTable = (props) => {
               >Clear All <CIcon icon={cilTrash} /></CButton>
 
               <CButton
-                style={{ display: (props.sendPush) ? 'block' : 'none' }}
+                style={{ display: (props.postQuestion) ? 'block' : 'none' }}
                 size="sm"
-                color='warning'
+                color='success'
                 className='float-end'
-                onClick={() => props.sendPush()}>Send to all <CIcon icon={cilSend} /></CButton>
+                onClick={() => props.postQuestion()}>Create Question <CIcon icon={cilNoteAdd} /></CButton>
             </CCardFooter>
           </CCard>
         </CCol>

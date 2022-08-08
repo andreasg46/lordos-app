@@ -92,6 +92,14 @@
   }
 }
 
+.home-card {
+  background-image: url("../../public/loading.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 6px;
+  box-shadow: inset 0 0 5px grey;
+}
+
 .center {
   display: flex;
   justify-content: center;
@@ -99,10 +107,27 @@
   height: 67vh;
 }
 
-.home-card {
+.loader-card {
   background-image: url("../../public/loading.gif");
   background-repeat: no-repeat;
   background-size: cover;
-  border-radius: 6px;
-  box-shadow: inset 0 0 5px grey;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  padding: 34px;
+  border-radius: 70px;
+  animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

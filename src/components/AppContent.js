@@ -4,12 +4,12 @@ import { CContainer } from '@coreui/react-pro'
 
 // routes config
 import routes from '../routes'
-import { CLoadingPages } from 'src/views/application/components/CLoadingPages'
+import { CLoader } from 'src/views/application/components/CLoader'
 
 const AppContent = () => {
   return (
     <CContainer lg>
-      <Suspense fallback={<CLoadingPages />}>
+      <Suspense fallback={<CLoader />}>
         <Routes>
           {routes.map((route, idx) => {
             return (

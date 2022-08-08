@@ -7,7 +7,7 @@ import { CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGr
 import { GetApi, PutApi } from './functions/axios';
 import { api_server_url } from 'src/config/urls';
 import { Alert, Alert2 } from './components/Alerts';
-import { getCookie, setCookie } from './components/Cookies';
+import { getCookie, setCookie } from './functions/cookies';
 import OneSignal from 'react-onesignal';
 import { AddTags } from '../application/Administrator/OneSignalServer';
 
