@@ -1,5 +1,7 @@
 
+import { CSidebar } from '@coreui/react-pro';
 import React, { useEffect, useState } from 'react'
+import { AppSidebar } from 'src/components';
 import { api_server_url } from 'src/config/urls';
 import { GetApi } from '../functions/axios';
 import CPushServerForm from './CPushServerForm';
@@ -99,6 +101,7 @@ const Admin = () => {
 
   return (
     <>
+      <AppSidebar />
       <CPushServerForm />
       <CTable table_title='Sessions' data={sessions_data} columns={sessions_columns} loading={loading} />
       <CTable table_title='Users' data={users_data} columns={users_columns} loading={loading} delete_all_url={'/users/delete-all'} resetData={resetData} />

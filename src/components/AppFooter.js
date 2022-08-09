@@ -1,7 +1,12 @@
 import React from 'react'
-import { CFooter } from '@coreui/react-pro'
+import { CButton, CFooter } from '@coreui/react-pro'
+import { useNavigate } from 'react-router-dom';
+import { getCookie } from 'src/views/application/functions/cookies'
+import CIcon from '@coreui/icons-react'
+import { cilLockLocked } from '@coreui/icons'
 
 const AppFooter = () => {
+  const navigate = useNavigate();
   return (
     <CFooter>
       <div>
@@ -10,12 +15,14 @@ const AppFooter = () => {
         </a>
         <span className="ms-1">&copy; 2022 silversky3DLabs.</span>
       </div>
-      {/* <div className="ms-auto">
-        <span className="me-1">Powered by</span>
-        <a href="https://coreui.io/react" target="_blank" rel="noopener noreferrer">
-          CoreUI React Admin &amp; Dashboard Template
-        </a>
-      </div> */}
+      <div className='ms-1' style={{ display: getCookie('is_admin') === 'true' ? 'block' : 'none' }}>
+        <CButton variant='outline'
+          onClick={() => {
+            navigate('/admin')
+          }}>
+          <CIcon icon={cilLockLocked} size={'lg'} ></CIcon><strong>Administrator Settings</strong>
+        </CButton>
+      </div>
     </CFooter>
   )
 }

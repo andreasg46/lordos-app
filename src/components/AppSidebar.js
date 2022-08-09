@@ -7,9 +7,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
-import navigation_admin from '../_nav'
 import navigation from '../_nav'
-import { getCookie } from 'src/views/application/functions/cookies'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -19,7 +17,7 @@ const AppSidebar = () => {
   return (
     <CSidebar
       position="fixed"
-      unfoldable={!unfoldable}
+      unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
         dispatch({ type: 'set', sidebarShow: visible })
