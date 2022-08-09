@@ -1,8 +1,10 @@
 // If you want to override variables do it here
 @import "variables";
 
-$enable-ltr: true; /* stylelint-disable-line scss/dollar-variable-default */
-$enable-rtl: true; /* stylelint-disable-line scss/dollar-variable-default */
+$enable-ltr: true;
+/* stylelint-disable-line scss/dollar-variable-default */
+$enable-rtl: true;
+/* stylelint-disable-line scss/dollar-variable-default */
 
 // Import styles
 @import "@coreui/coreui-pro/scss/coreui";
@@ -12,9 +14,6 @@ $enable-rtl: true; /* stylelint-disable-line scss/dollar-variable-default */
 @import "@coreui/chartjs/scss/coreui-chartjs";
 
 @import "layout";
-
-// Plugins
-@import "calendar";
 
 // Prism.js
 @import "examples";

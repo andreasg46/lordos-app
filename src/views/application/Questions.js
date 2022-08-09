@@ -70,12 +70,14 @@ const Questions = () => {
 
   return (
     <>
-      <div style={loading ? { display: 'none' } : { display: 'block' }}  >
-        <CQuestion title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} />
-      </div>
+      <div className='center'>
+        <div style={loading ? { display: 'none' } : { display: 'block' }}  >
+          <CQuestion title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} />
+        </div>
 
-      <div style={loading ? { display: 'block' } : { display: 'none' }}  >
-        <CLoader />
+        <div style={loading ? { display: 'block' } : { display: 'none' }}  >
+          <CLoader />
+        </div>
       </div>
     </>
   )

@@ -27,8 +27,8 @@ export const AppHeaderInfo = ({ session_id, user_code, session_status }) => {
   )
 }
 
-AppHeaderInfo.propTypes = {
-  session_id: PropTypes.string.isRequired,
-  user_code: PropTypes.string.isRequired,
-  session_status: PropTypes.string
-};
+// AppHeaderInfo.propTypes = {
+//   session_id: PropTypes.string.isRequired,
+//   user_code: PropTypes.string.isRequired,
+//   session_status: PropTypes.string
+// };
