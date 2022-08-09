@@ -1,28 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CContainer } from '@coreui/react-pro';
 import { useNavigate } from 'react-router-dom';
 import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGroup, CInputGroupText, CLoadingButton, CRow } from '@coreui/react-pro'
-import { GetApi, PutApi } from './functions/axios';
+import { GetApi, PutApi } from '../services/Axios';
 import { api_server_url } from 'src/config/urls';
-import { Alert, Alert2 } from './components/Alerts';
-import { getCookie, setCookie } from './functions/cookies';
+import { Alert, Alert2 } from '../services/Alerts';
+import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTags } from '../application/Administrator/OneSignalServer';
-
-setCookie('session_id', '', 7);
-setCookie('code', '', 7);
-setCookie('status', '', 7);
-setCookie('is_admin', '', 7);
+import { AddTags } from '../services/OneSignalServer';
 
 const Landing = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    resetCookies();
+
+  }, []);
 
   const [userId, setUserId] = useState(''); // One Signal
 
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
+  const [role, setRole] = useState('');
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
 
@@ -45,9 +46,10 @@ const Landing = () => {
       .then(function (value) {
         if (value) {
           Alert('Session found!', 'success')
-          setCookie('session_id', value.id, 180);
 
+          setCookie('session_id', value.id, 180);
           setCookie('is_admin', (value.id === 1000) ? true : false, '7');
+
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true });
 
           AddTags(userId, value.id, code);
@@ -64,6 +66,28 @@ const Landing = () => {
           Alert2('Session not found!', 'error');
           setLoader(false);
         }
+      });
+  }
+
+  const findUser = (e) => { // Retrieve user session
+    e.preventDefault();
+
+    setLoader(true);
+
+    GetApi(api_server_url + '/user/' + code)
+      .then(function (value) {
+        if (value) {
+          GetApi(api_server_url + '/role/' + value.RoleId)
+            .then(function (value) {
+              if (value) {
+                console.log(value);
+                setCookie('role', value.title, 180);
+              } else {
+                setCookie('role', 'N/A', 180);
+              }
+            })
+        }
+        setLoader(false);
       });
   }
 
@@ -94,6 +118,7 @@ const Landing = () => {
   const handleSubmit = (e) => {
     setLoader(true);
     findSession(e);
+    findUser(e);
   }
 
   return (

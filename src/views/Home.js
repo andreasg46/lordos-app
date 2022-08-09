@@ -2,7 +2,7 @@ import React from 'react'
 import {
   CCard,
 } from '@coreui/react-pro'
-import { CheckSession } from './functions/general'
+import { CheckSession } from '../services/Auth'
 import { cilBell } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 

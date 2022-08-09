@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { CQuestion } from './components/CQuestion';
-import { CheckSession } from './functions/general'
+import { CheckSession } from '../services/Auth'
 import { api_server_url } from 'src/config/urls';
-import { GetApi, PostApi } from './functions/axios';
-import { CLoader } from './components/CLoader';
+import { GetApi, PostApi } from '../services/Axios';
 import { useNavigate } from 'react-router-dom';
-import { Alert } from './components/Alerts';
-import { getCookie } from './functions/cookies';
+import { Alert } from '../services/Alerts';
+import { getCookie } from '../services/Cookies';
+import { AppLoader } from 'src/components/app/AppLoader';
 
 const Questions = () => {
   CheckSession();
@@ -76,7 +76,7 @@ const Questions = () => {
         </div>
 
         <div style={loading ? { display: 'block' } : { display: 'none' }}  >
-          <CLoader />
+          <AppLoader />
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
-import AppContent from './AppContent'
-import AppFooter from './AppFooter'
-import AppHeader from './AppHeader'
-import AppSidebar from './AppSidebar'
+import AppContent from './app/AppContent'
+import AppFooter from './app/AppFooter'
+import AppHeader from './app/AppHeader'
+import AppSidebar from './app/AppSidebar'
 
 export {
   AppContent,

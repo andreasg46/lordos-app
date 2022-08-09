@@ -41,6 +41,7 @@ export async function AddTags(userId, session_id, code) {
 }
 
 export function SendPushBySession(session_id, headings, subtitle, campaign, datetime, topic, click_url) {
+  console.log(session_id);
   headings = (headings === '' ? 'Default Heading' : headings);
   subtitle = (subtitle === '' ? 'Default Subtitle' : subtitle);
   campaign = (campaign === '' ? 'Default Campaign' : campaign);

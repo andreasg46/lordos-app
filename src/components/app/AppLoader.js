@@ -6,7 +6,7 @@ import {
   CSpinner,
 } from '@coreui/react-pro'
 
-export const CLoader = () => {
+export const AppLoader = () => {
 
   return (
     <>

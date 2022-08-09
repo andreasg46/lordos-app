@@ -2,10 +2,10 @@ import React from 'react'
 import { CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow, CSmartTable } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import { cilNoteAdd, cilSend, cilTrash } from '@coreui/icons'
-import { DeleteApi } from '../functions/axios'
+import { DeleteApi } from '../../services/Axios'
 import { api_server_url } from 'src/config/urls'
 
-export const CTable = (props) => {
+export const AdminTable = (props) => {
 
   return (
     <>

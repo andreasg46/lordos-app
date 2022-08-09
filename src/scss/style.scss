@@ -8,15 +8,5 @@ $enable-rtl: true;
 
 // Import styles
 @import "@coreui/coreui-pro/scss/coreui";
-@import "@coreui/coreui-pro/scss/themes/dark";
-
-// Import Chart.js custom tooltips styles
-@import "@coreui/chartjs/scss/coreui-chartjs";
-
 @import "layout";
-
-// Prism.js
-@import "examples";
-
-// If you want to add custom CSS you can put it here.
 @import "custom";

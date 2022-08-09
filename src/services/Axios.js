@@ -1,7 +1,7 @@
 
 import axios from "axios";
-import { Alert } from "../components/Alerts";
-import { getCookie } from "./cookies";
+import { Alert } from "./Alerts";
+import { getCookie } from "./Cookies";
 
 
 export async function GetApi(url) {
@@ -18,7 +18,6 @@ export async function GetApi(url) {
   });
   return data;
 }
-
 
 export async function PostApi(url, object) {
   var data = "";

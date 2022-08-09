@@ -17,11 +17,11 @@ const GetStatus = session_status => {
   }
 }
 
-export const AppHeaderInfo = ({ session_id, user_code, session_status }) => {
+export const AppHeaderInfo = ({ session_id, user_code, user_role, session_status }) => {
   return (
     <>
       <CCol className='header-info-col'>
-        <p className='header-title'>Session ID: <strong>{session_id}</strong> | User Code: <strong>{user_code}</strong> | Status: <CIcon icon={cisCircle} style={{ color: GetStatus(session_status), border: '3px solid #babcbc', borderRadius: '50px' }} /></p>
+        <p className='header-title'>Session ID: <strong>{session_id}</strong> | User Code: <strong>{user_code}</strong> | Role: <strong>{user_role}</strong> | Status: <CIcon icon={cisCircle} style={{ color: GetStatus(session_status), border: '3px solid #babcbc', borderRadius: '50px' }} /></p>
       </CCol>
     </>
   )

@@ -21,3 +21,11 @@ export function setCookie(cname, cvalue, exdays) {
   let expires = "expires=" + d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
+
+export function resetCookies() {
+  setCookie('session_id', '', 7);
+  setCookie('code', '', 7);
+  setCookie('role', '', 7);
+  setCookie('status', '', 7);
+  setCookie('is_admin', '', 7);
+}

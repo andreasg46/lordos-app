@@ -1,14 +1,16 @@
 
-import { CSidebar } from '@coreui/react-pro';
 import React, { useEffect, useState } from 'react'
 import { AppSidebar } from 'src/components';
 import { api_server_url } from 'src/config/urls';
-import { GetApi } from '../functions/axios';
-import CPushServerForm from './CPushServerForm';
-import { CTable } from './CTable';
+import { GetApi } from '../services/Axios';
+import CPushServerForm from '../components/admin/AdminPushForm';
+import { AdminTable } from '../components/admin/AdminTable';
+import { CheckAdmin } from '../services/Auth';
 
 
 const Admin = () => {
+  CheckAdmin();
+
   const [loading, setLoading] = useState(false);
 
   const [sessions_data, setSessionsData] = useState([]);
@@ -103,10 +105,10 @@ const Admin = () => {
     <>
       <AppSidebar />
       <CPushServerForm />
-      <CTable table_title='Sessions' data={sessions_data} columns={sessions_columns} loading={loading} />
-      <CTable table_title='Users' data={users_data} columns={users_columns} loading={loading} delete_all_url={'/users/delete-all'} resetData={resetData} />
-      <CTable table_title='Roles' data={roles_data} columns={roles_columns} loading={loading} />
-      <CTable table_title='Questions' data={questions_data} columns={questions_columns} loading={loading} postQuestion={postQuestion} />
+      <AdminTable table_title='Sessions' data={sessions_data} columns={sessions_columns} loading={loading} />
+      <AdminTable table_title='Users' data={users_data} columns={users_columns} loading={loading} delete_all_url={'/users/delete-all'} resetData={resetData} />
+      <AdminTable table_title='Roles' data={roles_data} columns={roles_columns} loading={loading} />
+      <AdminTable table_title='Questions' data={questions_data} columns={questions_columns} loading={loading} postQuestion={postQuestion} />
     </>
 
   )

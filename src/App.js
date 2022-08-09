@@ -3,13 +3,13 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import OneSignal from 'react-onesignal';
 import './scss/style.scss'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { CLoader } from './views/application/components/CLoader';
+import { AppLoader } from './components/app/AppLoader';
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
-const Landing = React.lazy(() => import('./views/application/Landing'))
+const Landing = React.lazy(() => import('./views/Landing'))
 
 const App = () => {
   useEffect(() => {
@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <HashRouter>
-      <Suspense fallback={<CLoader />}>
+      <Suspense fallback={<AppLoader />}>
         <Routes>
           <Route exact path="/landing" name="Landing Page" element={<Landing />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />

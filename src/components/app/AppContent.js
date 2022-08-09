@@ -3,13 +3,13 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer } from '@coreui/react-pro'
 
 // routes config
-import routes from '../routes'
-import { CLoader } from 'src/views/application/components/CLoader'
+import routes from '../../routes'
+import { AppLoader } from './AppLoader'
 
 const AppContent = () => {
   return (
     <CContainer lg>
-      <Suspense fallback={<CLoader />}>
+      <Suspense fallback={<AppLoader />}>
         <Routes>
           {routes.map((route, idx) => {
             return (

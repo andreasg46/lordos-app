@@ -8,12 +8,12 @@ import {
   CSmartTable,
   CCol,
   CRow,
-  CForm, CFormLabel, CFormSelect, CFormInput, CFormTextarea
+  CForm, CFormLabel, CFormSelect, CFormInput
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react';
 import { cilSend } from '@coreui/icons';
-import { today, currentTime } from '../helpers';
-import { GetDevices, SendPushBySession } from './OneSignalServer';
+import { today, currentTime } from '../../helpers';
+import { GetDevices, SendPushBySession } from '../../services/OneSignalServer';
 
 const devices_columns = [
   { key: 'id', label: 'Player ID', _props: { color: 'info' } },
@@ -25,7 +25,7 @@ const devices_columns = [
   { key: 'invalid_identifier', label: 'Subscribed', _props: { color: 'info' } },
 ];
 
-const CPushServerForm = () => {
+const AdminPushForm = () => {
   const [devicesData, setDevicesData] = useState([]);
 
   const [selectedSession, setSelectedSession] = useState('');
@@ -37,7 +37,7 @@ const CPushServerForm = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [deliveryTime, setDeliveryTime] = useState(currentTime);
-  const [clickUrl, setClickUrl] = useState('http://localhost:5000/questions');
+  const [clickUrl, setClickUrl] = useState('http://localhost:5000/#/questions');
 
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const CPushServerForm = () => {
                   </CCol>
                   <CCol md={4}>
                     <CFormLabel htmlFor="inputState">Click URL</CFormLabel>
-                    <CFormInput placeholder="http://localhost:5000/questions" aria-label="URL" value={clickUrl}
+                    <CFormInput placeholder="http://localhost:5000/#/questions" aria-label="URL" value={clickUrl}
                       onChange={(e) => setClickUrl(e.target.value)} />
                   </CCol>
                 </CRow>
@@ -157,4 +157,4 @@ const CPushServerForm = () => {
   )
 }
 
-export default CPushServerForm
+export default AdminPushForm

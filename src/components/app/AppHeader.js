@@ -9,7 +9,7 @@ import {
 } from '@coreui/react-pro'
 import { useNavigate } from 'react-router-dom';
 import { AppHeaderInfo } from './header/AppHeaderInfo';
-import { getCookie } from 'src/views/application/functions/cookies';
+import { getCookie } from 'src/services/Cookies';
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const AppHeader = () => {
             </div>
           </CCol>
         </CContainer>
-        <CHeaderDivider /><AppHeaderInfo session_id={getCookie('session_id')} user_code={getCookie('code')} session_status={getCookie('status')} /><CHeaderDivider />
+        <CHeaderDivider /><AppHeaderInfo session_id={getCookie('session_id')} user_code={getCookie('code')} user_role={getCookie('role')} session_status={getCookie('status')} /><CHeaderDivider />
       </CHeader>
 
     </>
