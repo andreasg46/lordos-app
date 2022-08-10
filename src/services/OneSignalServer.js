@@ -20,8 +20,6 @@ export async function GetDevices() {
 }
 
 export async function AddTags(userId, session_id, code) {
-  // Check if user exists
-
   const options = {
     method: 'PUT',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
@@ -40,12 +38,10 @@ export async function AddTags(userId, session_id, code) {
     .catch(err => console.error(err));
 }
 
-export async function AddTagsWithExternalUserId(externalUserId, session_id, code) {
-  // Check if user exists
-
+export async function AddTagsWithExternalUserId(userId, session_id, code) {
   const options = {
     method: 'PUT',
-    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    headers: { Accept: 'text/plain', 'Content-Type': 'application/json' },
     body: JSON.stringify({
       app_id: `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`,
       tags: {
@@ -55,7 +51,7 @@ export async function AddTagsWithExternalUserId(externalUserId, session_id, code
     })
   };
 
-  fetch('https://onesignal.com/api/v1/apps/' + `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}` + '/users/' + externalUserId, options)
+  fetch('https://onesignal.com/api/v1/apps/'.concat(`${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`).concat('/users/').concat(userId), options)
     .then(response => response.json())
     .then(response => console.log(response))
     .catch(err => console.error(err));
@@ -110,6 +106,43 @@ export function SendPushBySession(session_id, headings, subtitle, campaign, date
       response.errors ? console.log(response.errors) : console.log("Push Notification Send!");
     })
     .catch(err => console.error(err));
+}
+
+export function SendSMSBySession(session_id, subtitle, click_url) {
+  let body = {
+    session_id: session_id,
+    subtitle: { en: subtitle },
+    contents: { en: subtitle },
+    url: click_url,
+  }
+
+  console.log(body);
+
+  const options = {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      Authorization: 'Basic '.concat(process.env.REACT_APP_ONE_SIGNAL_API_KEY),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      app_id: `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`,
+      name: "Identifier for SMS Message",
+      sms_from: "+12763257952",
+      contents: { en: subtitle },
+      sms_media_urls: [click_url],
+      filters: [{ "field": "tag", "key": "session_id", "relation": "=", "value": session_id }],
+    })
+  };
+
+  fetch('https://onesignal.com/api/v1/notifications', options)
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+      response.errors ? console.log(response.errors) : console.log("SMS Notification Send!");
+    })
+    .catch(err => console.error(err));
+  //sendNotification(body);
 }
 
 export async function DeleteDevice(playerId) {

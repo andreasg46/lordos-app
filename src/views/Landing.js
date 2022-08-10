@@ -9,7 +9,7 @@ import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTags, AddTagsWithExternalUserId, SendPushBySession } from '../services/OneSignalServer';
+import { AddTags, AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
 import { currentTime, today } from 'src/helpers';
 
 const Landing = () => {
@@ -18,8 +18,6 @@ const Landing = () => {
   useEffect(() => {
     resetCookies();
   }, []);
-
-  const [userId, setUserId] = useState(''); // One Signal uuid
 
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
@@ -34,23 +32,23 @@ const Landing = () => {
   const findSession = async (e) => { // Retrieve user session
     e.preventDefault();
 
-    OneSignal.setExternalUserId(code);
+    await OneSignal.setExternalUserId(code);
 
     setLoader(true);
 
     GetApi(api_server_url + '/session/user/' + code)
       .then(function (value) {
         if (value) {
-          Alert('Session found!', 'success')
+          Alert('Session found!', 'success');
 
           setCookie('session_id', value.id, 180);
           setCookie('is_admin', (value.id === 1000) ? true : false, '180');
 
-          PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true });
+          PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true }); // Update session status
 
-          AddTagsWithExternalUserId(userId, value.id, code);
+          AddTagsWithExternalUserId(code, value.id, code); // Add tags on Push Server
 
-          GetApi(api_server_url + '/session/' + value.id) // Get all sessions and do the checks
+          GetApi(api_server_url + '/session/' + value.id) // Check if other members have joined
             .then(function (value) {
               if (value) {
                 setButtonText('Waiting for others to join...'); // Wait for others to join
@@ -76,7 +74,6 @@ const Landing = () => {
           GetApi(api_server_url + '/role/' + value.RoleId)
             .then(function (value) {
               if (value) {
-                console.log(value);
                 setCookie('role', value.title, 180);
               } else {
                 setCookie('role', 'N/A', 180);
@@ -117,13 +114,13 @@ const Landing = () => {
 
               let test = new Date();
 
-              // for (let i = 0; i < 2; i++) {
+              for (let i = 0; i < 2; i++) {
 
-              //   // Test Campaign
-              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-              //   test.setMinutes(test.getMinutes() + 2);
-              //   console.log(test);
-              // }
+                // Test Campaign
+                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+                SendSMSBySession(getCookie('session_id'), subtitle, clickUrl.concat('?phase=').concat('A'))
+                test.setMinutes(test.getMinutes() + 2);
+              }
 
               // for (let i = 0; i < total_days; i++) {
               //   const [next] = tomorrow.toISOString().split('T');
@@ -189,7 +186,6 @@ const Landing = () => {
                           onChange={handleInput}
                         />
                       </CInputGroup>
-                      <div className='onesignal-customlink-container'></div>
                       <CRow>
                         <CCol style={{ textAlign: 'end', margin: '20px 0 0 0' }}>
                           <CLoadingButton
