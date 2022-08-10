@@ -17,7 +17,7 @@ const App = () => {
       appId: "569117be-390c-4e5b-b865-f7522b09dcf2",
       allowLocalhostAsSecureOrigin: true
     });
-    OneSignal.showSlidedownPrompt();
+    // OneSignal.showSlidedownPrompt();
   }, []);
 
 
