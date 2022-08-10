@@ -9,7 +9,7 @@ import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTags, SendPushBySession } from '../services/OneSignalServer';
+import { AddTags, AddTagsWithExternalUserId, SendPushBySession } from '../services/OneSignalServer';
 import { currentTime, today } from 'src/helpers';
 
 const Landing = () => {
@@ -19,7 +19,7 @@ const Landing = () => {
     resetCookies();
   }, []);
 
-  const [userId, setUserId] = useState(''); // One Signal
+  const [userId, setUserId] = useState(''); // One Signal uuid
 
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
@@ -31,12 +31,10 @@ const Landing = () => {
   var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
   end_date = new Date(end_date);
 
-  OneSignal.getUserId(function (userId) {
-    setUserId(userId);
-  });
-
-  const findSession = (e) => { // Retrieve user session
+  const findSession = async (e) => { // Retrieve user session
     e.preventDefault();
+
+    OneSignal.setExternalUserId(code);
 
     setLoader(true);
 
@@ -50,7 +48,7 @@ const Landing = () => {
 
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true });
 
-          AddTags(userId, value.id, code);
+          AddTagsWithExternalUserId(userId, value.id, code);
 
           GetApi(api_server_url + '/session/' + value.id) // Get all sessions and do the checks
             .then(function (value) {
@@ -119,13 +117,13 @@ const Landing = () => {
 
               let test = new Date();
 
-              for (let i = 0; i < 2; i++) {
+              // for (let i = 0; i < 2; i++) {
 
-                // Test Campaign
-                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                test.setMinutes(test.getMinutes() + 2);
-                console.log(test);
-              }
+              //   // Test Campaign
+              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+              //   test.setMinutes(test.getMinutes() + 2);
+              //   console.log(test);
+              // }
 
               // for (let i = 0; i < total_days; i++) {
               //   const [next] = tomorrow.toISOString().split('T');
@@ -191,6 +189,7 @@ const Landing = () => {
                           onChange={handleInput}
                         />
                       </CInputGroup>
+                      <div className='onesignal-customlink-container'></div>
                       <CRow>
                         <CCol style={{ textAlign: 'end', margin: '20px 0 0 0' }}>
                           <CLoadingButton

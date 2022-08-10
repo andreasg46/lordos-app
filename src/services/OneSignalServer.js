@@ -40,6 +40,27 @@ export async function AddTags(userId, session_id, code) {
     .catch(err => console.error(err));
 }
 
+export async function AddTagsWithExternalUserId(externalUserId, session_id, code) {
+  // Check if user exists
+
+  const options = {
+    method: 'PUT',
+    headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      app_id: `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`,
+      tags: {
+        session_id: session_id,
+        code: code
+      }
+    })
+  };
+
+  fetch('https://onesignal.com/api/v1/apps/' + `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}` + '/users/' + externalUserId, options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+}
+
 export function SendPushBySession(session_id, headings, subtitle, campaign, datetime, topic, click_url) {
   headings = (headings === '' ? 'Default Heading' : headings);
   subtitle = (subtitle === '' ? 'Default Subtitle' : subtitle);
