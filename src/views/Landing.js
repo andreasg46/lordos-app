@@ -5,7 +5,7 @@ import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGroup, CInputGroupText, CLoadingButton, CRow } from '@coreui/react-pro'
 import { GetApi, PutApi } from '../services/Axios';
-import { api_server_url } from 'src/config/urls';
+import { api_server_url, url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
@@ -105,7 +105,7 @@ const Landing = () => {
               const subtitle = 'Questions are now available!';
               const campaign = 'Default Campaign';
               const topic = 'Default Topic';
-              const clickUrl = 'http://localhost:5000/#/questions';
+              const clickUrl = url.concat('/#/questions');
 
               const startDate = today;
               const tomorrow = new Date(startDate);
