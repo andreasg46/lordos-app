@@ -14,7 +14,7 @@ import CIcon from '@coreui/icons-react';
 import { cilSend } from '@coreui/icons';
 import { today, currentTime } from '../../helpers';
 import { GetDevices, SendPushBySession } from '../../services/OneSignalServer';
-import { url } from 'src/config/urls';
+import { app_url } from 'src/config/urls';
 
 const devices_columns = [
   { key: 'id', label: 'Player ID', _props: { color: 'info' } },
@@ -38,7 +38,7 @@ const AdminPushForm = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [deliveryTime, setDeliveryTime] = useState(currentTime);
-  const [clickUrl, setClickUrl] = useState(url.concat('/#/questions'));
+  const [clickUrl, setClickUrl] = useState(app_url.concat('/#/questions'));
 
 
   useEffect(() => {
@@ -142,7 +142,7 @@ const AdminPushForm = () => {
                   </CCol>
                   <CCol md={4}>
                     <CFormLabel htmlFor="inputState">Click URL</CFormLabel>
-                    <CFormInput placeholder={url.concat("/#/questions")} aria-label="URL" value={clickUrl}
+                    <CFormInput placeholder={app_url.concat("/#/questions")} aria-label="URL" value={clickUrl}
                       onChange={(e) => setClickUrl(e.target.value)} />
                   </CCol>
                 </CRow>
