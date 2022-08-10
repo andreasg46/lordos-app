@@ -9,24 +9,22 @@ import { api_server_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTags } from '../services/OneSignalServer';
+import { AddTags, SendPushBySession } from '../services/OneSignalServer';
+import { currentTime, today } from 'src/helpers';
 
 const Landing = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     resetCookies();
-
   }, []);
 
   const [userId, setUserId] = useState(''); // One Signal
 
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
-  const [role, setRole] = useState('');
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
-
 
   var day = new Date();
   var start_date = day.toLocaleString();
@@ -48,7 +46,7 @@ const Landing = () => {
           Alert('Session found!', 'success')
 
           setCookie('session_id', value.id, 180);
-          setCookie('is_admin', (value.id === 1000) ? true : false, '7');
+          setCookie('is_admin', (value.id === 1000) ? true : false, '180');
 
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true });
 
@@ -101,6 +99,47 @@ const Landing = () => {
               setCookie('status', 'Active', 180);
               setLoader(false);
               Alert2('Session established!', 'success');
+
+              // Start Push Server Campaign
+              const headings = 'Knock Knock!'
+              const subtitle = 'Questions are now available!';
+              const campaign = 'Default Campaign';
+              const topic = 'Default Topic';
+              const clickUrl = 'http://localhost:5000/#/questions';
+
+              const startDate = today;
+              const tomorrow = new Date(startDate);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+
+              const total_days = 7;
+
+              const deliveryTimeA = '09:00';
+              const deliveryTimeB = '14:00';
+              const deliveryTimeC = '18:00';
+
+              let test = new Date();
+
+              for (let i = 0; i < 2; i++) {
+
+                // Test Campaign
+                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+                test.setMinutes(test.getMinutes() + 2);
+                console.log(test);
+              }
+
+              // for (let i = 0; i < total_days; i++) {
+              //   const [next] = tomorrow.toISOString().split('T');
+
+              //   // Phase A Campaign
+              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('&phase=').concat('A'));
+              //   // Phase B Campaign
+              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('&phase=').concat('A'));
+              //   // Phase C Campaign
+              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('&phase=').concat('A'));
+
+              //   tomorrow.setDate(tomorrow.getDate() + 1)
+              // }
+
               setLoader(false);
               navigate('/');
               clearInterval(interval);

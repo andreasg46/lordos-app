@@ -41,7 +41,6 @@ export async function AddTags(userId, session_id, code) {
 }
 
 export function SendPushBySession(session_id, headings, subtitle, campaign, datetime, topic, click_url) {
-  console.log(session_id);
   headings = (headings === '' ? 'Default Heading' : headings);
   subtitle = (subtitle === '' ? 'Default Subtitle' : subtitle);
   campaign = (campaign === '' ? 'Default Campaign' : campaign);
@@ -55,7 +54,7 @@ export function SendPushBySession(session_id, headings, subtitle, campaign, date
     datetime: datetime,
     topic: topic,
     url: click_url,
-    // send_after: datetime
+    send_after: datetime
   }
 
   console.log(body);
@@ -87,7 +86,7 @@ export function SendPushBySession(session_id, headings, subtitle, campaign, date
     .then(response => response.json())
     .then(response => {
       console.log(response);
-      response.errors ? alert(response.errors) : alert("Push Notification Send!");
+      response.errors ? console.log(response.errors) : console.log("Push Notification Send!");
     })
     .catch(err => console.error(err));
 }
