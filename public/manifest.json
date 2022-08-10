@@ -3,7 +3,7 @@
   "name": "Lordos Mobile Application",
   "icons": [
     {
-      "src": "./assets/images/favicon.png",
+      "src": "./favicon.png",
       "sizes": "200x200",
       "type": "image/png"
     }
