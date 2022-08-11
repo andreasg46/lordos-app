@@ -32,7 +32,7 @@ const Landing = () => {
   const findSession = async (e) => { // Retrieve user session
     e.preventDefault();
 
-    await OneSignal.setExternalUserId(code);
+    // await OneSignal.setExternalUserId(code);
 
     setLoader(true);
 
@@ -46,7 +46,7 @@ const Landing = () => {
 
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true }); // Update session status
 
-          AddTagsWithExternalUserId(code, value.id, code); // Add tags on Push Server
+          // AddTagsWithExternalUserId(code, value.id, code); // Add tags on Push Server
 
           GetApi(api_server_url + '/session/' + value.id) // Check if other members have joined
             .then(function (value) {
@@ -120,8 +120,8 @@ const Landing = () => {
 
                 test.setMinutes(test.getMinutes() + 1);
                 // Test Campaign
-                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
+                // SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+                // SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
               }
 
               // for (let i = 0; i < total_days; i++) {
