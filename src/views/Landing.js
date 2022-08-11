@@ -9,7 +9,7 @@ import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTags, AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
+import { AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
 import { currentTime, today } from 'src/helpers';
 
 const Landing = () => {
@@ -42,7 +42,7 @@ const Landing = () => {
           Alert('Session found!', 'success');
 
           setCookie('session_id', value.id, 180);
-          setCookie('is_admin', (value.id === 1000) ? true : false, '180');
+          setCookie('is_admin', (value.id === 9000) ? true : false, '180');
 
           PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true }); // Update session status
 
@@ -102,6 +102,8 @@ const Landing = () => {
               const topic = 'Default Topic';
               const clickUrl = app_url.concat('/#/questions');
 
+              const smsContent = 'Questions available!';
+
               const startDate = today;
               const tomorrow = new Date(startDate);
               tomorrow.setDate(tomorrow.getDate() + 1);
@@ -118,8 +120,9 @@ const Landing = () => {
 
                 // Test Campaign
                 SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                SendSMSBySession(getCookie('session_id'), subtitle, clickUrl.concat('?phase=').concat('A'))
+                SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
                 test.setMinutes(test.getMinutes() + 2);
+
               }
 
               // for (let i = 0; i < total_days; i++) {

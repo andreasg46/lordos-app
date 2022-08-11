@@ -38,16 +38,14 @@ const AdminPushForm = () => {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today);
   const [deliveryTime, setDeliveryTime] = useState(currentTime);
-  const [clickUrl, setClickUrl] = useState(app_url.concat('/#/questions'));
+  const [clickUrl, setClickUrl] = useState(app_url.concat('/#/questions?phase=A'));
 
 
   useEffect(() => {
-    Promise.resolve(
-      GetDevices()
-        .then(function (value) {
-          setDevicesData(value.players);
-        }),
-    );
+    GetDevices()
+      .then(function (value) {
+        setDevicesData(value);
+      })
   }, []);
 
 
@@ -142,7 +140,7 @@ const AdminPushForm = () => {
                   </CCol>
                   <CCol md={4}>
                     <CFormLabel htmlFor="inputState">Click URL</CFormLabel>
-                    <CFormInput placeholder={app_url.concat("/#/questions")} aria-label="URL" value={clickUrl}
+                    <CFormInput placeholder={app_url.concat("/#/questions?phase=A")} aria-label="URL" value={clickUrl}
                       onChange={(e) => setClickUrl(e.target.value)} />
                   </CCol>
                 </CRow>
