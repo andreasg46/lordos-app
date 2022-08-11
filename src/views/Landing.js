@@ -120,8 +120,8 @@ const Landing = () => {
 
                 test.setMinutes(test.getMinutes() + 1);
                 // Test Campaign
-                // SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                // SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
+                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+                SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
               }
 
               // for (let i = 0; i < total_days; i++) {
