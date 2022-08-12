@@ -111,7 +111,7 @@ const Landing = () => {
                         //===== CASE 2 =====// Session Found 
                         else if (session_id) { // (iPhone User)
 
-                          if (isIOS) {
+                          if (session_id) {
                             swalQueue.fire({
                               title: "What's your phone number?",
                               input: "text",
@@ -228,8 +228,11 @@ const Landing = () => {
 
                 test.setMinutes(test.getMinutes() + 1);
                 // Test Campaign
-                SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                SendSMSBySession(getCookie('session_id'), smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
+                if (isIOS) {
+                  SendSMSBySession(code, smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
+                } else {
+                  SendPushBySession(code, headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+                }
               }
 
               // for (let i = 0; i < total_days; i++) {
