@@ -218,15 +218,18 @@ const Landing = () => {
               // TODO fix test
               const total_days = 1;
 
-              const deliveryTimeA = '15:30';
-              const deliveryTimeB = '15:40';
-              const deliveryTimeC = '15:50';
 
-              // let test = new Date();
+              let test = new Date();
+
+              const deliveryTimeA = '15:40';
+              const deliveryTimeB = '15:43';
+              const deliveryTimeC = '15:48';
+
+
 
               // for (let i = 0; i < 1; i++) {
 
-              //   test.setMinutes(test.getMinutes() + 1);
+
               //   // Test Campaign
               //   if (isIOS) {
               //     SendSMSBySession(code, smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
@@ -237,9 +240,9 @@ const Landing = () => {
 
               // Welcome Message
               if (isIOS) {
-                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), '');
+                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), clickUrl);
               } else {
-                SendWebPushByCode(code, headings, subtitle, campaign, new Date(), topic, ''); // Phase A Campaign
+                SendWebPushByCode(code, headings, subtitle, campaign, new Date(), topic, clickUrl); // Phase A Campaign
               }
 
               for (let i = 0; i < total_days; i++) {
@@ -252,7 +255,7 @@ const Landing = () => {
                 } else {
                   SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
                   SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
                 }
                 tomorrow.setDate(tomorrow.getDate() + 1)
               }
