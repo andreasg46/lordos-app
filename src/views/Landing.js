@@ -218,9 +218,9 @@ const Landing = () => {
               // TODO fix test
               const total_days = 1;
 
-              const deliveryTimeA = '15:00';
-              const deliveryTimeB = '15:05';
-              const deliveryTimeC = '15:15';
+              const deliveryTimeA = '15:30';
+              const deliveryTimeB = '15:40';
+              const deliveryTimeC = '15:50';
 
               // let test = new Date();
 
