@@ -91,9 +91,7 @@ const Landing = () => {
 
                         session_id = value.id || '';
                         setCookie('session_id', session_id, 180);
-                        setCookie('status', value.status || '', 180);
                         setCookie('is_admin', (session_id === 9000) ? true : false, 180);
-
 
                         //===== CASE 1 =====// Session not found
                         if (session_id === '') {
@@ -143,7 +141,6 @@ const Landing = () => {
                             })
                           }
 
-
                           else { // (Not iPhone User)
                             swalQueue.fire({
                               title: "Please subscribe to the push notification service before joining the session...",
@@ -176,19 +173,16 @@ const Landing = () => {
     if (!isIOS) {
       console.log(OneSignal.getUserId());
       OneSignal.getUserId(function (userId) {
-        AddTags(userId, session_id, code);
-      });
+        AddTags(userId, session_id, code).then(() => {
 
-    }
-
-    GetApi(api_server_url + '/session/' + session_id) // Check if other members have joined
-      .then(function (value) {
-        if (value) {
           setButtonText('Waiting for others to join...'); // Wait for others to join
           setButtonStatus(true);
-          openListener();
-        }
-      })
+
+          openListener(); // Wait for others to join
+
+        });
+      });
+    }
   }
 
   function openListener() { // Check if all users are activated and update db
@@ -200,6 +194,7 @@ const Landing = () => {
               PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: start_date, end_date: end_date, status: 'Active' });
               setCookie('status', 'Active', 180);
               setLoader(false);
+
               Alert2('Session established!', 'success');
 
               // Start Push Server Campaign
@@ -221,28 +216,18 @@ const Landing = () => {
 
               let test = new Date();
 
-              const deliveryTimeA = '15:40';
-              const deliveryTimeB = '15:43';
-              const deliveryTimeC = '15:48';
+              const deliveryTimeA = '16:10';
+              const deliveryTimeB = '16:13';
+              const deliveryTimeC = '16:16';
 
 
+              // SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
 
-              // for (let i = 0; i < 1; i++) {
-
-
-              //   // Test Campaign
-              //   if (isIOS) {
-              //     SendSMSBySession(code, smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
-              //   } else {
-              //     SendPushBySession(code, headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-              //   }
-              // }
-
-              // Welcome Message
+              //Welcome Message
               if (isIOS) {
-                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), clickUrl);
+                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), app_url);
               } else {
-                SendWebPushByCode(code, headings, subtitle, campaign, new Date(), topic, clickUrl); // Phase A Campaign
+                SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, app_url);
               }
 
               for (let i = 0; i < total_days; i++) {
