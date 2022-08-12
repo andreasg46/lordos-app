@@ -9,81 +9,187 @@ import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
+import { AddDevice, AddTags, AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
 import { currentTime, getMobileOperatingSystem, today } from 'src/helpers';
+import Swal from 'sweetalert2';
+import { findRole, findSession, findUser } from 'src/services/APIs';
 
 const Landing = () => {
   const navigate = useNavigate();
 
+
+  const [isIOS, setIOS] = useState(getMobileOperatingSystem() === 'iOS' ? true : false);
+  const [phoneNumber, setPhoneNumber] = useState('');
+
   useEffect(() => {
+    if (!getCookie('session_id')) { WelcomeAlert(); }
+
     resetCookies();
   }, []);
 
   const [loader, setLoader] = useState(false);
-  const [code, setCode] = useState('');
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
+
+  let code = '';
+  let session_id = '';
 
   var day = new Date();
   var start_date = day.toLocaleString();
   var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
   end_date = new Date(end_date);
 
-  getMobileOperatingSystem();
 
-  const findSession = async (e) => { // Retrieve user session
-    e.preventDefault();
+  const WelcomeAlert = async () => {
 
-    // await OneSignal.setExternalUserId(code);
+    Swal.fire({
+      title: 'Welcome',
+      text: 'to Lordos App',
+      imageUrl: 'logo-2.png',
+      imageWidth: 80,
+      imageAlt: 'Lordos App',
+      showConfirmButton: true,
+      confirmButtonText: "Proceed",
+      confirmButtonColor: '#198754',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        EnterCode();
+      }
+    })
 
-    setLoader(true);
+    const EnterCode = async () => {
+      const swalQueue = Swal.mixin({
+        confirmButtonText: 'Next',
+        confirmButtonColor: '#198754',
+        allowOutsideClick: false,
+      })
 
-    GetApi(api_server_url + '/session/user/' + code)
-      .then(function (value) {
-        if (value) {
-          Alert('Session found!', 'success');
+      await swalQueue.fire({
+        title: "What's your code?",
+        input: "text",
+        inputPlaceholder: 'Enter your code...',
+        currentProgressStep: 0,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
+          } else {
+            code = value;
 
-          setCookie('session_id', value.id, 180);
-          setCookie('is_admin', (value.id === 9000) ? true : false, '180');
+            findUser(code) // Step 1  => Get User Info
+              .then(value => {
+                console.log(value);
+                setCookie('code', code, 180);
 
-          PutApi(api_server_url + '/session/update/' + value.id + '/' + code, { activated: true }); // Update session status
+                findRole(value.RoleId) // Step 2  => Get Role Info
+                  .then(value => {
+                    console.log(value);
+                    setCookie('role', value.title, 180);
 
-          // AddTagsWithExternalUserId(code, value.id, code); // Add tags on Push Server
+                    findSession(code) // Step 3  => Get Session Info
+                      .then(value => {
+                        console.log(value);
 
-          GetApi(api_server_url + '/session/' + value.id) // Check if other members have joined
-            .then(function (value) {
-              if (value) {
-                setButtonText('Waiting for others to join...'); // Wait for others to join
-                setButtonStatus(true);
-                openListener();
-              }
-            })
-        } else {
-          Alert2('Session not found!', 'error');
-          setLoader(false);
+                        session_id = value.id || '';
+                        setCookie('session_id', session_id, 180);
+                        setCookie('status', value.status || '', 180);
+                        setCookie('is_admin', (session_id === 9000) ? true : false, 180);
+
+
+                        //===== CASE 1 =====// Session not found
+                        if (session_id === '') {
+                          swalQueue.fire({
+                            title: "Session not found please try again!",
+                            currentProgressStep: 1,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              WelcomeAlert();
+                            }
+                          })
+                        }
+
+                        //===== CASE 2 =====// Session Found 
+                        else if (session_id) { // (iPhone User)
+
+                          if (isIOS) {
+                            swalQueue.fire({
+                              title: "What's your phone number?",
+                              input: "text",
+                              inputPlaceholder: 'Use your country`s prefix +357********',
+                              currentProgressStep: 1,
+                              inputValidator: (value) => {
+
+                                if (!value) {
+                                  return 'You need to write something!'
+                                }
+                                else {
+                                  AddDevice(14, value, session_id, code).then(value => {
+                                    if (value.response !== '') {
+                                      Alert(value.response.message, 'success')
+                                      console.log(value);
+                                    } else {
+                                      swalQueue.fire({
+                                        title: "Oops. Something went wrong. Probably Identifier invalid format. Please try again!",
+                                        currentProgressStep: 1,
+                                      }).then((result) => {
+                                        if (result.isConfirmed) {
+                                          WelcomeAlert();
+                                        }
+                                      })
+                                    }
+                                  }
+                                  );
+                                }
+                              }
+                            })
+                          }
+
+
+                          else { // (Not iPhone User)
+                            swalQueue.fire({
+                              title: "Please subscribe to the push notification service before joining the session...",
+                              currentProgressStep: 1,
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                OneSignal.showSlidedownPrompt();
+                              }
+                            })
+                          }
+
+                        }
+
+                      });
+                  });
+              })
+          }
         }
-      });
+      })
+    }
   }
 
-  const findUser = (e) => { // Retrieve user session
+  const joinSession = async (e) => { // Retrieve user session
     e.preventDefault();
 
     setLoader(true);
 
-    GetApi(api_server_url + '/user/' + code)
+    PutApi(api_server_url + '/session/update/' + session_id + '/' + code, { activated: true }); // Update session status
+
+    if (!isIOS) {
+      console.log(OneSignal.getUserId());
+      OneSignal.getUserId(function (userId) {
+        AddTags(userId, session_id, code);
+      });
+
+    }
+
+    GetApi(api_server_url + '/session/' + session_id) // Check if other members have joined
       .then(function (value) {
         if (value) {
-          GetApi(api_server_url + '/role/' + value.RoleId)
-            .then(function (value) {
-              if (value) {
-                setCookie('role', value.title, 180);
-              } else {
-                setCookie('role', 'N/A', 180);
-              }
-            })
+          setButtonText('Waiting for others to join...'); // Wait for others to join
+          setButtonStatus(true);
+          openListener();
         }
-        setLoader(false);
-      });
+      })
   }
 
   function openListener() { // Check if all users are activated and update db
@@ -148,15 +254,9 @@ const Landing = () => {
     }, 4000);
   }
 
-  const handleInput = (e) => {
-    setCookie('code', e.target.value.toUpperCase(), 180);
-    setCode(e.target.value.toUpperCase());
-  }
-
   const handleSubmit = (e) => {
     setLoader(true);
-    findSession(e);
-    findUser(e);
+    joinSession(e);
   }
 
   return (
@@ -181,8 +281,7 @@ const Landing = () => {
                     <br className='landing-card' ></br>
                     <CForm onSubmit={handleSubmit}>
                       <h4>Welcome to Lordos App</h4>
-                      <p style={{ color: '#c4c9d0' }}>Get your session</p>
-                      <CInputGroup className="mb-3">
+                      {/* <CInputGroup className="mb-3">
                         <CInputGroupText>
                           Code
                         </CInputGroupText>
@@ -190,6 +289,14 @@ const Landing = () => {
                           onChange={handleInput}
                         />
                       </CInputGroup>
+                      <CInputGroup className="mb-3">
+                        <CInputGroupText>
+                          Phone Number
+                        </CInputGroupText>
+                        <CFormInput placeholder="Enter your phone number"
+                          onChange={(e) => { setPhoneNumber(e.target.value.toUpperCase()) }}
+                        />
+                      </CInputGroup> */}
                       <CRow>
                         <CCol style={{ textAlign: 'end', margin: '20px 0 0 0' }}>
                           <CLoadingButton

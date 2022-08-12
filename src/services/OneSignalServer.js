@@ -1,4 +1,3 @@
-import axios from "axios";
 import { api_server_url } from "src/config/urls";
 import { GetApi, PostApi } from "./Axios";
 
@@ -33,24 +32,15 @@ export async function SendSMSBySession(session_id, subtitle, datetime, click_url
     });
 }
 
-export async function GetDevices() {
-  let data = '';
-  await GetApi(api_server_url + '/devices')
-    .then(function (value) {
-      data = value.body.players;
-    });
-  return data;
-}
-
 export async function AddTags(userId, session_id, code) {
   const options = {
     method: 'PUT',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify({
       app_id: `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`,
+      external_user_id: code,
       tags: {
         session_id: session_id,
-        code: code
       }
     })
   };
@@ -61,22 +51,19 @@ export async function AddTags(userId, session_id, code) {
     .catch(err => console.error(err));
 }
 
-export async function AddTagsWithExternalUserId(userId, session_id, code) {
-  const options = {
-    method: 'PUT',
-    headers: { Accept: 'text/plain', 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      app_id: `${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`,
-      tags: {
-        session_id: session_id,
-        code: code
-      }
-    })
-  };
+export async function GetDevices() {
+  let data = '';
+  await GetApi(api_server_url + '/devices')
+    .then(function (value) {
+      data = value.body.players;
+    });
+  return data;
+}
 
-  fetch('https://onesignal.com/api/v1/apps/'.concat(`${process.env.REACT_APP_ONE_SIGNAL_APP_ID}`).concat('/users/').concat(userId), options)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
+export async function AddDevice(device_type, identifier, session_id, external_user_id) {
+  const response = await PostApi(api_server_url + '/device', { device_type, identifier, session_id, external_user_id })
+    .then(value => value)
+
+  return { response };
 }
 
