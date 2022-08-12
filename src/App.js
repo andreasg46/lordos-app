@@ -9,6 +9,7 @@ import { AppLoader } from './components/app/AppLoader';
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
+const Setup = React.lazy(() => import('./views/Setup'))
 const Landing = React.lazy(() => import('./views/Landing'))
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
     <HashRouter>
       <Suspense fallback={<AppLoader />}>
         <Routes>
+          <Route exact path="/setup" name="Setup" element={<Setup />} />
           <Route exact path="/landing" name="Landing Page" element={<Landing />} />
           <Route path="*" name="Home" element={<DefaultLayout />} />
         </Routes>

@@ -10,7 +10,7 @@ import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
 import { AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
-import { currentTime, today } from 'src/helpers';
+import { currentTime, getMobileOperatingSystem, today } from 'src/helpers';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -28,6 +28,8 @@ const Landing = () => {
   var start_date = day.toLocaleString();
   var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
   end_date = new Date(end_date);
+
+  getMobileOperatingSystem();
 
   const findSession = async (e) => { // Retrieve user session
     e.preventDefault();
