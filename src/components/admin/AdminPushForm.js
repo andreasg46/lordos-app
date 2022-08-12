@@ -13,7 +13,7 @@ import {
 import CIcon from '@coreui/icons-react';
 import { cilSend } from '@coreui/icons';
 import { today, currentTime } from '../../helpers';
-import { GetDevices, SendPushBySession } from '../../services/OneSignalServer';
+import { GetDevices, SendWebPushByCode } from '../../services/OneSignalServer';
 import { app_url } from 'src/config/urls';
 
 const devices_columns = [
@@ -52,7 +52,7 @@ const AdminPushForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    SendPushBySession(selectedSession, headings, subtitle, campaign, new Date(startDate + ', ' + deliveryTime), topic, clickUrl)
+    SendWebPushByCode(selectedSession, headings, subtitle, campaign, new Date(startDate + ', ' + deliveryTime), topic, clickUrl)
   }
 
   return (

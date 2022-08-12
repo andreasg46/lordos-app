@@ -21,7 +21,7 @@ const AppHeader = () => {
           <CCol xs={3}>
             <CImage src='logo.png' height={80}
               onClick={() => {
-                navigate('/home');
+                navigate('/');
               }} />
           </CCol>
 
@@ -29,7 +29,8 @@ const AppHeader = () => {
             <div style={{ textAlign: 'end', padding: '0px' }}>
               <CButton color='success' variant='outline'
                 onClick={() => {
-                  navigate('/landing');
+                  // navigate('/landing');
+                  window.location.assign('/#/landing')
                 }}
               >Join new session</CButton>
             </div>

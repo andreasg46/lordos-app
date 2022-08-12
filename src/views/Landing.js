@@ -9,7 +9,7 @@ import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import OneSignal from 'react-onesignal';
-import { AddDevice, AddTags, AddTagsWithExternalUserId, SendPushBySession, SendSMSBySession } from '../services/OneSignalServer';
+import { AddDevice, AddTags, AddTagsWithExternalUserId, SendWebPushByCode, SendSMSByCode } from '../services/OneSignalServer';
 import { currentTime, getMobileOperatingSystem, today } from 'src/helpers';
 import Swal from 'sweetalert2';
 import { findRole, findSession, findUser } from 'src/services/APIs';
@@ -22,9 +22,8 @@ const Landing = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   useEffect(() => {
-    if (!getCookie('session_id')) { WelcomeAlert(); }
-
     resetCookies();
+    if (!getCookie('session_id')) { WelcomeAlert(); }
   }, []);
 
   const [loader, setLoader] = useState(false);
@@ -216,37 +215,47 @@ const Landing = () => {
               const tomorrow = new Date(startDate);
               tomorrow.setDate(tomorrow.getDate() + 1);
 
-              const total_days = 7;
+              // TODO fix test
+              const total_days = 1;
 
-              const deliveryTimeA = '09:00';
-              const deliveryTimeB = '14:00';
-              const deliveryTimeC = '18:00';
+              const deliveryTimeA = '15:00';
+              const deliveryTimeB = '15:05';
+              const deliveryTimeC = '15:15';
 
-              let test = new Date();
+              // let test = new Date();
 
-              for (let i = 0; i < 1; i++) {
+              // for (let i = 0; i < 1; i++) {
 
-                test.setMinutes(test.getMinutes() + 1);
-                // Test Campaign
-                if (isIOS) {
-                  SendSMSBySession(code, smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
-                } else {
-                  SendPushBySession(code, headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
-                }
+              //   test.setMinutes(test.getMinutes() + 1);
+              //   // Test Campaign
+              //   if (isIOS) {
+              //     SendSMSBySession(code, smsContent, new Date(test), clickUrl.concat('?phase=').concat('A'));
+              //   } else {
+              //     SendPushBySession(code, headings, subtitle, campaign, new Date(test), topic, clickUrl.concat('?phase=').concat('A'));
+              //   }
+              // }
+
+              // Welcome Message
+              if (isIOS) {
+                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), '');
+              } else {
+                SendWebPushByCode(code, headings, subtitle, campaign, new Date(), topic, ''); // Phase A Campaign
               }
 
-              // for (let i = 0; i < total_days; i++) {
-              //   const [next] = tomorrow.toISOString().split('T');
+              for (let i = 0; i < total_days; i++) {
+                const [next] = tomorrow.toISOString().split('T');
 
-              //   // Phase A Campaign
-              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('&phase=').concat('A'));
-              //   // Phase B Campaign
-              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('&phase=').concat('A'));
-              //   // Phase C Campaign
-              //   SendPushBySession(getCookie('session_id'), headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('&phase=').concat('A'));
-
-              //   tomorrow.setDate(tomorrow.getDate() + 1)
-              // }
+                if (isIOS) {
+                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+                } else {
+                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+                }
+                tomorrow.setDate(tomorrow.getDate() + 1)
+              }
 
               setLoader(false);
               navigate('/');

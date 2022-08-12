@@ -1,7 +1,7 @@
 import { api_server_url } from "src/config/urls";
 import { GetApi, PostApi } from "./Axios";
 
-export async function SendPushBySession(code, headings, subtitle, campaign, datetime, topic, click_url) {
+export async function SendWebPushByCode(code, headings, subtitle, campaign, datetime, topic, click_url) {
   console.log("Sending Web Push...");
   let body = {
     code: code,
@@ -18,7 +18,7 @@ export async function SendPushBySession(code, headings, subtitle, campaign, date
     });
 }
 
-export async function SendSMSBySession(code, subtitle, datetime, click_url) {
+export async function SendSMSByCode(code, subtitle, datetime, click_url) {
   console.log("Sending SMS Push...");
   let body = {
     code: code,
