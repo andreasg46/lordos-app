@@ -12,8 +12,8 @@ export async function GetApi(url) {
     return data;
   }).catch(function (error) {
     if (getCookie('session_id') !== '') {
-      Alert(error.response.data.error, 'error');
-      console.log(error.response.data);
+      Alert(error, 'error');
+      console.log(error);
     }
   });
   return data;
@@ -26,8 +26,8 @@ export async function PostApi(url, object) {
     data = response.data;
     return data;
   }).catch(function (error) {
-    Alert(error.response.data.error, 'error');
-    console.log(error.response.data);
+    Alert(error, 'error');
+    console.log(error);
   });
   return data;
 }
@@ -39,8 +39,8 @@ export async function PutApi(url, object) {
     data = response.data;
     return data;
   }).catch(function (error) {
-    Alert(error.response.data.error, 'error');
-    console.log(error.response.data);
+    Alert(error, 'error');
+    console.log(error);
   });
   return data;
 }
@@ -58,8 +58,8 @@ export async function DeleteApi(url) {
 
       return data;
     }).catch(function (error) {
-      Alert(error.response.data.error, 'error');
-      console.log(error.response.data);
+      Alert(error, 'error');
+      console.log(error);
     });
   }
   return data;

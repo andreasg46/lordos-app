@@ -17,9 +17,8 @@ import { findRole, findSession, findUser } from 'src/services/APIs';
 const Landing = () => {
   const navigate = useNavigate();
 
-
   const [isIOS, setIOS] = useState(getMobileOperatingSystem() === 'iOS' ? true : false);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [userReady, setUserReady] = useState(false);
 
   useEffect(() => {
     resetCookies();
@@ -31,7 +30,10 @@ const Landing = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
 
   let code = '';
+  const [codeS, setCodeS] = useState('');
+
   let session_id = '';
+  const [sessionS, setSessionS] = useState('');
 
   var day = new Date();
   var start_date = day.toLocaleString();
@@ -74,6 +76,7 @@ const Landing = () => {
             return 'You need to write something!'
           } else {
             code = value;
+            setCodeS(value);
 
             findUser(code) // Step 1  => Get User Info
               .then(value => {
@@ -90,6 +93,8 @@ const Landing = () => {
                         console.log(value);
 
                         session_id = value.id || '';
+                        setSessionS(value.id || '');
+
                         setCookie('session_id', session_id, 180);
                         setCookie('is_admin', (session_id === 9000) ? true : false, 180);
 
@@ -111,8 +116,8 @@ const Landing = () => {
                           if (isIOS) {
                             swalQueue.fire({
                               title: "What's your phone number?",
-                              input: "text",
-                              inputPlaceholder: 'Use your country`s prefix +357********',
+                              input: "number",
+                              inputPlaceholder: '99123456',
                               currentProgressStep: 1,
                               inputValidator: (value) => {
 
@@ -120,9 +125,10 @@ const Landing = () => {
                                   return 'You need to write something!'
                                 }
                                 else {
-                                  AddDevice(14, value, session_id, code).then(value => {
+                                  AddDevice(14, '+357' + value, session_id, code).then(value => {
                                     if (value.response !== '') {
                                       Alert(value.response.message, 'success')
+                                      setUserReady(true);
                                       console.log(value);
                                     } else {
                                       swalQueue.fire({
@@ -148,6 +154,7 @@ const Landing = () => {
                             }).then((result) => {
                               if (result.isConfirmed) {
                                 OneSignal.showSlidedownPrompt();
+                                setUserReady(true);
                               }
                             })
                           }
@@ -167,22 +174,29 @@ const Landing = () => {
     e.preventDefault();
 
     setLoader(true);
+    PutApi(api_server_url + '/session/update/' + sessionS + '/' + codeS, { activated: true }) // Update session status
+      .then(() => {
+        if (!isIOS) {
+          console.log(OneSignal.getUserId());
+          OneSignal.getUserId(function (userId) {
+            AddTags(userId, session_id, code).then(() => {
+              setButtonText('Waiting for others to join...'); // Wait for others to join
+              setButtonStatus(true);
+              openListener(); // Wait for others to join
 
-    PutApi(api_server_url + '/session/update/' + session_id + '/' + code, { activated: true }); // Update session status
-
-    if (!isIOS) {
-      console.log(OneSignal.getUserId());
-      OneSignal.getUserId(function (userId) {
-        AddTags(userId, session_id, code).then(() => {
-
-          setButtonText('Waiting for others to join...'); // Wait for others to join
+            });
+          });
+        }
+        if (isIOS) {
+          setButtonText('Waiting for others to join i...'); // Wait for others to join
           setButtonStatus(true);
-
           openListener(); // Wait for others to join
-
-        });
+        }
+      }).catch(error => {
+        alert(error);
       });
-    }
+
+
   }
 
   function openListener() { // Check if all users are activated and update db
@@ -216,12 +230,12 @@ const Landing = () => {
 
               let test = new Date();
 
-              const deliveryTimeA = '16:10';
-              const deliveryTimeB = '16:13';
-              const deliveryTimeC = '16:16';
+              const deliveryTimeA = '20:55';
+              const deliveryTimeB = '21:05';
+              const deliveryTimeC = '21:10';
 
 
-              // SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
+              SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
 
               //Welcome Message
               if (isIOS) {
@@ -270,7 +284,7 @@ const Landing = () => {
                 <CRow style={{ verticalAlign: 'baseline' }} >
                   <CCard className='landing-card-lg' style={{ writingMode: 'vertical-rl', background: '#014d4d' }}>
                     <CCardBody className="text-center" >
-                      <CImage src='logo.png' style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                      <CImage src='logo.png' style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
                     </CCardBody>
                   </CCard>
                 </CRow>
@@ -281,24 +295,12 @@ const Landing = () => {
                     <br className='landing-card' ></br>
                     <CForm onSubmit={handleSubmit}>
                       <h4>Welcome to Lordos App</h4>
-                      {/* <CInputGroup className="mb-3">
-                        <CInputGroupText>
-                          Code
-                        </CInputGroupText>
-                        <CFormInput placeholder="Enter your code"
-                          onChange={handleInput}
-                        />
-                      </CInputGroup>
-                      <CInputGroup className="mb-3">
-                        <CInputGroupText>
-                          Phone Number
-                        </CInputGroupText>
-                        <CFormInput placeholder="Enter your phone number"
-                          onChange={(e) => { setPhoneNumber(e.target.value.toUpperCase()) }}
-                        />
-                      </CInputGroup> */}
+                      <br />
+                      <br />
+                      <br />
+                      <br />
                       <CRow>
-                        <CCol style={{ textAlign: 'end', margin: '20px 0 0 0' }}>
+                        <CCol style={{ textAlign: 'end', margin: '20px 0 0 0', display: userReady ? 'block' : 'none' }}>
                           <CLoadingButton
                             color='success'
                             spinnerType='grow'
