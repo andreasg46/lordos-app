@@ -230,19 +230,19 @@ const Landing = () => {
 
               let test = new Date();
 
-              const deliveryTimeA = '20:55';
-              const deliveryTimeB = '21:05';
-              const deliveryTimeC = '21:10';
+              const deliveryTimeA = '21:10';
+              const deliveryTimeB = '21:13';
+              const deliveryTimeC = '21:16';
 
 
               SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
 
               //Welcome Message
-              if (isIOS) {
-                SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), app_url);
-              } else {
-                SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, app_url);
-              }
+              // if (isIOS) {
+              //   SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), app_url);
+              // } else {
+              //   SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, app_url);
+              // }
 
               for (let i = 0; i < total_days; i++) {
                 const [next] = tomorrow.toISOString().split('T');
