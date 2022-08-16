@@ -3,7 +3,7 @@ import { CContainer } from '@coreui/react-pro';
 import { useNavigate } from 'react-router-dom';
 import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { CCard, CCardBody, CCardGroup, CCol, CForm, CFormInput, CImage, CInputGroup, CInputGroupText, CLoadingButton, CRow } from '@coreui/react-pro'
+import { CCard, CCardBody, CCardGroup, CCol, CForm, CImage, CLoadingButton, CRow } from '@coreui/react-pro'
 import { GetApi, PutApi } from '../services/Axios';
 import { api_server_url, app_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
@@ -176,27 +176,23 @@ const Landing = () => {
     setLoader(true);
     PutApi(api_server_url + '/session/update/' + sessionS + '/' + codeS, { activated: true }) // Update session status
       .then(() => {
+        setButtonText('Waiting for others to join i...'); // Wait for others to join
+        setButtonStatus(true);
+
         if (!isIOS) {
           console.log(OneSignal.getUserId());
           OneSignal.getUserId(function (userId) {
             AddTags(userId, session_id, code).then(() => {
-              setButtonText('Waiting for others to join...'); // Wait for others to join
-              setButtonStatus(true);
               openListener(); // Wait for others to join
-
             });
           });
         }
         if (isIOS) {
-          setButtonText('Waiting for others to join i...'); // Wait for others to join
-          setButtonStatus(true);
           openListener(); // Wait for others to join
         }
       }).catch(error => {
         alert(error);
       });
-
-
   }
 
   function openListener() { // Check if all users are activated and update db
@@ -235,26 +231,36 @@ const Landing = () => {
               const deliveryTimeC = '21:16';
 
 
-              SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
+              SendWebPushByCode(codeS, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
 
               //Welcome Message
-              // if (isIOS) {
-              //   SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), app_url);
-              // } else {
-              //   SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, new Date(), topic, app_url);
-              // }
+              if (isIOS) {
+                SendSMSByCode(codeS, 'Welcome to Lordos App!', new Date(), app_url);
+              } else {
+                SendWebPushByCode(codeS, headings, "Welcome to Lordos App!", campaign, new Date(), topic, app_url);
+              }
 
               for (let i = 0; i < total_days; i++) {
                 const [next] = tomorrow.toISOString().split('T');
 
+                console.log("Code is: " + codeS);
+                console.log("SMS content is: " + smsContent);
+                console.log("Date time is: " + new Date(next + ', ' + deliveryTimeA));
+                console.log("Click url is: " + clickUrl.concat('?phase=').concat('A'));
+                console.log("Heading is: " + headings);
+                console.log("Subtitle is: " + subtitle);
+                console.log("Campaign is: " + campaign);
+                console.log("Topic is: " + clickUrl.concat('?phase=').concat('A'));
+
+
                 if (isIOS) {
-                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-                  SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+                  SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+                  SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+                  SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
                 } else {
-                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-                  SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+                  SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+                  SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+                  SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
                 }
                 tomorrow.setDate(tomorrow.getDate() + 1)
               }
