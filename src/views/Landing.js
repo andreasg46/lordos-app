@@ -35,12 +35,6 @@ const Landing = () => {
   let session_id = '';
   const [session_id_S, setSessionS] = useState('');
 
-  var day = new Date();
-  var start_date = new Date(day);
-  var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
-  end_date = new Date(end_date);
-
-
   const WelcomeAlert = async () => {
 
     Swal.fire({
@@ -172,8 +166,8 @@ const Landing = () => {
 
   const joinSession = async (e) => { // Retrieve user session
     e.preventDefault();
-
     setLoader(true);
+
     PutApi(api_server_url + '/session/update/' + session_id_S + '/' + codeS, { activated: true }) // Update session status
       .then(() => {
         setButtonText('Waiting for others to join i...'); // Wait for others to join
@@ -187,6 +181,7 @@ const Landing = () => {
             });
           });
         }
+
         if (isIOS) {
           openListener(); // Wait for others to join
         }
@@ -196,6 +191,11 @@ const Landing = () => {
   }
 
   function openListener() { // Check if all users are activated and update db
+    var day = new Date();
+    var start_date = new Date(day);
+    var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
+    end_date = new Date(end_date);
+
     const interval = setInterval(() => {
       GetApi(api_server_url + '/session/count/' + getCookie('session_id'))
         .then(function (value) {
@@ -227,8 +227,8 @@ const Landing = () => {
               let test = new Date();
 
               const deliveryTimeA = test.toLocaleTimeString();
-              const deliveryTimeB = '12:15';
-              const deliveryTimeC = '12:18';
+              const deliveryTimeB = '12:35';
+              const deliveryTimeC = '12:40';
 
 
               SendWebPushByCode(codeS, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign

@@ -2,7 +2,6 @@ import { api_server_url } from "src/config/urls";
 import { GetApi, PostApi } from "./Axios";
 
 export async function SendWebPushByCode(code, headings, subtitle, campaign, datetime, topic, click_url) {
-  console.log("Sending Web Push...");
   let body = {
     code: code,
     headings: headings,
@@ -14,12 +13,12 @@ export async function SendWebPushByCode(code, headings, subtitle, campaign, date
   }
   await PostApi(api_server_url + '/web-push', body)
     .then(function (value) {
+      console.log("Sending Web Push...");
       console.log(value);
     });
 }
 
 export async function SendSMSByCode(code, subtitle, datetime, click_url) {
-  console.log("Sending SMS Push...");
   let body = {
     code: code,
     subtitle: subtitle,
@@ -28,6 +27,7 @@ export async function SendSMSByCode(code, subtitle, datetime, click_url) {
   }
   await PostApi(api_server_url + '/sms-push', body)
     .then(function (value) {
+      console.log("Sending SMS Push...");
       console.log(value);
     });
 }
