@@ -1,5 +1,5 @@
-import { api_server_url } from "src/config/urls";
-import { today } from "src/helpers";
+import { api_server_url, app_url } from "src/config/urls";
+import { isIOS, today } from "src/helpers";
 import { GetApi, PostApi } from "./Axios";
 
 export async function SendWebPushByCode(code, headings, subtitle, campaign, datetime, topic, click_url) {
@@ -82,9 +82,9 @@ export function StartCampaign(code) {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   const total_days = 1;
-  const deliveryTimeA = '12:40';
-  const deliveryTimeB = '12:35';
-  const deliveryTimeC = '12:40';
+  const deliveryTimeA = '09:00';
+  const deliveryTimeB = '14:00';
+  const deliveryTimeC = '18:00';
 
   //Welcome Message
   if (isIOS) {
@@ -93,20 +93,20 @@ export function StartCampaign(code) {
     SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, datetime, topic, app_url);
   }
 
-  // for (let i = 0; i < total_days; i++) {
-  //   const [next] = tomorrow.toISOString().split('T');
+  for (let i = 0; i < total_days; i++) {
+    const [next] = tomorrow.toISOString().split('T');
 
 
-  //   if (isIOS) {
-  //     SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-  //     SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-  //     SendSMSByCode(codeS, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
-  //   } else {
-  //     SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-  //     SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-  //     SendWebPushByCode(codeS, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
-  //   }
-  //   tomorrow.setDate(tomorrow.getDate() + 1)
-  // }
+    if (isIOS) {
+      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+    } else {
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+    }
+    tomorrow.setDate(tomorrow.getDate() + 1)
+  }
 }
 

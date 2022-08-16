@@ -1,4 +1,5 @@
 const getMobileOperatingSystem = () => {
+
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   // Windows Phone must come first because its UA also contains "Android"
@@ -14,9 +15,11 @@ const getMobileOperatingSystem = () => {
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     return "iOS";
   }
+
   return "Desktop";
 }
 
+let isIOS = getMobileOperatingSystem() === 'iOS' ? true : false;
 
 
 let now = new Date();
@@ -26,5 +29,5 @@ let today = now.getFullYear() + "-" + (month) + "-" + (day);
 
 let currentTime = (now.getHours() < 10 ? '0' + (now.getHours()) : now.getHours()) + ':' + now.getMinutes();
 
-export { today, currentTime, getMobileOperatingSystem }
+export { today, currentTime, isIOS }
 

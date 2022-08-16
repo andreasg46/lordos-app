@@ -3,19 +3,20 @@ import { CCard, CCardBody, CCardGroup, CCol, CForm, CImage, CLoadingButton, CRow
 import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { GetApi, PutApi } from '../services/Axios';
-import { api_server_url, app_url } from 'src/config/urls';
+import { api_server_url } from 'src/config/urls';
 import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
-import { AddDevice, AddTags, SendWebPushByCode, SendSMSByCode, StartCampaign } from '../services/OneSignalServer';
-import { getMobileOperatingSystem, today } from 'src/helpers';
+import { AddDevice, AddTags, StartCampaign } from '../services/OneSignalServer';
 import Swal from 'sweetalert2';
 import { findRole, findSession, findUser } from 'src/services/APIs';
+import { useNavigate } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
+import { isIOS } from 'src/helpers';
 
 const Landing = () => {
   const navigate = useNavigate();
 
-  const [isIOS, setIOS] = useState(getMobileOperatingSystem() === 'iOS' ? true : false);
+
   const [userReady, setUserReady] = useState(false);
 
   const [loader, setLoader] = useState(false);
@@ -24,8 +25,8 @@ const Landing = () => {
 
   let code = '';
   let session_id = '';
-  const [codeS, setCode_S] = useState('');
-  const [session_id_S, setSessionS] = useState('');
+  const [code_S, setCode_S] = useState('');
+  const [session_id_S, setSessionId_S] = useState('');
 
   useEffect(() => {
     resetCookies();
@@ -84,7 +85,7 @@ const Landing = () => {
                         console.log(value);
 
                         session_id = value.id || '';
-                        setSessionS(value.id || '');
+                        setSessionId_S(value.id || '');
 
                         setCookie('session_id', session_id, 180);
                         setCookie('is_admin', (session_id === 9000) ? true : false, 180);
@@ -107,7 +108,7 @@ const Landing = () => {
                           if (isIOS) {
                             swalQueue.fire({
                               title: "What's your phone number?",
-                              input: "number",
+                              input: "text",
                               inputPlaceholder: '99123456',
                               currentProgressStep: 1,
                               inputValidator: (value) => {
@@ -116,7 +117,7 @@ const Landing = () => {
                                   return 'You need to write something!'
                                 }
                                 else {
-                                  AddDevice(14, '+357' + value, session_id, code).then(value => {
+                                  AddDevice(14, '+357' + value, session_id_S, code_S).then(value => {
                                     if (value.response !== '') {
                                       Alert(value.response.message, 'success')
                                       setUserReady(true);
@@ -165,15 +166,14 @@ const Landing = () => {
     e.preventDefault();
     setLoader(true);
 
-    PutApi(api_server_url + '/session/update/' + session_id_S + '/' + codeS, { activated: true }) // Update session status
+    PutApi(api_server_url + '/session/update/' + session_id_S + '/' + code_S, { activated: true }) // Update session status
       .then(() => {
         setButtonText('Waiting for others to join...'); // Wait for others to join
         setButtonStatus(true);
 
         if (!isIOS) {
-          console.log(OneSignal.getUserId());
           OneSignal.getUserId(function (userId) {
-            AddTags(userId, session_id_S, codeS).then(() => {
+            AddTags(userId, session_id_S, code_S).then(() => {
               openListener(); // Wait for others to join
             });
           });
@@ -203,7 +203,7 @@ const Landing = () => {
 
               Alert2('Session established!', 'success');
 
-              StartCampaign(codeS); // Start Notifications campaign
+              StartCampaign(code_S); // Start Notifications campaign
 
               setLoader(false);
               navigate('/');
