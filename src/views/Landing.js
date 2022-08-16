@@ -30,10 +30,10 @@ const Landing = () => {
   const [buttonStatus, setButtonStatus] = useState(false);
 
   let code = '';
-  const [codeS, setCodeS] = useState('');
+  const [codeS, setCode_S] = useState('');
 
   let session_id = '';
-  const [sessionS, setSessionS] = useState('');
+  const [session_id_S, setSessionS] = useState('');
 
   var day = new Date();
   var start_date = new Date(day);
@@ -76,7 +76,7 @@ const Landing = () => {
             return 'You need to write something!'
           } else {
             code = value;
-            setCodeS(value);
+            setCode_S(value);
 
             findUser(code) // Step 1  => Get User Info
               .then(value => {
@@ -174,7 +174,7 @@ const Landing = () => {
     e.preventDefault();
 
     setLoader(true);
-    PutApi(api_server_url + '/session/update/' + sessionS + '/' + codeS, { activated: true }) // Update session status
+    PutApi(api_server_url + '/session/update/' + session_id_S + '/' + codeS, { activated: true }) // Update session status
       .then(() => {
         setButtonText('Waiting for others to join i...'); // Wait for others to join
         setButtonStatus(true);
@@ -182,7 +182,7 @@ const Landing = () => {
         if (!isIOS) {
           console.log(OneSignal.getUserId());
           OneSignal.getUserId(function (userId) {
-            AddTags(userId, session_id, code).then(() => {
+            AddTags(userId, session_id_S, codeS).then(() => {
               openListener(); // Wait for others to join
             });
           });
