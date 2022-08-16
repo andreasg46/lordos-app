@@ -36,7 +36,7 @@ const Landing = () => {
   const [sessionS, setSessionS] = useState('');
 
   var day = new Date();
-  var start_date = day.toLocaleString();
+  var start_date = new Date(day);
   var end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
   end_date = new Date(end_date);
 
