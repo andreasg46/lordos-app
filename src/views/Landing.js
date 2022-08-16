@@ -226,9 +226,9 @@ const Landing = () => {
 
               let test = new Date();
 
-              const deliveryTimeA = '21:10';
-              const deliveryTimeB = '21:13';
-              const deliveryTimeC = '21:16';
+              const deliveryTimeA = test.toLocaleTimeString();
+              const deliveryTimeB = '12:15';
+              const deliveryTimeC = '12:18';
 
 
               SendWebPushByCode(codeS, headings, "Welcome to Lordos App!", campaign, new Date(), topic, clickUrl); // Phase A Campaign
