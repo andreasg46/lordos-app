@@ -22,9 +22,11 @@ const Landing = () => {
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
 
-  let code = '';
+  let code = ''
+  let phone = '';
   let session_id = '';
   const [code_S, setCode_S] = useState('');
+  const [phone_S, setPhone_S] = useState('');
   const [session_id_S, setSessionId_S] = useState('');
 
   useEffect(() => {
@@ -116,6 +118,8 @@ const Landing = () => {
                                   return 'You need to write something!'
                                 }
                                 else {
+                                  phone = '+357' + value;
+                                  setPhone_S('+357' + value);
                                   AddDevice('+357' + value, code, session_id).then(value => {
                                     if (value.response !== '') {
                                       Alert(value.response.message, 'success')
@@ -202,7 +206,7 @@ const Landing = () => {
 
               Alert2('Session established!', 'success');
 
-              StartCampaign(code_S); // Start Notifications campaign
+              StartCampaign(code_S, phone_S); // Start Notifications campaign
 
               setLoader(false);
               navigate('/');

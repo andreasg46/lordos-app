@@ -19,11 +19,11 @@ export async function SendWebPushByCode(code, headings, subtitle, campaign, date
     });
 }
 
-export async function SendSMSByCode(code, subtitle, datetime, click_url) {
+export async function SendSMSByCode(phone, message, datetime, click_url) {
   let body = {
-    code: code,
-    subtitle: subtitle,
-    datetime: datetime,
+    phone: phone,
+    message: message,
+    datetime: datetime || null,
     click_url: click_url
   }
   await PostApi(api_server_url + '/sms-push', body)
@@ -68,7 +68,7 @@ export async function AddDevice(phone, code, session_id) {
   return { response };
 }
 
-export function StartCampaign(code) {
+export function StartCampaign(code, phone) {
   // Start Push Server Campaign
   const headings = 'Knock Knock!'
   const subtitle = 'Questions are now available!';
@@ -90,7 +90,7 @@ export function StartCampaign(code) {
 
   //Welcome Message
   if (isIOS) {
-    SendSMSByCode(code, 'Welcome to Lordos App!', new Date(), app_url);
+    SendSMSByCode(phone, 'Welcome to Lordos App!', null, app_url);
   } else {
     SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, datetime, topic, app_url);
   }
@@ -101,9 +101,9 @@ export function StartCampaign(code) {
     console.log(next + 'T' + deliveryTimeA);
 
     if (isIOS) {
-      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
     } else {
       SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
       SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
