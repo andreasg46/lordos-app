@@ -84,9 +84,9 @@ export function StartCampaign(code) {
 
   const total_days = 1;
 
-  const deliveryTimeA = '20:00:00';
-  const deliveryTimeB = '20:04:00';
-  const deliveryTimeC = '20:11:00';
+  const deliveryTimeA = '20:25:00';
+  const deliveryTimeB = '20:27:00';
+  const deliveryTimeC = '20:33:00';
 
   //Welcome Message
   if (isIOS) {
