@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   CButton,
   CCard,
@@ -7,9 +7,22 @@ import {
   CCardHeader,
   CCardTitle,
   CCol,
+  CRow,
 } from '@coreui/react-pro'
+import CIcon from '@coreui/icons-react'
+import { cilCheckCircle } from '@coreui/icons'
 
 export const CQuestion = (props) => {
+  const [options, setOptions] = useState([]);
+
+  const handleSelect = (value) => {
+
+    setOptions([...options, value]);
+
+
+    console.log(options);
+  }
+
   return (
     <>
       <CCol md={12}>
@@ -18,12 +31,25 @@ export const CQuestion = (props) => {
           <CCardBody>
             <CCardTitle>{props.title}</CCardTitle>
             {props.options.map((option, index) => {
-              return (<CButton key={index}
-                className='answer-button'
-                onClick={() => { props.submitAnswer(option) }}
-              >{option}</CButton>)
+              return (
+                <CRow key={index}>
+                  <CButton key={index}
+                    className='question-card'
+                    onClick={() => handleSelect(option)}
+                  >{option}</CButton>
+                </CRow>
+
+              )
             })}
           </CCardBody>
+          <CCardFooter>
+            <CButton
+              size="sm"
+              color='success'
+              className='float-end'
+              onClick={() => { props.submitAnswer(options) }}
+            >Submit <CIcon icon={cilCheckCircle} /></CButton>
+          </CCardFooter>
         </CCard >
       </CCol>
     </>

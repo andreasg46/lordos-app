@@ -16,7 +16,6 @@ import { isIOS } from 'src/helpers';
 const Landing = () => {
   const navigate = useNavigate();
 
-
   const [userReady, setUserReady] = useState(false);
 
   const [loader, setLoader] = useState(false);
@@ -117,14 +116,14 @@ const Landing = () => {
                                   return 'You need to write something!'
                                 }
                                 else {
-                                  AddDevice(14, '+357' + value, session_id_S, code_S).then(value => {
+                                  AddDevice('+357' + value, code, session_id).then(value => {
                                     if (value.response !== '') {
                                       Alert(value.response.message, 'success')
                                       setUserReady(true);
                                       console.log(value);
                                     } else {
                                       swalQueue.fire({
-                                        title: "Oops. Something went wrong. Probably Identifier invalid format. Please try again!",
+                                        title: "Oops. Something went wrong. Please try again!",
                                         currentProgressStep: 1,
                                       }).then((result) => {
                                         if (result.isConfirmed) {

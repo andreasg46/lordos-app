@@ -61,8 +61,8 @@ export async function GetDevices() {
   return data;
 }
 
-export async function AddDevice(device_type, identifier, session_id, external_user_id) {
-  const response = await PostApi(api_server_url + '/device', { device_type, identifier, session_id, external_user_id })
+export async function AddDevice(phone, code, session_id) {
+  const response = await PostApi(api_server_url + '/device', { phone, code, session_id })
     .then(value => value)
 
   return { response };
@@ -80,11 +80,13 @@ export function StartCampaign(code) {
   const smsContent = 'Questions available!';
 
   const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setDate(tomorrow.getDate());
+
   const total_days = 1;
-  const deliveryTimeA = '09:00';
-  const deliveryTimeB = '14:00';
-  const deliveryTimeC = '18:00';
+
+  const deliveryTimeA = '20:00:00';
+  const deliveryTimeB = '20:04:00';
+  const deliveryTimeC = '20:11:00';
 
   //Welcome Message
   if (isIOS) {
@@ -96,15 +98,16 @@ export function StartCampaign(code) {
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
 
+    console.log(next + 'T' + deliveryTimeA);
 
     if (isIOS) {
-      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendSMSByCode(code, smsContent, new Date(next + ', ' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendSMSByCode(code, smsContent, new Date(next + 'T' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
     } else {
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + ', ' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
     }
     tomorrow.setDate(tomorrow.getDate() + 1)
   }

@@ -20,6 +20,7 @@ const Questions = (props) => {
   const [loading, setLoading] = useState(false);
 
   const [id, setId] = useState(0);
+  const [question, setQuestion] = useState([]);
   const [title, setTitle] = useState('');
   const [options, setOptions] = useState([]);
 
@@ -40,6 +41,7 @@ const Questions = (props) => {
           if (value.questions) {
 
             if (value.questions.length !== 0) {
+              setQuestion(value.questions[index]);
               setId(value.questions[index].id);
               setTitle(value.questions[index].title);
               setOptions(value.questions[index].options);
@@ -60,8 +62,8 @@ const Questions = (props) => {
     )
   }, []);
 
-  function submitAnswer(option) {
-    PostApi(api_server_url + '/answer/create', { selected: option, UserCode: getCookie('code'), QuestionId: id });
+  function submitAnswer(options) {
+    PostApi(api_server_url + '/answer/create', { selected: options, UserCode: getCookie('code'), QuestionId: id });
 
     if (index < total) {
       Promise.resolve(
@@ -91,7 +93,7 @@ const Questions = (props) => {
     <>
       <div className='center'>
         <div style={loading ? { display: 'none' } : { display: 'block' }} className='questions-card' >
-          <CQuestion title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} />
+          <CQuestion data={question} title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} />
         </div>
 
         <div style={loading ? { display: 'block' } : { display: 'none' }}  >
