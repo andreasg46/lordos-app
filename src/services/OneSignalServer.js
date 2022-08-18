@@ -85,9 +85,9 @@ export function StartCampaign(code, phone) {
   const total_days = 1;
 
   // Times are on UTC +3000
-  const deliveryTimeA = '12:55:00';
-  const deliveryTimeB = '13:03:00';
-  const deliveryTimeC = '13:15:00';
+  const deliveryTimeA = '09:00:00';
+  const deliveryTimeB = '14:00:00';
+  const deliveryTimeC = '18:00:00';
 
   //Welcome Message
   if (isIOS) {
