@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CCard, CCardBody, CCardGroup, CCol, CForm, CImage, CLoadingButton, CRow, CContainer } from '@coreui/react-pro'
+import { CCard, CCardBody, CCardGroup, CCol, CForm, CImage, CLoadingButton, CRow, CContainer, CBadge } from '@coreui/react-pro'
 import { cilSearch } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { GetApi, PutApi } from '../services/Axios';
@@ -8,10 +8,25 @@ import { Alert, Alert2 } from '../services/Alerts';
 import { getCookie, resetCookies, setCookie } from '../services/Cookies';
 import { AddDevice, AddTags, StartCampaign } from '../services/OneSignalServer';
 import Swal from 'sweetalert2';
-import { findRole, findSession, findUser } from 'src/services/APIs';
+import { findOtherUsers, findRole, findSession, findUser } from 'src/services/APIs';
 import { useNavigate } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { isIOS } from 'src/helpers';
+
+const getBadge = (status) => {
+  switch (status) {
+    case 'Joined':
+      return 'success-gradient'
+    case 'Inactive':
+      return 'secondary-gradient'
+    case 'Pending':
+      return 'warning-gradient'
+    case 'Banned':
+      return 'danger-gradient'
+    default:
+      return 'secondary-gradient'
+  }
+}
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -28,6 +43,7 @@ const Landing = () => {
   const [code_S, setCode_S] = useState('');
   const [phone_S, setPhone_S] = useState('');
   const [session_id_S, setSessionId_S] = useState('');
+  const [other_users, setOtherUsers] = useState([]);
 
   useEffect(() => {
     resetCookies();
@@ -148,8 +164,20 @@ const Landing = () => {
                               currentProgressStep: 1,
                             }).then((result) => {
                               if (result.isConfirmed) {
-                                OneSignal.showSlidedownPrompt();
-                                setUserReady(true);
+                                OneSignal.showNativePrompt().then(() => {
+                                  Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
+                                    console.log(value)
+                                    if (value) {
+                                      setUserReady(true);
+                                    } else {
+                                      Alert('Push Notifications must be enabled!', 'info')
+                                    }
+                                  })
+                                    .catch(error => {
+                                      Alert('Push Notifications must be enabled!', 'info')
+                                    });
+                                });
+
                               }
                             })
                           }
@@ -196,26 +224,32 @@ const Landing = () => {
     end_date = new Date(end_date);
 
     const interval = setInterval(() => {
-      GetApi(api_server_url + '/session/count/' + getCookie('session_id'))
-        .then(function (value) {
-          if (value) {
-            if (value.count === 0) { // Check if session has all members joined
-              PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
-              setCookie('status', 'Active', 180);
-              setLoader(false);
+      findOtherUsers(session_id_S, code_S).then((value) => {
+        setOtherUsers(value);
 
-              Alert2('Session established!', 'success');
+        GetApi(api_server_url + '/session/count/' + getCookie('session_id'))
+          .then(function (value) {
+            if (value) {
+              if (value.count === 0) { // Check if session has all members joined
+                PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
+                setCookie('status', 'Active', 180);
+                setLoader(false);
 
-              StartCampaign(code_S, phone_S); // Start Notifications campaign
+                Alert2('Session established!', 'success');
 
-              setLoader(false);
-              navigate('/');
-              clearInterval(interval);
+                StartCampaign(code_S, phone_S); // Start Notifications campaign
 
+                setLoader(false);
+                navigate('/');
+                clearInterval(interval);
+
+              }
             }
-          }
-        })
-    }, 4000);
+          })
+
+      })
+
+    }, 5000);
   }
 
   const handleSubmit = (e) => {
@@ -246,8 +280,16 @@ const Landing = () => {
                     <CForm onSubmit={handleSubmit}>
                       <h4>Welcome to Lordos App</h4>
                       <br />
-                      <br />
-                      <br />
+                      {other_users.map((user, index) => {
+                        return (
+                          <div key={index}>
+                            {user.code}: <CBadge
+                              color={getBadge(user.activated ? 'Joined' : 'Pending')}
+                            >{user.activated ? 'Joined' : 'Pending'}</CBadge>
+                          </div>
+                        )
+                      })}
+
                       <br />
                       <CRow>
                         <CCol style={{ textAlign: 'end', margin: '20px 0 0 0', display: userReady ? 'block' : 'none' }}>

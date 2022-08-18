@@ -1,25 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   CButton,
   CCard,
   CCardBody,
   CCardFooter,
   CCardHeader,
-  CCardTitle,
   CCol,
-  CRow,
+  CFormCheck,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
 import { cilCheckCircle } from '@coreui/icons'
 
 export const CQuestion = (props) => {
-  const [options, setOptions] = useState([]);
+  let options = [];
 
-  const handleSelect = (value) => {
-
-    setOptions([...options, value]);
-
-
+  const handleSelect = (e, index) => {
+    options[index] = (e.target.value !== '' && e.target.value === options[index]) ? '' : e.target.value;
     console.log(options);
   }
 
@@ -27,24 +23,27 @@ export const CQuestion = (props) => {
     <>
       <CCol md={12}>
         <CCard md={12}>
-          <CCardHeader>Question {props.index}<span className='float-end'><strong>{props.index}/{props.total}</strong></span></CCardHeader>
+          <CCardHeader>
+            <small><em>Phase {props.phase}</em></small> <strong>Question {props.index}</strong><span className='float-end'><strong>{props.index}/{props.total}</strong></span>
+
+          </CCardHeader>
           <CCardBody>
-            <CCardTitle>{props.title}</CCardTitle>
+            <p style={{ fontSize: 'large' }}><em>{props.title}</em></p>
             {props.options.map((option, index) => {
               return (
-                <CRow key={index}>
-                  <CButton key={index}
-                    className='question-card'
-                    onClick={() => handleSelect(option)}
-                  >{option}</CButton>
-                </CRow>
-
+                <div key={index}>
+                  <CButton className='question-card'>
+                    <CFormCheck id={option} value={option} key={option} label={option} onChange={(e) => { handleSelect(e, index) }} />
+                  </CButton>
+                </div>
               )
             })}
           </CCardBody>
           <CCardFooter>
+
             <CButton
-              size="sm"
+              size="lg"
+              style={{ width: '100%' }}
               color='success'
               className='float-end'
               onClick={() => { props.submitAnswer(options) }}

@@ -28,3 +28,21 @@ export async function findRole(RoleId) { // Retrieve user
 
   return { ...role };
 }
+
+export async function findOtherUsers(session_id, code) { // Retrieve other users
+  console.log('Getting other users...');
+
+  const users = await GetApi(api_server_url + '/session/users/' + session_id + '/' + code)
+    .then(value => value);
+
+  return users;
+}
+
+export async function findOtherUsersAnswered(session_id, code, phase) { // Retrieve other users
+  console.log('Getting other users answered...');
+
+  const users = await GetApi(api_server_url + '/questions/answered/' + session_id + '/' + code + '/' + phase)
+    .then(value => value);
+
+  return users;
+}
