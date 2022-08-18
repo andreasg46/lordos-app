@@ -63,6 +63,7 @@ const Questions = (props) => {
   }, []);
 
   function submitAnswer(options) {
+    console.log(id);
     PostApi(api_server_url + '/answer/create', { selected: options, UserCode: getCookie('code'), QuestionId: id });
 
     if (index < total) {
@@ -72,6 +73,7 @@ const Questions = (props) => {
             if (value) {
               setTitle(value.questions[index].title);
               setOptions(value.questions[index].options);
+              setId(value.questions[index].id);
               setIndex(index + 1);
               setTotal(value.count);
             }

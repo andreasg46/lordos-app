@@ -20,10 +20,10 @@ const Home = () => {
   const GetPhase = () => {
     let time = new Date().getUTCHours();
     if (time > 5 && time < 11) { // from 09:00 till 14:00 utc(0)
-      previousPhase = 'A';
+      previousPhase = 'C';
       setPendingPhaseText('B starts at 14:00');
     } else if (time > 10 && time < 16) { // from 14:00 till 18:00 utc(0)
-      previousPhase = 'A';
+      previousPhase = 'B';
       setPendingPhaseText('C starts at 18:00');
     } else {
       previousPhase = 'A'; // from 18:00 till 09:00 utc(0)
