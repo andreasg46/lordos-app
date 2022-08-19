@@ -80,14 +80,21 @@ export function StartCampaign(code, phone) {
   const smsContent = 'Questions available!';
 
   const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  // tomorrow.setDate(tomorrow.getDate() + 1);
+
 
   const total_days = 1;
 
   // Times are on UTC +3000
-  const deliveryTimeA = '09:00:00';
-  const deliveryTimeB = '14:00:00';
-  const deliveryTimeC = '18:00:00';
+  // const deliveryTimeA = '09:00:00';
+  // const deliveryTimeB = '14:00:00';
+  // const deliveryTimeC = '18:00:00';
+
+  tomorrow.setDate(tomorrow.getDate());
+  const deliveryTimeA = '12:15:00';
+  const deliveryTimeB = '12:30:00';
+  const deliveryTimeC = '12:45:00';
+
 
   //Welcome Message
   if (isIOS) {
