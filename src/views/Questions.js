@@ -9,6 +9,23 @@ import { getCookie } from '../services/Cookies';
 import { AppLoader } from 'src/components/app/AppLoader';
 import { useSearchParams } from 'react-router-dom';
 
+var backPresses = 0;
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+var maxBackPresses = 2;
+function handleBackButton(init) {
+  if (init !== true)
+    backPresses++;
+  if ((!isAndroid && backPresses >= maxBackPresses) || (isAndroid && backPresses >= maxBackPresses - 1)) {
+    window.history.back();
+  } else
+    window.history.pushState({}, '');
+}
+
+function setupWindowHistoryTricks() {
+  handleBackButton(true);
+  window.addEventListener('popstate', handleBackButton);
+}
+
 const Questions = (props) => {
   CheckSession();
   const navigate = useNavigate();
@@ -31,6 +48,8 @@ const Questions = (props) => {
   let selected_options = [];
 
   useEffect(() => {
+    setupWindowHistoryTricks();
+
     setLoading(true);
     setIndex(0);
 

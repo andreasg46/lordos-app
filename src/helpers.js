@@ -1,5 +1,4 @@
 const getMobileOperatingSystem = () => {
-
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
   // Windows Phone must come first because its UA also contains "Android"
@@ -22,6 +21,7 @@ const getMobileOperatingSystem = () => {
 let isIOS = getMobileOperatingSystem() === 'iOS' ? true : false;
 
 
+// Date, time
 let now = new Date();
 let day = ("0" + now.getDate()).slice(-2);
 let month = ("0" + (now.getMonth() + 1)).slice(-2);
@@ -34,5 +34,22 @@ let currentTime =
   + ':' +
   now.getSeconds();
 
-export { today, currentTime, isIOS }
+// Back button
+var backPresses = 0;
+var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
+var maxBackPresses = 2;
+function handleBackButton(init) {
+  if (init !== true)
+    backPresses++;
+  if ((!isAndroid && backPresses >= maxBackPresses) || (isAndroid && backPresses >= maxBackPresses - 1)) {
+    window.history.back();
+  } else
+    window.history.pushState({}, '');
+}
+
+function setupWindowHistoryTricks() {
+  handleBackButton(true);
+  window.addEventListener('popstate', handleBackButton);
+}
+export { today, currentTime, isIOS, setupWindowHistoryTricks }
 
