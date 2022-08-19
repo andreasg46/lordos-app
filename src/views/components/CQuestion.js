@@ -12,12 +12,6 @@ import CIcon from '@coreui/icons-react'
 import { cilCheckCircle } from '@coreui/icons'
 
 export const CQuestion = (props) => {
-  let options = [];
-
-  const handleSelect = (e, index) => {
-    options[index] = (e.target.value !== '' && e.target.value === options[index]) ? '' : e.target.value;
-    console.log(options);
-  }
 
   return (
     <>
@@ -33,7 +27,7 @@ export const CQuestion = (props) => {
               return (
                 <div key={index}>
                   <CButton className='question-card'>
-                    <CFormCheck id={option} value={option} key={option} label={option} onChange={(e) => { handleSelect(e, index) }} />
+                    <CFormCheck id={option} value={option} key={option} label={option} onChange={props.handleSelect} />
                   </CButton>
                 </div>
               )
@@ -46,7 +40,7 @@ export const CQuestion = (props) => {
               style={{ width: '100%' }}
               color='success'
               className='float-end'
-              onClick={() => { props.submitAnswer(options) }}
+              onClick={props.submitAnswer}
             >Submit <CIcon icon={cilCheckCircle} /></CButton>
           </CCardFooter>
         </CCard >

@@ -24,11 +24,11 @@ const Questions = (props) => {
   const [title, setTitle] = useState('');
   const [options, setOptions] = useState([]);
 
-
   const [index, setIndex] = useState(0);
   const [total, setTotal] = useState(0);
 
   let type = role;
+  let selected_options = [];
 
   useEffect(() => {
     setLoading(true);
@@ -62,9 +62,18 @@ const Questions = (props) => {
     )
   }, []);
 
-  function submitAnswer(options) {
-    console.log(id);
-    PostApi(api_server_url + '/answer/create', { selected: options, UserCode: getCookie('code'), QuestionId: id });
+  const handleSelect = (e) => {
+    if (e.target.checked) {
+      selected_options.push(e.target.value);
+    } else {
+      const result = selected_options.filter(element => element !== e.target.value);
+      selected_options = result;
+    }
+    console.log(selected_options);
+  }
+
+  function submitAnswer() {
+    PostApi(api_server_url + '/answer/create', { selected: selected_options, UserCode: getCookie('code'), QuestionId: id });
 
     if (index < total) {
       Promise.resolve(
@@ -95,7 +104,7 @@ const Questions = (props) => {
     <>
       <div className='center'>
         <div style={loading ? { display: 'none' } : { display: 'block' }} className='questions-card' >
-          <CQuestion data={question} phase={phase} title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} />
+          <CQuestion data={question} phase={phase} title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} handleSelect={handleSelect} />
         </div>
 
         <div style={loading ? { display: 'block' } : { display: 'none' }}  >

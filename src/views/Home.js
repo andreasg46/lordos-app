@@ -17,16 +17,21 @@ const Home = () => {
   const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
   let previousPhase = 'N/A';
 
+  let today = new Date().toISOString().slice(0, 10);
+  const tmp = new Date(today);
+  tmp.setDate(tmp.getDate() + 1);
+  let tomorrow = new Date(tmp).toISOString().slice(0, 10);
+
   const GetPhase = () => {
-    let time = new Date().getUTCHours();
-    if (time > 5 && time < 11) { // from 09:00 till 14:00 utc(0)
-      previousPhase = 'C';
+    let time = new Date().getUTCHours() + 3;
+    if (time > 8 && time < 14) { // from 09:00 till 14:00 
+      previousPhase = 'A';
       setPendingPhaseText('B starts at 14:00');
-    } else if (time > 10 && time < 16) { // from 14:00 till 18:00 utc(0)
+    } else if (time >= 14 && time < 18) { // from 14:00 till 18:00 
       previousPhase = 'B';
       setPendingPhaseText('C starts at 18:00');
     } else {
-      previousPhase = 'A'; // from 18:00 till 09:00 utc(0)
+      previousPhase = 'C'; // from 18:00 till 09:00 
       setPendingPhaseText('A starts at 09:00');
     }
   }
@@ -41,7 +46,7 @@ const Home = () => {
         for (let i = 0; i < tmpOtherUsers.length; i++) {
           tmpOtherUsers[i]['answered'] = false;
         }
-        Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase))
+        Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase, today, tomorrow))
           .then(value2 => {
             value1.map((user, index) => {
               value2.map((answer) => {

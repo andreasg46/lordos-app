@@ -38,10 +38,10 @@ export async function findOtherUsers(session_id, code) { // Retrieve other users
   return users;
 }
 
-export async function findOtherUsersAnswered(session_id, code, phase) { // Retrieve other users
+export async function findOtherUsersAnswered(session_id, code, phase, startDate, endDate) { // Retrieve other users
   console.log('Getting other users answered...');
 
-  const users = await GetApi(api_server_url + '/questions/answered/' + session_id + '/' + code + '/' + phase)
+  const users = await GetApi(api_server_url + '/questions/answered/' + session_id + '/' + code + '/' + phase + '/' + startDate + '/' + endDate)
     .then(value => value);
 
   return users;
