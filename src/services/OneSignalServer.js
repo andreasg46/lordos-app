@@ -1,3 +1,4 @@
+import { phase_A_time, phase_B_time, phase_C_time } from "src/config/globals";
 import { api_server_url, app_url } from "src/config/urls";
 import { isIOS, today } from "src/helpers";
 import { GetApi, PostApi } from "./Axios";
@@ -84,16 +85,7 @@ export function StartCampaign(code, phone) {
 
 
   const total_days = 1;
-
-  // Times are on UTC +3000
-  // const deliveryTimeA = '09:00:00';
-  // const deliveryTimeB = '14:00:00';
-  // const deliveryTimeC = '18:00:00';
-
   tomorrow.setDate(tomorrow.getDate());
-  const deliveryTimeA = '12:15:00';
-  const deliveryTimeB = '12:30:00';
-  const deliveryTimeC = '12:45:00';
 
 
   //Welcome Message
@@ -109,13 +101,13 @@ export function StartCampaign(code, phone) {
     console.log(next + 'T' + deliveryTimeA);
 
     if (isIOS) {
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeA), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeB), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + deliveryTimeC), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_A_time), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_B_time), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_C_time), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
     } else {
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeA), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeB), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + deliveryTimeC), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_A_time), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_B_time), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_C_time), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
     }
     tomorrow.setDate(tomorrow.getDate() + 1)
   }
