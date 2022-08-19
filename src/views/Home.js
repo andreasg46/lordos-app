@@ -10,14 +10,8 @@ import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { AppLoader } from 'src/components/app/AppLoader';
 import { phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
-import { setupWindowHistoryTricks } from 'src/helpers';
-
-window.addEventListener('load', function () {
-  window.history.pushState({}, '', 'https://silversky3d.com')
-})
 
 const Home = () => {
-
   CheckSession();
 
   const [loader, setLoader] = useState(true);
@@ -47,7 +41,13 @@ const Home = () => {
   }
 
   useEffect(() => {
-    setupWindowHistoryTricks();
+    window.history.pushState(null, null, null);
+
+    window.addEventListener('popstate', () => {
+      window.history.pushState(null, null, null);
+      alert("If you go back to the previous page, please back from the return to the previous button.");
+    });
+
     GetPhase();
 
     let tmpOtherUsers = [];
