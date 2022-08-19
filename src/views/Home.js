@@ -9,6 +9,7 @@ import CIcon from '@coreui/icons-react';
 import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { AppLoader } from 'src/components/app/AppLoader';
+import { phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
 
 const Home = () => {
   CheckSession();
@@ -18,6 +19,7 @@ const Home = () => {
   const [otherUsers, setOtherUsers] = useState([]);
   const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
   let previousPhase = 'N/A';
+
   let today = new Date().toISOString().slice(0, 10);
   const tmp = new Date(today);
   tmp.setDate(tmp.getDate() + 1);
@@ -25,15 +27,19 @@ const Home = () => {
 
   const GetPhase = () => {
     let time = new Date().getUTCHours() + 3;
-    if (time > 8 && time < 14) { // from 09:00 till 14:00 
+
+    console.log(time);
+    console.log(phase_A_time.slice(0, 2));
+
+    if (time >= phase_A_time.slice(0, 2) && time < phase_B_time.slice(0, 2)) {
       previousPhase = 'A';
-      setPendingPhaseText('B starts at 14:00');
-    } else if (time >= 14 && time < 18) { // from 14:00 till 18:00 
+      setPendingPhaseText('B starts at ' + phase_B_time);
+    } else if (time >= phase_B_time.slice(0, 2) && time < phase_C_time.slice(0, 2)) {
       previousPhase = 'B';
-      setPendingPhaseText('C starts at 18:00');
+      setPendingPhaseText('C starts at ' + phase_C_time);
     } else {
       previousPhase = 'C'; // from 18:00 till 09:00 
-      setPendingPhaseText('A starts at 09:00');
+      setPendingPhaseText('A starts at ' + phase_A_time);
     }
   }
 
