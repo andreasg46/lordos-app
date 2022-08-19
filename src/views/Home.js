@@ -8,15 +8,16 @@ import { cilBell } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
+import { AppLoader } from 'src/components/app/AppLoader';
 
 const Home = () => {
   CheckSession();
 
-  const [otherUsers, setOtherUsers] = useState([]);
+  const [loader, setLoader] = useState(true);
 
+  const [otherUsers, setOtherUsers] = useState([]);
   const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
   let previousPhase = 'N/A';
-
   let today = new Date().toISOString().slice(0, 10);
   const tmp = new Date(today);
   tmp.setDate(tmp.getDate() + 1);
@@ -56,16 +57,16 @@ const Home = () => {
               })
             })
             setOtherUsers(tmpOtherUsers);
+            setLoader(false);
           });
       });
-
   }, []);
 
 
   return (
     <>
-      <div className="center">
-        <div className='home-card'>
+      <div className="center" style={{ display: loader ? 'none' : 'block' }}>
+        <div className='home-card' >
           <CCard style={{ backgroundColor: 'rgba(0,0,0,0.8)', padding: '30px 18px' }}>
             <h1 style={{ color: 'white' }}>Thank you for participating in Lordos Application!</h1>
             <hr style={{ height: '4px', background: '#9ef1e2' }} />
@@ -90,6 +91,9 @@ const Home = () => {
             <p style={{ color: 'white', padding: '0' }}>You will receive a push notification when new questions are available <CIcon icon={cilBell} /></p>
           </CCard>
         </div >
+      </div>
+      <div>
+        <AppLoader style={{ display: loader ? 'block' : 'none' }} />
       </div>
     </>
   )

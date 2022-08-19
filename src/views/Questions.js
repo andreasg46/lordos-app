@@ -102,7 +102,7 @@ const Questions = (props) => {
 
   return (
     <>
-      <div className='center'>
+      <div className='questions-center'>
         <div style={loading ? { display: 'none' } : { display: 'block' }} className='questions-card' >
           <CQuestion data={question} phase={phase} title={title} index={index} total={total} options={options} submitAnswer={submitAnswer} handleSelect={handleSelect} />
         </div>
