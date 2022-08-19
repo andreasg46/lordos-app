@@ -193,7 +193,7 @@ const Landing = () => {
   }
 
   const joinSession = async (e) => { // Retrieve user session
-    setCookie('session_id', session_id, 180);
+    setCookie('session_id', session_id_S, 180);
 
     e.preventDefault();
     setLoader(true);
