@@ -95,8 +95,8 @@ const Home = () => {
           </CCard>
         </div >
       </div>
-      <div>
-        <AppLoader style={{ display: loader ? 'block' : 'none' }} />
+      <div style={{ display: (loader ? 'block' : 'none') }}>
+        <AppLoader />
       </div>
     </>
   )
