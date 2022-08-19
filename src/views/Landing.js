@@ -193,9 +193,9 @@ const Landing = () => {
   }
 
   const joinSession = async (e) => { // Retrieve user session
-    setCookie('session_id', session_id_S, 180);
-
     e.preventDefault();
+
+    setCookie('session_id', session_id_S, 180);
     setLoader(true);
 
     PutApi(api_server_url + '/session/update/' + session_id_S + '/' + code_S, { activated: true }) // Update session status
