@@ -41,13 +41,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-    window.history.pushState(null, null, null);
-
-    window.addEventListener('popstate', () => {
-      window.history.pushState(null, null, null);
-      alert("If you go back to the previous page, please back from the return to the previous button.");
-    });
-
     GetPhase();
 
     let tmpOtherUsers = [];
