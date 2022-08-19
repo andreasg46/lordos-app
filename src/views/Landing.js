@@ -104,7 +104,6 @@ const Landing = () => {
                         session_id = value.id || '';
                         setSessionId_S(value.id || '');
 
-                        setCookie('session_id', session_id, 180);
                         setCookie('is_admin', (session_id === 9000) ? true : false, 180);
 
                         //===== CASE 1 =====// Session not found
@@ -194,6 +193,8 @@ const Landing = () => {
   }
 
   const joinSession = async (e) => { // Retrieve user session
+    setCookie('session_id', session_id, 180);
+
     e.preventDefault();
     setLoader(true);
 
