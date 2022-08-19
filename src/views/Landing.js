@@ -163,7 +163,7 @@ const Landing = () => {
                               currentProgressStep: 1,
                             }).then((result) => {
                               if (result.isConfirmed) {
-                                OneSignal.showSlidedownPrompt().then(() => {
+                                OneSignal.showNativePrompt().then(() => {
                                   Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
                                     console.log('Push Notifications enabled: ' + value)
                                     if (value) {
