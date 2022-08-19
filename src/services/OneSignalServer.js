@@ -98,8 +98,6 @@ export function StartCampaign(code, phone) {
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
 
-    console.log(next + 'T' + deliveryTimeA);
-
     if (isIOS) {
       SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_A_time), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
       SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_B_time), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign

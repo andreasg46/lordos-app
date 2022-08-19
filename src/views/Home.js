@@ -28,9 +28,6 @@ const Home = () => {
   const GetPhase = () => {
     let time = new Date().getUTCHours() + 3;
 
-    console.log(time);
-    console.log(phase_A_time.slice(0, 2));
-
     if (time >= phase_A_time.slice(0, 2) && time < phase_B_time.slice(0, 2)) {
       previousPhase = 'A';
       setPendingPhaseText('B starts at ' + phase_B_time);
