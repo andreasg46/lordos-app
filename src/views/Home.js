@@ -240,9 +240,9 @@ const Home = () => {
 
       </div>
 
-      <div style={{ display: (loader ? 'block' : 'none') }}>
+      {/* <div style={{ display: (loader ? 'block' : 'none') }}>
         <AppLoader />
-      </div>
+      </div> */}
     </>
   )
 }

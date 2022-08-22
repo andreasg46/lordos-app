@@ -12,6 +12,7 @@ import { findOtherUsers, findRole, findSession, findUser } from 'src/services/AP
 import { useNavigate } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { isIOS } from 'src/helpers';
+import { AppLoader } from 'src/components/app/AppLoader';
 
 const getBadge = (status) => {
   switch (status) {
@@ -293,6 +294,9 @@ const Landing = () => {
 
                       <br />
                       <CRow>
+                        <CCol style={{ display: userReady ? 'none' : 'block' }} >
+                          <AppLoader />
+                        </CCol>
                         <CCol style={{ textAlign: 'end', margin: '20px 0 0 0', display: userReady ? 'block' : 'none' }}>
                           <CLoadingButton
                             color='success'
@@ -303,6 +307,7 @@ const Landing = () => {
                             type='submit'
                           ><CIcon icon={cilSearch} /> {buttonText}
                           </CLoadingButton>
+
                         </CCol>
                       </CRow>
                     </CForm>

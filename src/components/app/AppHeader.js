@@ -29,8 +29,8 @@ const AppHeader = () => {
             <div style={{ textAlign: 'end', padding: '0px' }}>
               <CButton color='success' variant='outline'
                 onClick={() => {
-                  // navigate('/landing');
-                  window.location.assign('/#/landing')
+                  navigate('/landing');
+                  // window.location.assign('/#/landing')
                 }}
               >Join new session</CButton>
             </div>
