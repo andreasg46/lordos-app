@@ -99,13 +99,13 @@ export function StartCampaign(code, phone) {
     const [next] = tomorrow.toISOString().split('T');
 
     if (isIOS) {
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_A_time), clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_B_time), clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_C_time), clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_A_time), clickUrl); // Phase A Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_B_time), clickUrl); // Phase B Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_C_time), clickUrl); // Phase C Campaign
     } else {
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_A_time), topic, clickUrl.concat('?phase=').concat('A')); // Phase A Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_B_time), topic, clickUrl.concat('?phase=').concat('B')); // Phase B Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_C_time), topic, clickUrl.concat('?phase=').concat('C')); // Phase C Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_A_time), topic, clickUrl); // Phase A Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_B_time), topic, clickUrl); // Phase B Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_C_time), topic, clickUrl); // Phase C Campaign
     }
     tomorrow.setDate(tomorrow.getDate() + 1)
   }

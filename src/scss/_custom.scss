@@ -113,6 +113,7 @@
   background-size: cover;
   border-radius: 6px;
   box-shadow: inset 0 0 5px grey;
+  margin-bottom: 24px;
 }
 
 .center {
@@ -120,13 +121,6 @@
   justify-content: center;
   align-items: center;
   height: 67vh;
-}
-
-.questions-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 24px;
 }
 
 .loader-card {
@@ -156,4 +150,24 @@
 
 .questions-card {
   width: 100% !important;
+}
+
+.question-checkbox .form-check-label {
+  width: 90%;
+  cursor: pointer;
+  background: #aaffe3;
+  color: black;
+  border-radius: 5px;
+  padding: 6px;
+  text-align: left;
+  margin: 0;
+  font-weight: 700;
+
+}
+
+.questions-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
 }

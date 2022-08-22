@@ -34,5 +34,10 @@ let currentTime =
   + ':' +
   now.getSeconds();
 
-export { today, currentTime, isIOS }
+function getRandomInt(max) {
+  max = 9999999;
+  return Math.floor(Math.random() * max);
+}
+
+export { today, currentTime, isIOS, getRandomInt }
 

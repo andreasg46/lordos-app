@@ -1,47 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import {
-  CBadge,
-  CCard,
-} from '@coreui/react-pro'
-import { CheckSession } from '../services/Auth'
-import { cilBell } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
 import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
+import { GetCurrentDeadline, GetCurrentPhase, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
+import { CheckSession } from 'src/services/Auth';
+import Questions from './components/Questions';
 import { AppLoader } from 'src/components/app/AppLoader';
-import { phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
+import { HomeCard } from './components/HomeCard';
+import { GetApi, PostApi } from 'src/services/Axios';
+import { api_server_url } from 'src/config/urls';
+import { Alert } from 'src/services/Alerts';
+import { CBadge, CButton, CCol } from '@coreui/react-pro';
+import { getRandomInt } from 'src/helpers';
+import CIcon from '@coreui/icons-react';
+import { cilPencil } from '@coreui/icons';
+
 
 const Home = () => {
   CheckSession();
 
-  const [loader, setLoader] = useState(true);
-
-  const [otherUsers, setOtherUsers] = useState([]);
-  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
-  let previousPhase = 'N/A';
-
-  let today = new Date().toISOString().slice(0, 10);
-  const tmp = new Date(today);
-  tmp.setDate(tmp.getDate() + 1);
-  let tomorrow = new Date(tmp).toISOString().slice(0, 10);
-
-  const GetPhase = () => {
-    let time = new Date().getUTCHours() + 3;
-
-    if (time >= phase_A_time.slice(0, 2) && time < phase_B_time.slice(0, 2)) {
-      previousPhase = 'A';
-      setPendingPhaseText('B starts at ' + phase_B_time);
-    } else if (time >= phase_B_time.slice(0, 2) && time < phase_C_time.slice(0, 2)) {
-      previousPhase = 'B';
-      setPendingPhaseText('C starts at ' + phase_C_time);
-    } else {
-      previousPhase = 'C'; // from 18:00 till 09:00 
-      setPendingPhaseText('A starts at ' + phase_A_time);
-    }
-  }
-
   useEffect(() => {
     GetPhase();
+
+    if (currentPhase !== 'N/A') {
+      GetQuestions();
+    }
+
 
     let tmpOtherUsers = [];
     Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
@@ -65,36 +48,179 @@ const Home = () => {
       });
   }, []);
 
+  const [loader, setLoader] = useState(true);
+  const [otherUsers, setOtherUsers] = useState([]);
+  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
+  const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
+  const [currentDeadlineText, setCurrentDeadlineText] = useState('N/A');
+
+  const [questionsAvailable, setQuestionsAvailable] = useState(false);
+
+  let previousPhase = 'N/A';
+  let currentPhase = 'N/A';
+
+  const role = getCookie('role') === 'Child' ? 'child' : 'parent';
+
+  const [question_id, setQuestionId] = useState(0);
+  const [title, setTitle] = useState('');
+  const [options, setOptions] = useState([]);
+
+  const [index, setIndex] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  let type = role;
+
+
+  let today = new Date().toISOString().slice(0, 10);
+  const tmp = new Date(today);
+  tmp.setDate(tmp.getDate() + 1);
+  let tomorrow = new Date(tmp).toISOString().slice(0, 10);
+
+  const GetPhase = () => {
+    let hours = new Date().getUTCHours() + 3;
+
+    currentPhase = GetCurrentPhase();
+    setCurrentPhaseText(currentPhase);
+    setCurrentDeadlineText(GetCurrentDeadline());
+
+    setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
+
+    // Home card
+    if (hours >= phase_A_time.slice(0, 2) && hours < phase_B_time.slice(0, 2)) {
+      previousPhase = 'A';
+      setPendingPhaseText('B starts at ' + phase_B_time);
+    } else if (hours >= phase_B_time.slice(0, 2) && hours < phase_C_time.slice(0, 2)) {
+      previousPhase = 'B';
+      setPendingPhaseText('C starts at ' + phase_C_time);
+    } else {
+      previousPhase = 'C'; // from 18:00 till 09:00 
+      setPendingPhaseText('A starts at ' + phase_A_time);
+    }
+  }
+
+  const GetQuestions = () => {
+    setIndex(0);
+
+    Promise.resolve(
+      GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
+        .then(function (value) {
+
+          console.log(value);
+          if (value.questions) {
+
+            if (value.questions.length !== 0) {
+              setQuestionId(value.questions[index].id);
+              setTitle(value.questions[index].title);
+              setOptions(value.questions[index].options);
+              setIndex(index + 1);
+              setTotal(value.count);
+            } else {
+              setTitle('No available questions');
+              setIndex('');
+              setTotal('');
+            }
+          } else {
+            setTitle('No available questions');
+            setIndex('');
+            setTotal('');
+          }
+          setLoader(false);
+        })
+    )
+  }
+
+  let selected_options = [];
+
+  const handleSelect = (e) => {
+    if (e.target.checked) {
+      selected_options.push(e.target.value);
+    } else {
+      const result = selected_options.filter(element => element !== e.target.value);
+      selected_options = result;
+    }
+  }
+
+  function nextQuestion() {
+    if (index < total) {
+      Promise.resolve(
+        GetApi(api_server_url + '/questions/' + type + '/' + currentPhaseText)
+          .then(function (value) {
+            if (value) {
+              setTitle(value.questions[index].title);
+              setOptions(value.questions[index].options);
+              setQuestionId(value.questions[index].id);
+              setIndex(index + 1);
+              setTotal(value.count);
+            }
+          })
+      )
+    } else {
+      Alert('Completed!', 'success');
+      setQuestionsAvailable(false);
+
+      setTitle('');
+      setOptions([]);
+      setIndex(0);
+      setTotal(0);
+    }
+  }
+
+  function editAnswers() {
+    window.location.assign('/');
+  }
+
+  function submitAnswer() {
+    PostApi(api_server_url + '/answer/create', { id: getRandomInt(), selected: selected_options, UserCode: getCookie('code'), QuestionId: question_id });
+
+    if (index < total) {
+      Promise.resolve(
+        GetApi(api_server_url + '/questions/' + type + '/' + currentPhaseText)
+          .then(function (value) {
+            if (value) {
+              setTitle(value.questions[index].title);
+              setOptions(value.questions[index].options);
+              setQuestionId(value.questions[index].id);
+              setIndex(index + 1);
+              setTotal(value.count);
+            }
+          })
+      )
+    } else {
+      Alert('Completed!', 'success');
+
+      setQuestionsAvailable(false);
+      setTitle('');
+      setOptions([]);
+      setIndex(0);
+      setTotal(0);
+    }
+  }
 
   return (
     <>
-      <div className="center" style={{ display: loader ? 'none' : 'block' }}>
-        <div className='home-card' >
-          <CCard style={{ backgroundColor: 'rgba(0,0,0,0.8)', padding: '30px 18px' }}>
-            <h1 style={{ color: 'white' }}>Thank you for participating in Lordos Application!</h1>
-            <hr style={{ height: '4px', background: '#9ef1e2' }} />
-            <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Pending: <CBadge color='warning-gradient'>Phase {pendingPhaseText}</CBadge></p>
-            <hr style={{ height: '4px', background: '#9ef1e2' }} />
-            <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Previous phase completed:</p>
-            {otherUsers.map((user, index) => {
-              return (
-                <div key={index}>
-                  <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>
-                    <CBadge color={user.answered ? 'success-gradient' : 'danger-gradient'}>
-                      User {user.code} has {user.answered ? 'completed' : 'not completed'} previous phase
-                    </CBadge>
-
-
-                  </p>
-                </div>
-              )
-            })}
-
-            <hr style={{ height: '4px', background: '#9ef1e2' }} />
-            <p style={{ color: 'white', padding: '0' }}>You will receive a push notification when new questions are available <CIcon icon={cilBell} /></p>
-          </CCard>
-        </div >
+      <div style={{ width: '100%', display: (currentPhaseText === 'N/A') ? 'none' : 'block' }}>
+        <CButton variant={'ghost'} className={'float-end'} onClick={editAnswers}>Edit answers<CIcon icon={cilPencil} /></CButton>
       </div>
+
+      <div style={{ display: loader ? 'none' : 'block' }}>
+
+        <div style={{ width: '100%', display: (currentPhaseText === 'N/A') ? 'none' : 'block' }}>
+          <CBadge color='success-gradient'>Phase {currentPhaseText} is running</CBadge> <CBadge color='danger-gradient'>Deadline at {currentDeadlineText}</CBadge>
+          <hr />
+        </div>
+
+
+
+        <div style={{ display: (questionsAvailable) ? 'block' : 'none' }}>
+          <Questions options={options} loader={loader} index={index} id={question_id} title={title} total={total} handleSelect={handleSelect} nextQuestion={nextQuestion} submitAnswer={submitAnswer} />
+        </div>
+
+        <div className='home-card' style={{ display: (!questionsAvailable) ? 'block' : 'none' }}>
+          <HomeCard otherUsers={otherUsers} pendingPhaseText={pendingPhaseText} />
+        </div >
+
+      </div>
+
       <div style={{ display: (loader ? 'block' : 'none') }}>
         <AppLoader />
       </div>
