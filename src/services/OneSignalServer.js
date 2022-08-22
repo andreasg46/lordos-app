@@ -76,7 +76,7 @@ export function StartCampaign(code, phone) {
   const campaign = 'Default Campaign';
   const topic = 'Default Topic';
   const datetime = new Date();
-  const clickUrl = app_url.concat('/#/questions');
+  const clickUrl = app_url.concat('/');
 
   const smsContent = 'Questions available!';
 
