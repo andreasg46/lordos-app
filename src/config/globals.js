@@ -1,8 +1,8 @@
-export const phase_A_time = '15:30:00';
-export const deadline_A = '16:00:00';
+export const phase_A_time = '16:30:00';
+export const deadline_A = '17:00:00';
 
-export const phase_B_time = '16:00:00';
-export const deadline_B = '16:30:00';
+export const phase_B_time = '17:15:00';
+export const deadline_B = '17:45:00';
 
 export const phase_C_time = '18:00:00';
 export const deadline_C = '18:30:00';
