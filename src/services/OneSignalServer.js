@@ -1,4 +1,5 @@
-import { phase_A_time, phase_B_time, phase_C_time } from "src/config/globals";
+
+import { settings } from "src/config/globals";
 import { api_server_url, app_url } from "src/config/urls";
 import { isIOS, today } from "src/helpers";
 import { GetApi, PostApi } from "./Axios";
@@ -99,13 +100,13 @@ export function StartCampaign(code, phone) {
     const [next] = tomorrow.toISOString().split('T');
 
     if (isIOS) {
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_A_time), clickUrl); // Phase A Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_B_time), clickUrl); // Phase B Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + phase_C_time), clickUrl); // Phase C Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
+      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
     } else {
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_A_time), topic, clickUrl); // Phase A Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_B_time), topic, clickUrl); // Phase B Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + phase_C_time), topic, clickUrl); // Phase C Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseB_time), topic, clickUrl); // Phase B Campaign
+      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseC_time), topic, clickUrl); // Phase C Campaign
     }
     tomorrow.setDate(tomorrow.getDate() + 1)
   }

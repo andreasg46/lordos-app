@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 import OneSignal from 'react-onesignal';
 import { isIOS } from 'src/helpers';
 import { AppLoader } from 'src/components/app/AppLoader';
-import { GetSettings } from 'src/config/globals';
 
 const getBadge = (status) => {
   switch (status) {
@@ -48,8 +47,6 @@ const Landing = () => {
   const [other_users, setOtherUsers] = useState([]);
 
   useEffect(() => {
-    GetSettings();
-
     resetCookies();
     if (!getCookie('session_id')) { WelcomeAlert(); }
   }, []);

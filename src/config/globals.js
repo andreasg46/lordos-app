@@ -1,43 +1,28 @@
 import { GetApi } from "src/services/Axios";
 import { api_server_url } from "./urls";
 
-export let phase_A_time = "09:00:00";
-export let deadline_A = '09:30:00';
+export let settings = '';
 
-export let phase_B_time = '14:00:00';
-export let deadline_B = '14:30:00';
-
-export let phase_C_time = '18:00:00';
-export let deadline_C = '18:30:00';
-
-export let deadline = '30';
-
-export async function GetSettings() {
+export function GetSettings() {
   let data = '';
-  await GetApi(api_server_url + '/settings')
+  GetApi(api_server_url + '/settings')
     .then(function (value) {
-      value = value[0];
-      phase_A_time = value.phaseA_time;
-      phase_B_time = value.phaseB_time;
-      phase_C_time = value.phaseC_time;
-      deadline_A = value.phaseA_deadline;
-      deadline_B = value.phaseB_deadline;
-      deadline_C = value.phaseC_deadline;
+      data = value[0];
+      settings = data;
     });
   return data;
 }
-
 
 export function GetCurrentPhase() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
   // Questions card
-  if (n >= phase_A_time && n <= deadline_A) {
+  if (n >= settings.phaseA_time && n <= settings.phaseA_deadline) {
     return 'A';
-  } else if (n >= phase_B_time && n <= deadline_B) {
+  } else if (n >= settings.phaseB_time && n <= settings.phaseB_deadline) {
     return 'B';
-  } else if (n >= phase_C_time && n <= deadline_C) {
+  } else if (n >= settings.phaseC_time && n <= settings.phaseC_deadline) {
     return 'C';
   } else {
     return 'N/A';
@@ -45,36 +30,43 @@ export function GetCurrentPhase() {
 }
 
 export function GetPreviousPhase() {
-  var d = new Date();
-  var n = d.toLocaleTimeString('en-US', { hour12: false });
 
-  // Home card
-  if (n >= phase_A_time && n <= deadline_A) {
+  if (GetCurrentPhase() === 'A') { //
     return 'C';
-  } else if (n >= phase_B_time && n <= deadline_B) {
+  }
+  if (GetCurrentPhase() === 'B') {
     return 'A';
-  } else if (n >= phase_C_time && n <= deadline_C) {
+  }
+  if (GetCurrentPhase() === 'C') {
     return 'B';
-  } else {
-    return 'N/A';
+  }
+  else {
+    return 'A';
   }
 }
 
-export function GetPreviousPhaseTime(previousPhase) {
-  var d = new Date();
-  var n = d.toLocaleTimeString('en-US', { hour12: false });
+export function GetPendingPhase() {
+  if (GetCurrentPhase() === 'A') { //
+    return 'B';
+  }
+  if (GetCurrentPhase() === 'B') { //
+    return 'C';
+  }
+  if (GetCurrentPhase() === 'C') { //
+    return 'A';
+  }
+}
 
-  // Home card
-  if (previousPhase === 'C') {
-    return phase_C_time;
+export function GetPendingPhaseTime(previousPhase) {
+  if (GetPendingPhase() === 'A') {
+    return settings.phaseA_time;
   }
-  if (previousPhase === 'B') {
-    return phase_B_time;
+  if (GetPendingPhase() === 'B') {
+    return settings.phaseB_time;
   }
-  if (previousPhase === 'A') {
-    return phase_A_time;
+  if (GetPendingPhase() === 'C') {
+    return settings.phaseC_time;
   }
-
   return 'N/A';
 }
 
@@ -83,13 +75,16 @@ export function GetCurrentDeadline() {
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
   // Questions card
-  if (n >= phase_A_time && n <= deadline_A) {
-    return deadline_A;
-  } else if (n >= phase_B_time && n <= deadline_B) {
-    return deadline_B;
-  } else if (n >= phase_C_time && n <= deadline_C) {
-    return deadline_C;
+  if (n >= settings.phaseA_time && n <= settings.phaseA_deadline) {
+    return settings.phaseA_deadline;
+  } else if (n >= settings.phaseB_time && n <= settings.phaseB_deadline) {
+    return settings.phaseB_deadline;
+  } else if (n >= settings.phaseC_time && n <= settings.phaseC_deadline) {
+    return settings.phaseC_deadline;
   } else {
     return 'N/A';
   }
 }
+
+
+// export { phaseA_time, phaseA_deadline, phaseB_time, phaseB_deadline, phaseC_time, phaseC_deadline, deadline }
