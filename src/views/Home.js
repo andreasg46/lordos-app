@@ -17,13 +17,10 @@ const Home = () => {
   CheckSession();
 
   const [loader, setLoader] = useState(true);
-  const [otherUsers, setOtherUsers] = useState([]);
 
   const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
   const [currentDeadlineText, setCurrentDeadlineText] = useState('N/A');
   const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
-
-
 
   const [questionsAvailable, setQuestionsAvailable] = useState(false);
   const [previousQuestionFlag, setPreviousQuestionFlag] = useState(true);
@@ -31,7 +28,9 @@ const Home = () => {
 
   let previousPhase = 'N/A';
   let currentPhase = 'N/A';
+  let pendingPhase = 'N/A';
 
+  const [otherUsers, setOtherUsers] = useState([]);
   const role = getCookie('role') === 'Child' ? 'child' : 'parent';
 
   let tmp_questions = [];
@@ -92,10 +91,6 @@ const Home = () => {
     // Check if other users completed the task
     let tmpOtherUsers = [];
 
-    previousPhase = GetPreviousPhase();
-    let pendingPhaseTime = GetPendingPhaseTime();
-    setPendingPhaseText(GetPendingPhase() + ' starts at ' + pendingPhaseTime);
-
     Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
       .then(value1 => {
         tmpOtherUsers = value1 || [];
@@ -119,6 +114,39 @@ const Home = () => {
       }).catch((e) => {
         setLoader(false);
       });
+<<<<<<< HEAD
+=======
+  }, []);
+
+  const GetPhase = () => {
+    previousPhase = GetPreviousPhase();
+    currentPhase = GetCurrentPhase();
+    pendingPhase = GetPendingPhase();
+    let pendingPhaseTime = GetPendingPhaseTime();
+
+    setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
+
+    if (currentPhase !== 'N/A') {
+      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
+        .then(value => {
+
+          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
+            setEditAnswersFlag(true);
+            setQuestionsAvailable(false);
+          } else {
+            setEditAnswersFlag(false);
+            GetQuestions();
+          }
+
+        })
+    }
+
+    setCurrentPhaseText(currentPhase);
+    setCurrentDeadlineText(GetCurrentDeadline());
+
+    setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
+
+>>>>>>> ab08e483c37f1690ff533f74b9c16db6e8581bf9
   }
 
   const GetQuestions = () => {
