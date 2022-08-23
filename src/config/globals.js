@@ -92,9 +92,9 @@ export function GetPendingPhaseTime() {
     return settings.phaseC_time;
   }
   else if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
-    return settings.phaseB_time;
+    return settings.phaseA_time;
   }
   else {
-    return settings.phaseB_time;
+    return settings.phaseA_time;
   }
 }
