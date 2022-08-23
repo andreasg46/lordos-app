@@ -35,7 +35,7 @@ export function GetCurrentDeadline() {
     return settings.phaseA_deadline;
   }
   if (GetCurrentPhase() === 'B') {
-    settings.phaseB_deadline;
+    return settings.phaseB_deadline;
   }
   if (GetCurrentPhase() === 'C') {
     return settings.phaseC_deadline;
