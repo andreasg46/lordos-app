@@ -4,7 +4,6 @@ import { getCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetSettings, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
-import { AppLoader } from 'src/components/app/AppLoader';
 import { HomeCard } from './components/HomeCard';
 import { GetApi, PostApi } from 'src/services/Axios';
 import { api_server_url } from 'src/config/urls';
@@ -37,13 +36,12 @@ const Home = () => {
 
   useEffect(() => {
     setupWindowHistoryTricks();
-    GetSettings();
-    GetPhase();
-
-    if (currentPhase !== 'N/A') {
-      GetQuestions();
-    }
-
+    GetSettings().then(() => {
+      GetPhase();
+      if (currentPhase !== 'N/A') {
+        GetQuestions();
+      }
+    })
 
     let tmpOtherUsers = [];
     Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
