@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
-import { GetCurrentDeadline, GetCurrentPhase, GetSettings, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
+import { GetCurrentDeadline, GetCurrentPhase, GetPreviousPhase, GetPreviousPhaseTime, GetSettings, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
 import { HomeCard } from './components/HomeCard';
@@ -93,6 +93,9 @@ const Home = () => {
     let hours = new Date().getUTCHours() + 3;
 
     currentPhase = GetCurrentPhase();
+    previousPhase = GetPreviousPhase();
+
+    setPendingPhaseText(previousPhase + ' starts at ' + GetPreviousPhaseTime(previousPhase));
 
     if (currentPhase != 'N/A') {
       Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
@@ -109,23 +112,23 @@ const Home = () => {
         })
     }
 
-
     setCurrentPhaseText(currentPhase);
     setCurrentDeadlineText(GetCurrentDeadline());
 
     setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
 
-    // Home card
-    if (hours >= phase_A_time.slice(0, 2) && hours < phase_B_time.slice(0, 2)) {
-      previousPhase = 'A';
-      setPendingPhaseText('B starts at ' + phase_B_time);
-    } else if (hours >= phase_B_time.slice(0, 2) && hours < phase_C_time.slice(0, 2)) {
-      previousPhase = 'B';
-      setPendingPhaseText('C starts at ' + phase_C_time);
-    } else {
-      previousPhase = 'C'; // from 18:00 till 09:00 
-      setPendingPhaseText('A starts at ' + phase_A_time);
-    }
+
+    // // Home card
+    // if (hours >= phase_A_time.slice(0, 2) && hours < phase_B_time.slice(0, 2)) {
+    //   previousPhase = 'A';
+    //   setPendingPhaseText('B starts at ' + phase_B_time);
+    // } else if (hours >= phase_B_time.slice(0, 2) && hours < phase_C_time.slice(0, 2)) {
+    //   previousPhase = 'B';
+    //   setPendingPhaseText('C starts at ' + phase_C_time);
+    // } else {
+    //   previousPhase = 'C'; // from 18:00 till 09:00 
+    //   setPendingPhaseText('A starts at ' + phase_A_time);
+    // }
   }
 
   const GetQuestions = () => {

@@ -44,6 +44,40 @@ export function GetCurrentPhase() {
   }
 }
 
+export function GetPreviousPhase() {
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
+
+  // Home card
+  if (n >= phase_A_time && n <= deadline_A) {
+    return 'C';
+  } else if (n >= phase_B_time && n <= deadline_B) {
+    return 'A';
+  } else if (n >= phase_C_time && n <= deadline_C) {
+    return 'B';
+  } else {
+    return 'N/A';
+  }
+}
+
+export function GetPreviousPhaseTime(previousPhase) {
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
+
+  // Home card
+  if (previousPhase === 'C') {
+    return phase_C_time;
+  }
+  if (previousPhase === 'B') {
+    return phase_B_time;
+  }
+  if (previousPhase === 'A') {
+    return phase_A_time;
+  }
+
+  return 'N/A';
+}
+
 export function GetCurrentDeadline() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
