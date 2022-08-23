@@ -67,35 +67,35 @@ const Home = () => {
     // Check if other users completed the task
     let tmpOtherUsers = [];
 
-    Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
-      .then(value1 => {
-        tmpOtherUsers = value1 || [];
-        for (let i = 0; i < tmpOtherUsers.length; i++) {
-          tmpOtherUsers[i]['answered'] = false;
-        }
-        Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase, today, tomorrow))
-          .then(value2 => {
-            value1.map((user, index) => {
-              value2.map((answer) => {
-                if (user.code === answer.code) {
-                  tmpOtherUsers[index]['answered'] = true;
-                }
+    previousPhase = GetPreviousPhase();
+    setPendingPhaseText(previousPhase + ' starts at ' + GetPreviousPhaseTime(previousPhase));
+
+    if (previousPhase != 'N/A') {
+      Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
+        .then(value1 => {
+          tmpOtherUsers = value1 || [];
+          for (let i = 0; i < tmpOtherUsers.length; i++) {
+            tmpOtherUsers[i]['answered'] = false;
+          }
+          Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase, today, tomorrow))
+            .then(value2 => {
+              value1.map((user, index) => {
+                value2.map((answer) => {
+                  if (user.code === answer.code) {
+                    tmpOtherUsers[index]['answered'] = true;
+                  }
+                })
               })
-            })
-            setOtherUsers(tmpOtherUsers);
-            setLoader(false);
-          });
-      });
+              setOtherUsers(tmpOtherUsers);
+              setLoader(false);
+            });
+        });
+    }
 
   }, []);
 
   const GetPhase = () => {
-    let hours = new Date().getUTCHours() + 3;
-
     currentPhase = GetCurrentPhase();
-    previousPhase = GetPreviousPhase();
-
-    setPendingPhaseText(previousPhase + ' starts at ' + GetPreviousPhaseTime(previousPhase));
 
     if (currentPhase != 'N/A') {
       Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
@@ -117,18 +117,6 @@ const Home = () => {
 
     setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
 
-
-    // // Home card
-    // if (hours >= phase_A_time.slice(0, 2) && hours < phase_B_time.slice(0, 2)) {
-    //   previousPhase = 'A';
-    //   setPendingPhaseText('B starts at ' + phase_B_time);
-    // } else if (hours >= phase_B_time.slice(0, 2) && hours < phase_C_time.slice(0, 2)) {
-    //   previousPhase = 'B';
-    //   setPendingPhaseText('C starts at ' + phase_C_time);
-    // } else {
-    //   previousPhase = 'C'; // from 18:00 till 09:00 
-    //   setPendingPhaseText('A starts at ' + phase_A_time);
-    // }
   }
 
   const GetQuestions = () => {
