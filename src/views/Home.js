@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
-import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, settings } from 'src/config/globals';
+import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, GetSettings, settings } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
 import { HomeCard } from './components/HomeCard';
@@ -64,8 +64,11 @@ const Home = () => {
   useEffect(() => {
     setupWindowHistoryTricks();
 
-    GetPhase();
-    GetOtherUsersResponses();
+    GetSettings().then(() => {
+      GetPhase();
+      GetOtherUsersResponses();
+    })
+
   }, []);
 
   const GetPhase = () => {
