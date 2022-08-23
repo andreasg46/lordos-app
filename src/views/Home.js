@@ -58,8 +58,37 @@ const Home = () => {
     setupWindowHistoryTricks();
 
     GetPhase();
+    GetOtherUsersResponses();
+  }, []);
 
+  const GetPhase = () => {
+    console.log("Getting Phase...");
 
+    currentPhase = GetCurrentPhase();
+
+    if (currentPhase !== 'N/A') {
+      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
+        .then(value => {
+
+          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
+            setEditAnswersFlag(true);
+            setQuestionsAvailable(false);
+          } else {
+            setEditAnswersFlag(false);
+            GetQuestions();
+          }
+
+        })
+    }
+
+    setCurrentPhaseText(currentPhase);
+    setCurrentDeadlineText(GetCurrentDeadline());
+
+    setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
+
+  }
+
+  const GetOtherUsersResponses = () => {
     // Check if other users completed the task
     let tmpOtherUsers = [];
 
@@ -90,31 +119,6 @@ const Home = () => {
       }).catch((e) => {
         setLoader(false);
       });
-  }, []);
-
-  const GetPhase = () => {
-    currentPhase = GetCurrentPhase();
-
-    if (currentPhase !== 'N/A') {
-      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
-        .then(value => {
-
-          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
-            setEditAnswersFlag(true);
-            setQuestionsAvailable(false);
-          } else {
-            setEditAnswersFlag(false);
-            GetQuestions();
-          }
-
-        })
-    }
-
-    setCurrentPhaseText(currentPhase);
-    setCurrentDeadlineText(GetCurrentDeadline());
-
-    setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
-
   }
 
   const GetQuestions = () => {
