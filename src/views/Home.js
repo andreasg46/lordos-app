@@ -18,12 +18,14 @@ const Home = () => {
 
   const [loader, setLoader] = useState(true);
   const [otherUsers, setOtherUsers] = useState([]);
-  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
+
   const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
   const [currentDeadlineText, setCurrentDeadlineText] = useState('N/A');
+  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
+
+
 
   const [questionsAvailable, setQuestionsAvailable] = useState(false);
-
   const [previousQuestionFlag, setPreviousQuestionFlag] = useState(true);
   const [editAnswersFlag, setEditAnswersFlag] = useState(false);
 
@@ -62,9 +64,7 @@ const Home = () => {
     let tmpOtherUsers = [];
 
     previousPhase = GetPreviousPhase();
-
-
-    let pendingPhaseTime = GetPendingPhaseTime(previousPhase);
+    let pendingPhaseTime = GetPendingPhaseTime();
     setPendingPhaseText(GetPendingPhase() + ' starts at ' + pendingPhaseTime);
 
     Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))

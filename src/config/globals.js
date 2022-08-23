@@ -67,14 +67,15 @@ export function GetPendingPhase() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
+
   // Questions card
   if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
     return 'B';
   }
-  if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
+  else if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
     return 'C';
   }
-  if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
+  else if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
     return 'A';
   }
   else {
@@ -82,7 +83,7 @@ export function GetPendingPhase() {
   }
 }
 
-export function GetPendingPhaseTime(previousPhase) {
+export function GetPendingPhaseTime() {
   if (GetPendingPhase() === 'A') {
     return settings.phaseA_time;
   }
