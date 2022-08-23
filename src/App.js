@@ -14,6 +14,7 @@ const Landing = React.lazy(() => import('./views/Landing'))
 
 const App = () => {
   GetSettings();
+  console.log(settings);
 
   useEffect(() => {
     OneSignal.init({
