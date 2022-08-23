@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase } from 'src/config/globals';
@@ -12,9 +12,13 @@ import { CBadge, CButton } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
+import { useDispatch } from 'react-redux';
 
 const Home = () => {
   CheckSession();
+
+  const dispatch = useDispatch();
+  const stableDispatch = useCallback(dispatch, []);
 
   const [loader, setLoader] = useState(true);
 

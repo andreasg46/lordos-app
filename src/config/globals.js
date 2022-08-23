@@ -82,6 +82,9 @@ export function GetPendingPhase() {
 }
 
 export function GetPendingPhaseTime() {
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
+
   if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
     return settings.phaseB_time;
   }
