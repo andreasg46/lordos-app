@@ -17,12 +17,6 @@ import { useDispatch } from 'react-redux';
 const Home = () => {
   CheckSession();
 
-
-  console.log(settings);
-
-  const dispatch = useDispatch();
-  const stableDispatch = useCallback(dispatch, []);
-
   const [loader, setLoader] = useState(true);
 
   const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
