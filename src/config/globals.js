@@ -29,6 +29,21 @@ export function GetCurrentPhase() {
   }
 }
 
+export function GetCurrentDeadline() {
+  // Questions card
+  if (GetCurrentPhase() === 'A') {
+    return settings.phaseA_deadline;
+  }
+  if (GetCurrentPhase() === 'B') {
+    settings.phaseB_deadline;
+  }
+  if (GetCurrentPhase() === 'C') {
+    return settings.phaseC_deadline;
+  } else {
+    return 'N/A';
+  }
+}
+
 export function GetPreviousPhase() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
@@ -43,7 +58,7 @@ export function GetPreviousPhase() {
   if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
     return 'C';
   } else {
-    return 'N/A';
+    return 'A';
   }
 
 }
@@ -63,7 +78,7 @@ export function GetPendingPhase() {
     return 'A';
   }
   else {
-    return 'N/A';
+    return 'A';
   }
 }
 
@@ -77,24 +92,5 @@ export function GetPendingPhaseTime(previousPhase) {
   if (GetPendingPhase() === 'C') {
     return settings.phaseC_time;
   }
-  return 'N/A';
+  return settings.phaseA_time;
 }
-
-export function GetCurrentDeadline() {
-  var d = new Date();
-  var n = d.toLocaleTimeString('en-US', { hour12: false });
-
-  // Questions card
-  if (n >= settings.phaseA_time && n <= settings.phaseA_deadline) {
-    return settings.phaseA_deadline;
-  } else if (n >= settings.phaseB_time && n <= settings.phaseB_deadline) {
-    return settings.phaseB_deadline;
-  } else if (n >= settings.phaseC_time && n <= settings.phaseC_deadline) {
-    return settings.phaseC_deadline;
-  } else {
-    return 'N/A';
-  }
-}
-
-
-// export { phaseA_time, phaseA_deadline, phaseB_time, phaseB_deadline, phaseC_time, phaseC_deadline, deadline }
