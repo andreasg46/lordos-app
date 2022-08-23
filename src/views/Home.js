@@ -61,9 +61,14 @@ const Home = () => {
   }, []);
 
   const GetPhase = () => {
-    console.log("Getting Phase...");
+    console.log("Getting Phase.. ");
 
+    previousPhase = GetPreviousPhase();
     currentPhase = GetCurrentPhase();
+    pendingPhase = GetPendingPhase();
+    let pendingPhaseTime = GetPendingPhaseTime();
+
+    setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
 
     if (currentPhase !== 'N/A') {
       Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
@@ -114,39 +119,6 @@ const Home = () => {
       }).catch((e) => {
         setLoader(false);
       });
-<<<<<<< HEAD
-=======
-  }, []);
-
-  const GetPhase = () => {
-    previousPhase = GetPreviousPhase();
-    currentPhase = GetCurrentPhase();
-    pendingPhase = GetPendingPhase();
-    let pendingPhaseTime = GetPendingPhaseTime();
-
-    setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
-
-    if (currentPhase !== 'N/A') {
-      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
-        .then(value => {
-
-          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
-            setEditAnswersFlag(true);
-            setQuestionsAvailable(false);
-          } else {
-            setEditAnswersFlag(false);
-            GetQuestions();
-          }
-
-        })
-    }
-
-    setCurrentPhaseText(currentPhase);
-    setCurrentDeadlineText(GetCurrentDeadline());
-
-    setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
-
->>>>>>> ab08e483c37f1690ff533f74b9c16db6e8581bf9
   }
 
   const GetQuestions = () => {
