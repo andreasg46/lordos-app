@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
-import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase } from 'src/config/globals';
+import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, settings } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
 import { HomeCard } from './components/HomeCard';
@@ -16,6 +16,9 @@ import { useDispatch } from 'react-redux';
 
 const Home = () => {
   CheckSession();
+
+
+  console.log(settings);
 
   const dispatch = useDispatch();
   const stableDispatch = useCallback(dispatch, []);
