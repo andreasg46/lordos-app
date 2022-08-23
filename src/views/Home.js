@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase } from 'src/config/globals';
@@ -12,13 +12,8 @@ import { CBadge, CButton } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
-import { useDispatch } from 'react-redux';
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const stableDispatch = useCallback(dispatch, []);
-
-
   CheckSession();
 
   const [loader, setLoader] = useState(true);
@@ -34,6 +29,7 @@ const Home = () => {
   let previousPhase = 'N/A';
   let currentPhase = 'N/A';
   let pendingPhase = 'N/A';
+  let pendingPhaseTime = 'N/A';
 
   const [otherUsers, setOtherUsers] = useState([]);
   const role = getCookie('role') === 'Child' ? 'child' : 'parent';
@@ -60,9 +56,10 @@ const Home = () => {
 
   useEffect(() => {
     setupWindowHistoryTricks();
+
     GetPhase();
     GetOtherUsersResponses();
-  }, [stableDispatch]);
+  }, []);
 
   const GetPhase = () => {
     console.log("Getting Phase.. ");
@@ -70,7 +67,7 @@ const Home = () => {
     previousPhase = GetPreviousPhase();
     currentPhase = GetCurrentPhase();
     pendingPhase = GetPendingPhase();
-    let pendingPhaseTime = GetPendingPhaseTime();
+    pendingPhaseTime = GetPendingPhaseTime();
 
     setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
 
