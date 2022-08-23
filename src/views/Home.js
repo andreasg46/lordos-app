@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
+import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetSettings, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
@@ -9,7 +9,7 @@ import { GetApi, PostApi } from 'src/services/Axios';
 import { api_server_url } from 'src/config/urls';
 import { Alert } from 'src/services/Alerts';
 import { CBadge, CButton, CCol } from '@coreui/react-pro';
-import { getRandomInt } from 'src/helpers';
+import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
 
@@ -17,25 +17,45 @@ import { cilPencil } from '@coreui/icons';
 const Home = () => {
   CheckSession();
 
-  var backPresses = 0;
-  var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
-  var maxBackPresses = 2;
-  function handleBackButton(init) {
-    if (init !== true)
-      backPresses++;
-    if ((!isAndroid && backPresses >= maxBackPresses) ||
-      (isAndroid && backPresses >= maxBackPresses - 1)) {
-      window.history.back();
-    } else
-      window.history.pushState({}, '');
-  }
-  function setupWindowHistoryTricks() {
-    handleBackButton(true);
-    window.addEventListener('popstate', handleBackButton);
-  }
+  const [loader, setLoader] = useState(true);
+  const [otherUsers, setOtherUsers] = useState([]);
+  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
+  const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
+  const [currentDeadlineText, setCurrentDeadlineText] = useState('N/A');
+
+  const [questionsAvailable, setQuestionsAvailable] = useState(false);
+
+  const [previousQuestionFlag, setPreviousQuestionFlag] = useState(true);
+  const [editAnswersFlag, setEditAnswersFlag] = useState(false);
+
+  let previousPhase = 'N/A';
+  let currentPhase = 'N/A';
+
+  const role = getCookie('role') === 'Child' ? 'child' : 'parent';
+
+  let tmp_questions = [];
+  const [questions, setQuestions] = useState([]);
+
+  const [question_id, setQuestionId] = useState(0);
+
+  const [title, setTitle] = useState('');
+  const [options, setOptions] = useState([]);
+
+  const [indexText, setIndexText] = useState(0);
+  let index = 0;
+
+  const [total, setTotal] = useState(0);
+
+  let type = role;
+
+  let today = new Date().toISOString().slice(0, 10);
+  const tmp = new Date(today);
+  tmp.setDate(tmp.getDate() + 1);
+  let tomorrow = new Date(tmp).toISOString().slice(0, 10);
 
   useEffect(() => {
     setupWindowHistoryTricks();
+
     GetSettings().then(() => {
       GetPhase();
       if (currentPhase !== 'N/A') {
@@ -43,7 +63,10 @@ const Home = () => {
       }
     })
 
+
+    // Check if other users completed the task
     let tmpOtherUsers = [];
+
     Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
       .then(value1 => {
         tmpOtherUsers = value1 || [];
@@ -63,40 +86,30 @@ const Home = () => {
             setLoader(false);
           });
       });
+
   }, []);
-
-  const [loader, setLoader] = useState(true);
-  const [otherUsers, setOtherUsers] = useState([]);
-  const [pendingPhaseText, setPendingPhaseText] = useState('N/A');
-  const [currentPhaseText, setCurrentPhaseText] = useState('N/A');
-  const [currentDeadlineText, setCurrentDeadlineText] = useState('N/A');
-
-  const [questionsAvailable, setQuestionsAvailable] = useState(false);
-
-  let previousPhase = 'N/A';
-  let currentPhase = 'N/A';
-
-  const role = getCookie('role') === 'Child' ? 'child' : 'parent';
-
-  const [question_id, setQuestionId] = useState(0);
-  const [title, setTitle] = useState('');
-  const [options, setOptions] = useState([]);
-
-  const [index, setIndex] = useState(0);
-  const [total, setTotal] = useState(0);
-
-  let type = role;
-
-
-  let today = new Date().toISOString().slice(0, 10);
-  const tmp = new Date(today);
-  tmp.setDate(tmp.getDate() + 1);
-  let tomorrow = new Date(tmp).toISOString().slice(0, 10);
 
   const GetPhase = () => {
     let hours = new Date().getUTCHours() + 3;
 
     currentPhase = GetCurrentPhase();
+
+    if (currentPhase != 'N/A') {
+      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
+        .then(value => {
+          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
+
+            setEditAnswersFlag(true);
+            setQuestionsAvailable(false);
+
+
+          } else {
+            setEditAnswersFlag(false);
+          }
+        })
+    }
+
+
     setCurrentPhaseText(currentPhase);
     setCurrentDeadlineText(GetCurrentDeadline());
 
@@ -116,29 +129,32 @@ const Home = () => {
   }
 
   const GetQuestions = () => {
-    setIndex(0);
+    index = 0;
+    setIndexText(0);
 
     Promise.resolve(
       GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
         .then(function (value) {
 
-          console.log(value);
           if (value.questions) {
-
             if (value.questions.length !== 0) {
-              setQuestionId(value.questions[index].id);
-              setTitle(value.questions[index].title);
-              setOptions(value.questions[index].options);
-              setIndex(index + 1);
+              tmp_questions = value.questions;
+              setQuestions(tmp_questions);
+
+              // Set current Question
+              setQuestionId(tmp_questions[indexText].id);
+              setTitle(tmp_questions[indexText].title);
+              setOptions(tmp_questions[indexText].options);
               setTotal(value.count);
+
             } else {
               setTitle('No available questions');
-              setIndex('');
+              setIndexText('');
               setTotal('');
             }
           } else {
             setTitle('No available questions');
-            setIndex('');
+            setIndexText('');
             setTotal('');
           }
           setLoader(false);
@@ -157,66 +173,61 @@ const Home = () => {
     }
   }
 
-  function nextQuestion() {
-    if (index < total) {
-      Promise.resolve(
-        GetApi(api_server_url + '/questions/' + type + '/' + currentPhaseText)
-          .then(function (value) {
-            if (value) {
-              setTitle(value.questions[index].title);
-              setOptions(value.questions[index].options);
-              setQuestionId(value.questions[index].id);
-              setIndex(index + 1);
-              setTotal(value.count);
-            }
-          })
-      )
-    } else {
-      Alert('Completed!', 'success');
-      setQuestionsAvailable(false);
+  function editAnswers() {
+    setQuestionsAvailable(true);
 
-      setTitle('');
-      setOptions([]);
-      setIndex(0);
-      setTotal(0);
+    GetPhase();
+    if (currentPhase !== 'N/A') {
+      GetQuestions();
     }
   }
 
-  function editAnswers() {
-    window.location.assign('/');
+  function previousQuestion() {
+    index = indexText;
+    index--;
+
+    if (index >= 0) {
+      setIndexText(index);
+      setTitle(questions[index].title);
+      setOptions(questions[index].options);
+      setQuestionId(questions[index].id);
+    }
+    if (index == 0) {
+      setPreviousQuestionFlag(true);
+    }
   }
 
   function submitAnswer() {
+    setPreviousQuestionFlag(false);
+
     PostApi(api_server_url + '/answer/create', { id: getRandomInt(), selected: selected_options, UserCode: getCookie('code'), QuestionId: question_id });
 
-    if (index < total) {
-      Promise.resolve(
-        GetApi(api_server_url + '/questions/' + type + '/' + currentPhaseText)
-          .then(function (value) {
-            if (value) {
-              setTitle(value.questions[index].title);
-              setOptions(value.questions[index].options);
-              setQuestionId(value.questions[index].id);
-              setIndex(index + 1);
-              setTotal(value.count);
-            }
-          })
-      )
-    } else {
-      Alert('Completed!', 'success');
+    index = indexText;
+    index++;
 
+    if (index < total) {
+      setIndexText(index);
+      setTitle(questions[index].title);
+      setOptions(questions[index].options);
+      setQuestionId(questions[index].id);
+    }
+    else {
+      Alert('Completed!', 'success');
       setQuestionsAvailable(false);
+      setPreviousQuestionFlag(true);
+      setEditAnswersFlag(true);
+
       setTitle('');
       setOptions([]);
-      setIndex(0);
+      setIndexText(0);
       setTotal(0);
     }
   }
 
   return (
     <>
-      <div style={{ width: '100%', display: (currentPhaseText === 'N/A') ? 'none' : 'block' }}>
-        <CButton variant={'ghost'} className={'float-end'} onClick={editAnswers}>Edit answers<CIcon icon={cilPencil} /></CButton>
+      <div style={{ width: '100%', display: (editAnswersFlag) ? 'block' : 'none' }}>
+        <CButton variant={'ghost'} className={'float-end'} onClick={editAnswers}>Edit answers <CIcon icon={cilPencil} /></CButton>
       </div>
 
       <div style={{ display: loader ? 'none' : 'block' }}>
@@ -229,7 +240,7 @@ const Home = () => {
 
 
         <div style={{ display: (questionsAvailable) ? 'block' : 'none' }}>
-          <Questions options={options} loader={loader} index={index} id={question_id} title={title} total={total} handleSelect={handleSelect} nextQuestion={nextQuestion} submitAnswer={submitAnswer} />
+          <Questions options={options} loader={loader} index={indexText} id={question_id} title={title} total={total} handleSelect={handleSelect} previousQuestion={previousQuestion} previousQuestionFlag={previousQuestionFlag} submitAnswer={submitAnswer} />
         </div>
 
         <div className='home-card' style={{ display: (!questionsAvailable) ? 'block' : 'none' }}>
@@ -237,10 +248,6 @@ const Home = () => {
         </div >
 
       </div>
-
-      {/* <div style={{ display: (loader ? 'block' : 'none') }}>
-        <AppLoader />
-      </div> */}
     </>
   )
 }

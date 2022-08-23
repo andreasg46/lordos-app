@@ -10,7 +10,7 @@ import {
   CFormCheck,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
-import { cilArrowCircleRight, cilCheckCircle } from '@coreui/icons'
+import { cilArrowCircleLeft, cilArrowCircleRight, cilCheckCircle } from '@coreui/icons'
 
 const Questions = (props) => {
 
@@ -21,7 +21,7 @@ const Questions = (props) => {
           <CCol md={12}>
             <CCard md={12}>
               <CCardHeader>
-                <small><em>Phase {props.phase}</em></small> <strong>Question {props.index}</strong><span className='float-end'><strong>{props.index}/{props.total}</strong></span>
+                <strong>Question {props.index + 1}</strong><span className='float-end'><strong>{props.index + 1}/{props.total}</strong></span>
 
               </CCardHeader>
               <CCardBody>
@@ -41,15 +41,16 @@ const Questions = (props) => {
                   style={{ width: '48%' }}
                   color='primary'
                   variant='outline'
-                  onClick={props.nextQuestion}
-                >Next <CIcon icon={cilArrowCircleRight} /></CButton>
+                  disabled={props.previousQuestionFlag}
+                  onClick={props.previousQuestion}
+                >Back <CIcon icon={cilArrowCircleLeft} /></CButton>
                 <CButton
                   style={{ width: '48%' }}
                   color='success'
                   variant='outline'
                   className='float-end'
                   onClick={props.submitAnswer}
-                >Submit <CIcon icon={cilCheckCircle} /></CButton>
+                >Next <CIcon icon={cilArrowCircleRight} /></CButton>
               </CCardFooter>
             </CCard >
           </CCol>
