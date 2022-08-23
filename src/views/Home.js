@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
-import { GetCurrentDeadline, GetCurrentPhase, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
+import { GetCurrentDeadline, GetCurrentPhase, GetSettings, phase_A_time, phase_B_time, phase_C_time } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
 import { AppLoader } from 'src/components/app/AppLoader';
@@ -17,7 +17,6 @@ import { cilPencil } from '@coreui/icons';
 
 const Home = () => {
   CheckSession();
-
 
   var backPresses = 0;
   var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
@@ -38,6 +37,7 @@ const Home = () => {
 
   useEffect(() => {
     setupWindowHistoryTricks();
+    GetSettings();
     GetPhase();
 
     if (currentPhase !== 'N/A') {

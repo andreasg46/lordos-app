@@ -1,14 +1,32 @@
-export const phase_A_time = '18:20:00';
-export const deadline_A = '18:50:00';
+import { GetApi } from "src/services/Axios";
+import { api_server_url } from "./urls";
 
-export const phase_B_time = '19:00:00';
-export const deadline_B = '19:30:00';
+export let phase_A_time = "";
+export let deadline_A = '10:20:00';
 
-export const phase_C_time = '20:00:00';
-export const deadline_C = '20:30:00';
+export let phase_B_time = '11:00:00';
+export let deadline_B = '11:20:00';
 
+export let phase_C_time = '12:00:00';
+export let deadline_C = '12:20:00';
 
-export const deadline = '30';
+export let deadline = '30';
+
+export async function GetSettings() {
+  let data = '';
+  await GetApi(api_server_url + '/settings')
+    .then(function (value) {
+      value = value[0];
+      phase_A_time = value.phaseA_time;
+      phase_B_time = value.phaseB_time;
+      phase_C_time = value.phaseC_time;
+      deadline_A = value.phaseA_deadline;
+      deadline_B = value.phaseB_deadline;
+      deadline_C = value.phaseC_deadline;
+    });
+  return data;
+}
+
 
 export function GetCurrentPhase() {
   var d = new Date();
