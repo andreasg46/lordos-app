@@ -1,14 +1,14 @@
 import { GetApi } from "src/services/Axios";
 import { api_server_url } from "./urls";
 
-export let phase_A_time = "";
-export let deadline_A = '10:20:00';
+export let phase_A_time = "09:00:00";
+export let deadline_A = '09:30:00';
 
-export let phase_B_time = '11:00:00';
-export let deadline_B = '11:20:00';
+export let phase_B_time = '14:00:00';
+export let deadline_B = '14:30:00';
 
-export let phase_C_time = '12:00:00';
-export let deadline_C = '12:20:00';
+export let phase_C_time = '18:00:00';
+export let deadline_C = '18:30:00';
 
 export let deadline = '30';
 
