@@ -30,30 +30,40 @@ export function GetCurrentPhase() {
 }
 
 export function GetPreviousPhase() {
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
 
-  if (GetCurrentPhase() === 'A') { //
-    return 'C';
-  }
-  if (GetCurrentPhase() === 'B') {
+  // Questions card
+  if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
     return 'A';
   }
-  if (GetCurrentPhase() === 'C') {
+  if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
     return 'B';
   }
-  else {
-    return 'A';
+  if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
+    return 'C';
+  } else {
+    return 'N/A';
   }
+
 }
 
 export function GetPendingPhase() {
-  if (GetCurrentPhase() === 'A') { //
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
+
+  // Questions card
+  if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
     return 'B';
   }
-  if (GetCurrentPhase() === 'B') { //
+  if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
     return 'C';
   }
-  if (GetCurrentPhase() === 'C') { //
+  if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
     return 'A';
+  }
+  else {
+    return 'N/A';
   }
 }
 
