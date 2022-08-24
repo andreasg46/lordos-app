@@ -12,6 +12,7 @@ import { CBadge, CButton } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
+import { IdleTimer } from 'src/services/IdleTimer';
 
 const Home = () => {
   CheckSession();
@@ -61,7 +62,7 @@ const Home = () => {
       GetPhase();
       GetOtherUsersResponses();
     })
-
+    IdleTimer();
   }, []);
 
   const GetPhase = () => {

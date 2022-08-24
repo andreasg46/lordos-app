@@ -163,14 +163,14 @@ const Landing = () => {
                               if (result.isConfirmed) {
                                 OneSignal.showNativePrompt().then(() => {
                                   Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
-                                    console.log('Checking push notifications status... => ' + value)
+                                    console.log('Checking push notifications status... => ', value)
                                     if (value) {
                                       setUserReady(true);
                                     } else {
                                       Alert('Push Notifications must be enabled!', 'info')
                                     }
                                   })
-                                    .catch(error => {
+                                    .catch(() => {
                                       Alert('Push Notifications must be enabled!', 'info')
                                     });
                                 });

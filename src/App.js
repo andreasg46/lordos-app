@@ -13,8 +13,6 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 const Landing = React.lazy(() => import('./views/Landing'))
 
 const App = () => {
-  GetSettings();
-
   useEffect(() => {
     OneSignal.init({
       appId: "569117be-390c-4e5b-b865-f7522b09dcf2",

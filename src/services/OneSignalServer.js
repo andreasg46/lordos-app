@@ -48,7 +48,7 @@ export async function AddTags(userId, session_id, code) {
 
   fetch('https://onesignal.com/api/v1/players/' + userId, options)
     .then(response => response.json())
-    .then(response => console.log('Updating player id... => ' + response.success))
+    .then(response => console.log('Updating player id... => ', response.success))
     .catch(err => console.error(err));
 }
 
@@ -94,6 +94,9 @@ export function StartCampaign(code, phone) {
     SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, datetime, topic, app_url);
   }
 
+  var d = new Date();
+  var n = d.toLocaleTimeString('en-US', { hour12: false });
+
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
 
@@ -102,9 +105,12 @@ export function StartCampaign(code, phone) {
       SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
       SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
     } else {
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseB_time), topic, clickUrl); // Phase B Campaign
-      SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseC_time), topic, clickUrl); // Phase C Campaign
+      if (settings.phaseA_time > n)
+        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
+      if (settings.phaseB_time > n)
+        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseB_time), topic, clickUrl); // Phase B Campaign
+      if (settings.phaseC_time > n)
+        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseC_time), topic, clickUrl); // Phase C Campaign
     }
     tomorrow.setDate(tomorrow.getDate() + 1)
   }
