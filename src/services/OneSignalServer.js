@@ -16,8 +16,7 @@ export async function SendWebPushByCode(code, headings, subtitle, campaign, date
   }
   await PostApi(api_server_url + '/web-push', body)
     .then(function (value) {
-      console.log("Sending Web Push...");
-      console.log(value);
+      console.log("Sending Web Push... => ", value);
     });
 }
 
@@ -30,8 +29,7 @@ export async function SendSMSByCode(phone, message, datetime, click_url) {
   }
   await PostApi(api_server_url + '/sms-push', body)
     .then(function (value) {
-      console.log("Sending SMS Push...");
-      console.log(value);
+      console.log("Sending SMS Push... => ", value);
     });
 }
 
@@ -50,7 +48,7 @@ export async function AddTags(userId, session_id, code) {
 
   fetch('https://onesignal.com/api/v1/players/' + userId, options)
     .then(response => response.json())
-    .then(response => console.log(response))
+    .then(response => console.log('Updating player id... => ' + response.success))
     .catch(err => console.error(err));
 }
 

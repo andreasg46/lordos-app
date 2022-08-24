@@ -90,17 +90,14 @@ const Landing = () => {
 
             findUser(code) // Step 1  => Get User Info
               .then(value => {
-                console.log(value);
                 setCookie('code', code, 180);
 
                 findRole(value.RoleId) // Step 2  => Get Role Info
                   .then(value => {
-                    console.log(value);
                     setCookie('role', value.title, 180);
 
                     findSession(code) // Step 3  => Get Session Info
                       .then(value => {
-                        console.log(value);
 
                         session_id = value.id || '';
                         setSessionId_S(value.id || '');
@@ -166,7 +163,7 @@ const Landing = () => {
                               if (result.isConfirmed) {
                                 OneSignal.showNativePrompt().then(() => {
                                   Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
-                                    console.log('Push Notifications enabled: ' + value)
+                                    console.log('Checking push notifications status... => ' + value)
                                     if (value) {
                                       setUserReady(true);
                                     } else {

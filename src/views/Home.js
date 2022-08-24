@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
 import { getCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, GetSettings, settings } from 'src/config/globals';
@@ -12,7 +12,6 @@ import { CBadge, CButton } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import CIcon from '@coreui/icons-react';
 import { cilPencil } from '@coreui/icons';
-import { useDispatch } from 'react-redux';
 
 const Home = () => {
   CheckSession();
@@ -66,8 +65,6 @@ const Home = () => {
   }, []);
 
   const GetPhase = () => {
-    console.log("Getting Phase.. ");
-
     previousPhase = GetPreviousPhase();
     currentPhase = GetCurrentPhase();
     pendingPhase = GetPendingPhase();
@@ -92,7 +89,6 @@ const Home = () => {
 
     setCurrentPhaseText(currentPhase);
     setCurrentDeadlineText(GetCurrentDeadline());
-
     setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
 
   }
@@ -225,7 +221,7 @@ const Home = () => {
   return (
     <>
       <div style={{ width: '100%', display: (editAnswersFlag) ? 'block' : 'none' }}>
-        <CButton variant={'ghost'} className={'float-end'} onClick={editAnswers}>Edit answers <CIcon icon={cilPencil} /></CButton>
+        <CButton variant={'outline'} className={'float-end'} onClick={editAnswers}>Edit answers <CIcon icon={cilPencil} /></CButton>
       </div>
 
       <div style={{ display: loader ? 'none' : 'block' }}>

@@ -4,6 +4,8 @@ import { api_server_url } from "./urls";
 export let settings = '';
 
 export async function GetSettings() {
+  console.log('Getting settings...');
+
   let data = '';
   await GetApi(api_server_url + '/settings')
     .then(function (value) {
@@ -67,13 +69,13 @@ export function GetPendingPhase() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
-  if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
+  if (n >= settings.phaseA_time && n <= settings.phaseB_time) {
     return 'B';
   }
-  else if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
+  else if (n >= settings.phaseB_time && n <= settings.phaseC_time) {
     return 'C';
   }
-  else if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
+  else if (n >= settings.phaseC_time && n <= settings.phaseA_time) {
     return 'A';
   }
   else {
@@ -85,13 +87,13 @@ export function GetPendingPhaseTime() {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
-  if (n >= settings.phaseA_deadline && n <= settings.phaseB_time) {
+  if (n >= settings.phaseA_time && n <= settings.phaseB_time) {
     return settings.phaseB_time;
   }
-  else if (n >= settings.phaseB_deadline && n <= settings.phaseC_time) {
+  else if (n >= settings.phaseB_time && n <= settings.phaseC_time) {
     return settings.phaseC_time;
   }
-  else if (n >= settings.phaseC_deadline && n <= settings.phaseA_time) {
+  else if (n >= settings.phaseC_time && n <= settings.phaseA_time) {
     return settings.phaseA_time;
   }
   else {

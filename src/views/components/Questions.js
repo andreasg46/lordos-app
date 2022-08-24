@@ -10,7 +10,7 @@ import {
   CFormCheck,
 } from '@coreui/react-pro'
 import CIcon from '@coreui/icons-react'
-import { cilArrowCircleLeft, cilArrowCircleRight, cilCheckCircle } from '@coreui/icons'
+import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
 

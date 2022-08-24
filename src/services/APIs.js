@@ -39,7 +39,7 @@ export async function findUserAnswered(session_id, code, phase, startDate, endDa
 }
 
 export async function findOtherUsers(session_id, code) { // Retrieve other users
-  console.log('Getting other users...');
+  console.log('Getting other users status...');
 
   const users = await GetApi(api_server_url + '/session/users/' + session_id + '/' + code)
     .then(value => value);
