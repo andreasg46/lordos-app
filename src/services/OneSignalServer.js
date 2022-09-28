@@ -81,7 +81,7 @@ export function StartCampaign(code, phone) {
   const reminderContent = 'Have you completed your task? If not do it now!';
 
   const tomorrow = new Date(today);
-  // tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
 
   const total_days = 1;
@@ -103,9 +103,9 @@ export function StartCampaign(code, phone) {
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
 
-    let phaseA_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseA_time));
-    let phaseB_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseB_time));
-    let phaseC_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseC_time));
+    let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
+    let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
+    let phaseC_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseC_time));
 
     if (isIOS) {
       SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
