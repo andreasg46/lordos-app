@@ -4,8 +4,6 @@ import { api_server_url } from "./urls";
 export let settings = '';
 
 export async function GetSettings() {
-  console.log('Getting settings...');
-
   let data = '';
   await GetApi(api_server_url + '/settings')
     .then(function (value) {

@@ -195,35 +195,41 @@ const Home = () => {
   function submitAnswer() {
     setPreviousQuestionFlag(false);
 
-    PostApi(api_server_url + '/answer/create', { id: getRandomInt(), selected: selected_options, UserCode: getCookie('code'), QuestionId: question_id });
+    console.log(selected_options);
 
-    index = indexText;
-    index++;
+    if (selected_options.length === 0) {
+      Alert("You must submit an answer!", 'warning');
+    } else {
+      PostApi(api_server_url + '/answer/create', { id: getRandomInt(), selected: selected_options, UserCode: getCookie('code'), QuestionId: question_id });
 
-    if (index < total) {
-      setIndexText(index);
-      setTitle(questions[index].title);
-      setOptions(questions[index].options);
-      setQuestionId(questions[index].id);
-    }
-    else {
-      Alert('Completed!', 'success');
-      setQuestionsAvailable(false);
-      setPreviousQuestionFlag(true);
-      setEditAnswersFlag(true);
+      index = indexText;
+      index++;
 
-      setTitle('');
-      setOptions([]);
-      setIndexText(0);
-      setTotal(0);
+      if (index < total) {
+        setIndexText(index);
+        setTitle(questions[index].title);
+        setOptions(questions[index].options);
+        setQuestionId(questions[index].id);
+      }
+      else {
+        Alert('Completed!', 'success');
+        setQuestionsAvailable(false);
+        setPreviousQuestionFlag(true);
+        setEditAnswersFlag(true);
+
+        setTitle('');
+        setOptions([]);
+        setIndexText(0);
+        setTotal(0);
+      }
     }
   }
 
   return (
     <>
-      <div style={{ width: '100%', display: (editAnswersFlag) ? 'block' : 'none' }}>
+      {/* <div style={{ width: '100%', display: (editAnswersFlag) ? 'block' : 'none' }}>
         <CButton variant={'outline'} className={'float-end'} onClick={editAnswers}>Edit answers <CIcon icon={cilPencil} /></CButton>
-      </div>
+      </div> */}
 
       <div style={{ display: loader ? 'none' : 'block' }}>
 

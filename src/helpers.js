@@ -39,6 +39,12 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
+function addMinutes(numOfMinutes, date = new Date()) {
+  date.setMinutes(date.getMinutes() + numOfMinutes);
+
+  return date;
+}
+
 var backPresses = 0;
 var isAndroid = navigator.userAgent.toLowerCase().indexOf("android") > -1;
 var maxBackPresses = 2;
@@ -56,5 +62,5 @@ function setupWindowHistoryTricks() {
   window.addEventListener('popstate', handleBackButton);
 }
 
-export { today, currentTime, isIOS, getRandomInt, setupWindowHistoryTricks }
+export { today, currentTime, isIOS, addMinutes, getRandomInt, setupWindowHistoryTricks }
 

@@ -1,7 +1,7 @@
 
 import { settings } from "src/config/globals";
 import { api_server_url, app_url } from "src/config/urls";
-import { isIOS, today } from "src/helpers";
+import { addMinutes, isIOS, today } from "src/helpers";
 import { GetApi, PostApi } from "./Axios";
 
 export async function SendWebPushByCode(code, headings, subtitle, campaign, datetime, topic, click_url) {
@@ -77,7 +77,8 @@ export function StartCampaign(code, phone) {
   const datetime = new Date();
   const clickUrl = app_url.concat('/');
 
-  const smsContent = 'Questions available!';
+  const messageContent = 'Questions are now available!';
+  const reminderContent = 'Have you completed your task? If not do it now!';
 
   const tomorrow = new Date(today);
   // tomorrow.setDate(tomorrow.getDate() + 1);
@@ -97,21 +98,37 @@ export function StartCampaign(code, phone) {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
+
+
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
 
+    let phaseA_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseA_time));
+    let phaseB_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseB_time));
+    let phaseC_meritTime = addMinutes(1, new Date(next + 'T' + settings.phaseC_time));
+
     if (isIOS) {
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
-      SendSMSByCode(phone, smsContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
+      SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
+      SendSMSByCode(phone, reminderContent, phaseA_meritTime, clickUrl); // Phase A Campaign Merit Time
+
+      SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
+      SendSMSByCode(phone, reminderContent, phaseB_meritTime, clickUrl); // Phase B Campaign Merit Time
+
+      SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
+      SendSMSByCode(phone, reminderContent, phaseC_meritTime, clickUrl); // Phase C Campaign Merit Time
+
     } else {
-      if (settings.phaseA_time > n)
-        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
-      if (settings.phaseB_time > n)
-        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseB_time), topic, clickUrl); // Phase B Campaign
-      if (settings.phaseC_time > n)
-        SendWebPushByCode(code, headings, subtitle, campaign, new Date(next + 'T' + settings.phaseC_time), topic, clickUrl); // Phase C Campaign
+      SendWebPushByCode(code, headings, messageContent, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
+      SendWebPushByCode(code, headings, reminderContent, campaign, phaseA_meritTime, topic, clickUrl); // Phase A Campaign Merit Time
+
+      SendWebPushByCode(code, headings, messageContent, campaign, new Date(next + 'T' + settings.phaseB_time), topic, clickUrl); // Phase B Campaign
+      SendWebPushByCode(code, headings, reminderContent, campaign, phaseB_meritTime, topic, clickUrl); // Phase B Campaign Merit Time
+
+      SendWebPushByCode(code, headings, messageContent, campaign, new Date(next + 'T' + settings.phaseC_time), topic, clickUrl); // Phase C Campaign
+      SendWebPushByCode(code, headings, reminderContent, campaign, phaseC_meritTime, topic, clickUrl); // Phase C Campaign Merit Time
+
     }
+
     tomorrow.setDate(tomorrow.getDate() + 1)
   }
 }
