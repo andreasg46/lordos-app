@@ -14,8 +14,10 @@ import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
 
+  console.log(props.options);
   return (
     <>
+
       <div className='questions-center'>
         <div style={props.loader ? { display: 'none' } : { display: 'block' }} className='questions-card' >
           <CCol md={12}>
@@ -30,7 +32,7 @@ const Questions = (props) => {
                   return (
                     <div key={index}>
                       <CButton className='question-card' style={{ cursor: 'initial' }}>
-                        <CFormCheck className='question-checkbox' id={option} value={option} key={option} label={option} onChange={props.handleSelect} />
+                        <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} />
                       </CButton>
                     </div>
                   )

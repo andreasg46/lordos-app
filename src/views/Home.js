@@ -160,10 +160,11 @@ const Home = () => {
   let selected_options = [];
 
   const handleSelect = (e) => {
+    console.log(e.target);
     if (e.target.checked) {
-      selected_options.push(e.target.value);
+      selected_options.push(e.target.id);
     } else {
-      const result = selected_options.filter(element => element !== e.target.value);
+      const result = selected_options.filter(element => element !== e.target.id);
       selected_options = result;
     }
   }
