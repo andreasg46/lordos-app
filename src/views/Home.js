@@ -160,7 +160,6 @@ const Home = () => {
   let selected_options = [];
 
   const handleSelect = (e) => {
-    console.log(e.target);
     if (e.target.checked) {
       selected_options.push(e.target.id);
     } else {

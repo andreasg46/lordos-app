@@ -13,11 +13,8 @@ import CIcon from '@coreui/icons-react'
 import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
-
-  console.log(props.options);
   return (
     <>
-
       <div className='questions-center'>
         <div style={props.loader ? { display: 'none' } : { display: 'block' }} className='questions-card' >
           <CCol md={12}>
