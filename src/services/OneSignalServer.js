@@ -81,10 +81,10 @@ export function StartCampaign(code, phone) {
   const reminderContent = 'Have you completed your task? If not do it now!';
 
   const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setDate(tomorrow.getDate() + 0);
 
 
-  const total_days = 1;
+  const total_days = 1; // total campaign days
   tomorrow.setDate(tomorrow.getDate());
 
 
@@ -101,7 +101,7 @@ export function StartCampaign(code, phone) {
 
 
   for (let i = 0; i < total_days; i++) {
-    const [next] = today.toISOString().split('T');
+    const [next] = tomorrow.toISOString().split('T');
 
     // let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
