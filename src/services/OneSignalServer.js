@@ -101,7 +101,7 @@ export function StartCampaign(code, phone) {
 
 
   for (let i = 0; i < total_days; i++) {
-    const [next] = tomorrow.toISOString().split('T');
+    const [next] = today.toISOString().split('T');
 
     // let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
