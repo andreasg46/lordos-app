@@ -13,7 +13,7 @@ import CIcon from '@coreui/icons-react'
 import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
-  var title_texts = props.title.split(',').map(function (word, index) {
+  var title_texts = props.title.split('|').map(function (word, index) {
     if (index == 0) {
       return (
         <p style={{ fontSize: 'large', fontWeight: 'bold' }} key={index}>{word}</p>
