@@ -107,9 +107,9 @@ export function StartCampaign(code, phone) {
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
     // let phaseC_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseC_time));
 
-    let phaseA_meritTime = addMinutes((settings.deadline) / 2, new Date(next + 'T' + settings.phaseA_time));
-    let phaseB_meritTime = addMinutes((settings.deadline) / 2, new Date(next + 'T' + settings.phaseB_time));
-    let phaseC_meritTime = addMinutes((settings.deadline) / 2, new Date(next + 'T' + settings.phaseC_time));
+    let phaseA_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseA_time));
+    let phaseB_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseB_time));
+    let phaseC_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseC_time));
 
     if (isIOS) {
       SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
