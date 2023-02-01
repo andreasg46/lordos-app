@@ -41,6 +41,7 @@ const Home = () => {
   const [question_id, setQuestionId] = useState(0);
 
   const [title, setTitle] = useState('');
+  const [typeOfQuestion, setTypeOfQuestion] = useState('');
   const [options, setOptions] = useState([]);
 
   const [indexText, setIndexText] = useState(0);
@@ -139,16 +140,19 @@ const Home = () => {
               // Set current Question
               setQuestionId(tmp_questions[indexText].id);
               setTitle(tmp_questions[indexText].title);
+              setTypeOfQuestion(tmp_questions[indexText].response);
               setOptions(tmp_questions[indexText].options);
               setTotal(value.count);
 
             } else {
               setTitle('No available questions');
+              setTypeOfQuestion('');
               setIndexText('');
               setTotal('');
             }
           } else {
             setTitle('No available questions');
+            setTypeOfQuestion('');
             setIndexText('');
             setTotal('');
           }
@@ -160,7 +164,10 @@ const Home = () => {
   let selected_options = [];
 
   const handleSelect = (e) => {
-    if (e.target.checked) {
+    if (e.target.checked && typeOfQuestion == 'multiple') {
+      selected_options.push(e.target.id);
+    } else if (e.target.checked && typeOfQuestion == 'single') {
+      selected_options = [];
       selected_options.push(e.target.id);
     } else {
       const result = selected_options.filter(element => element !== e.target.id);
@@ -184,6 +191,7 @@ const Home = () => {
     if (index >= 0) {
       setIndexText(index);
       setTitle(questions[index].title);
+      setTypeOfQuestion(questions[index].response);
       setOptions(questions[index].options);
       setQuestionId(questions[index].id);
     }
@@ -208,6 +216,7 @@ const Home = () => {
       if (index < total) {
         setIndexText(index);
         setTitle(questions[index].title);
+        setTypeOfQuestion(questions[index].response);
         setOptions(questions[index].options);
         setQuestionId(questions[index].id);
       }
@@ -218,6 +227,7 @@ const Home = () => {
         setEditAnswersFlag(true);
 
         setTitle('');
+        setTypeOfQuestion('');
         setOptions([]);
         setIndexText(0);
         setTotal(0);
@@ -241,7 +251,7 @@ const Home = () => {
 
 
         <div style={{ display: (questionsAvailable) ? 'block' : 'none' }}>
-          <Questions options={options} loader={loader} index={indexText} id={question_id} title={title} total={total} handleSelect={handleSelect} previousQuestion={previousQuestion} previousQuestionFlag={previousQuestionFlag} submitAnswer={submitAnswer} />
+          <Questions options={options} loader={loader} index={indexText} id={question_id} title={title} typeOfQuestion={typeOfQuestion} total={total} handleSelect={handleSelect} previousQuestion={previousQuestion} previousQuestionFlag={previousQuestionFlag} submitAnswer={submitAnswer} />
         </div>
 
         <div className='home-card' style={{ display: (!questionsAvailable) ? 'block' : 'none' }}>

@@ -13,6 +13,18 @@ import CIcon from '@coreui/icons-react'
 import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
+  var title_texts = props.title.split(',').map(function (word, index) {
+    if (index == 0) {
+      return (
+        <p style={{ fontSize: 'large', fontWeight: 'bold' }} key={index}>{word}</p>
+      );
+    } else {
+      return (
+        <p style={{ fontSize: 'small', fontStyle: 'italic' }} key={index}>{word}</p>
+      );
+    }
+  });
+
   return (
     <>
       <div className='questions-center'>
@@ -20,19 +32,28 @@ const Questions = (props) => {
           <CCol md={12}>
             <CCard md={12}>
               <CCardHeader>
-                <strong>Question {props.index + 1}</strong><span className='float-end'><strong>{props.index + 1}/{props.total}</strong></span>
-
+                <strong>Question {props.index + 1} ({props.typeOfQuestion} choice)</strong><span className='float-end'><strong>{props.index + 1}/{props.total}</strong></span>
               </CCardHeader>
               <CCardBody>
-                <p style={{ fontSize: 'large' }}><em>{props.title}</em></p>
+                <div style={{ fontSize: 'large' }}>{title_texts}</div>
                 {props.options.map((option, index) => {
-                  return (
-                    <div key={index}>
-                      <CButton className='question-card' style={{ cursor: 'initial' }}>
-                        <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} />
-                      </CButton>
-                    </div>
-                  )
+                  if (props.typeOfQuestion == 'multiple') {
+                    return (
+                      <div key={index}>
+                        <CButton className='question-card' style={{ cursor: 'initial' }}>
+                          <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} />
+                        </CButton>
+                      </div>
+                    )
+                  } else {
+                    return (
+                      <div key={index}>
+                        <CButton className='question-card' style={{ cursor: 'initial' }}>
+                          <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} name="flexRadioDefault" type="radio" />
+                        </CButton>
+                      </div>
+                    )
+                  }
                 })}
               </CCardBody>
               <CCardFooter>
