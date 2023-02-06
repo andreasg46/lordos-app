@@ -76,7 +76,7 @@ const Home = () => {
     if (currentPhase !== 'N/A') {
       Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow, role))
         .then(value => {
-          if (value.count.count[0] == value.q_count.count[0]) { // User Completed the current Phase
+          if (value.count[0].count == value.q_count[0].count) { // User Completed the current Phase
             console.log("Current Phase Completed");
             setEditAnswersFlag(true);
             setQuestionsAvailable(false);
