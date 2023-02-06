@@ -82,6 +82,9 @@ const Home = () => {
             setQuestionsAvailable(false);
           } else {
             console.log(value);
+            setCookie('index', value.count[0].count, 1);
+            setIndexText(getCookie('index'));
+            index = getCookie('index');
             setEditAnswersFlag(false);
             GetQuestions();
           }
