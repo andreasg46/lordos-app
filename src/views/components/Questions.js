@@ -38,7 +38,7 @@ const Questions = (props) => {
           <CCol md={12}>
             <CCard md={12}>
               <CCardHeader>
-                <strong>Question {props.index + 1} ({props.typeOfQuestion} choice)</strong><span className='float-end'><strong>{props.index + 1}/{props.total}</strong></span>
+                <strong>Question {parseInt(props.index) + 1} ({props.typeOfQuestion} choice)</strong><span className='float-end'><strong>{parseInt(props.index) + 1}/{props.total}</strong></span>
               </CCardHeader>
               <CCardBody>
                 <div style={{ fontSize: 'large' }}>{title_texts}</div>

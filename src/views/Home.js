@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
-import { getCookie } from 'src/services/Cookies';
+import { getCookie, setCookie } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, GetSettings, settings } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
@@ -8,10 +8,8 @@ import { HomeCard } from './components/HomeCard';
 import { GetApi, PostApi } from 'src/services/Axios';
 import { api_server_url } from 'src/config/urls';
 import { Alert } from 'src/services/Alerts';
-import { CBadge, CButton } from '@coreui/react-pro';
+import { CBadge } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
-import CIcon from '@coreui/icons-react';
-import { cilPencil } from '@coreui/icons';
 import { IdleTimer } from 'src/services/IdleTimer';
 
 const Home = () => {
@@ -44,8 +42,9 @@ const Home = () => {
   const [typeOfQuestion, setTypeOfQuestion] = useState('');
   const [options, setOptions] = useState([]);
 
-  const [indexText, setIndexText] = useState(0);
-  let index = 0;
+  if (!getCookie('index')) { setCookie('index', 0, 1); }
+  const [indexText, setIndexText] = useState((getCookie('index')));
+  let index = getCookie('index');
 
   const [total, setTotal] = useState(0);
 
@@ -77,18 +76,16 @@ const Home = () => {
     if (currentPhase !== 'N/A') {
       Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
         .then(value => {
-
-          if (value.length > 0 && !editAnswersFlag) { // User Completed the current Phase
+          if (value) { // User Completed the current Phase
+            console.log("Current Phase Completed");
             setEditAnswersFlag(true);
             setQuestionsAvailable(false);
           } else {
             setEditAnswersFlag(false);
             GetQuestions();
           }
-
         })
     }
-
     setCurrentPhaseText(currentPhase);
     setCurrentDeadlineText(GetCurrentDeadline());
     setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
@@ -125,9 +122,6 @@ const Home = () => {
   }
 
   const GetQuestions = () => {
-    index = 0;
-    setIndexText(0);
-
     Promise.resolve(
       GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
         .then(function (value) {
@@ -143,7 +137,6 @@ const Home = () => {
               setTypeOfQuestion(tmp_questions[indexText].response);
               setOptions(tmp_questions[indexText].options);
               setTotal(value.count);
-
             } else {
               setTitle('No available questions');
               setTypeOfQuestion('');
@@ -185,8 +178,9 @@ const Home = () => {
   }
 
   function previousQuestion() {
-    index = indexText;
+    index = getCookie('index');
     index--;
+    setCookie('index', index, 1);
 
     if (index >= 0) {
       setIndexText(index);
@@ -210,8 +204,9 @@ const Home = () => {
     } else {
       PostApi(api_server_url + '/answer/create', { id: getRandomInt(), selected: selected_options, UserCode: getCookie('code'), QuestionId: question_id });
 
-      index = indexText;
+      index = getCookie('index');
       index++;
+      setCookie('index', index, 1);
 
       if (index < total) {
         setIndexText(index);
@@ -225,6 +220,8 @@ const Home = () => {
         setQuestionsAvailable(false);
         setPreviousQuestionFlag(true);
         setEditAnswersFlag(true);
+
+        setCookie('index', 0, 1);
 
         setTitle('');
         setTypeOfQuestion('');
