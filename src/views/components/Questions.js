@@ -14,11 +14,11 @@ import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
   var title_texts = props.title.split('|').map(function (word, index) {
-    if (index == 0) {
-      return (
-        <p style={{ fontSize: 'large', fontWeight: 'bold', display: 'none' }} key={index}>{word}</p>
-      );
-    }
+    // if (index == 0) {
+    //   return (
+    //     <p style={{ fontSize: 'large', fontWeight: 'bold', display: 'none' }} key={index}>{word}</p>
+    //   );
+    // }
     if (index == 0) {
       return (
         <p style={{ fontSize: 'large', fontStyle: 'italic' }} key={index}>{word}</p>
