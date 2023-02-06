@@ -19,6 +19,11 @@ const Questions = (props) => {
         <p style={{ fontSize: 'large', fontWeight: 'bold', display: 'none' }} key={index}>{word}</p>
       );
     }
+    if (index == 0) {
+      return (
+        <p style={{ fontSize: 'large', fontStyle: 'italic' }} key={index}>{word}</p>
+      );
+    }
     if (index == 1) {
       return (
         <p style={{ fontSize: 'small', fontWeight: 'bold' }} key={index}>{word}</p>
