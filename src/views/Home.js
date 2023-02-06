@@ -74,13 +74,14 @@ const Home = () => {
     setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
 
     if (currentPhase !== 'N/A') {
-      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow))
+      Promise.resolve(findUserAnswered(getCookie('session_id'), getCookie('code'), currentPhase, today, tomorrow, role))
         .then(value => {
-          if (value) { // User Completed the current Phase
+          if (value.count.count[0] == value.q_count.count[0]) { // User Completed the current Phase
             console.log("Current Phase Completed");
             setEditAnswersFlag(true);
             setQuestionsAvailable(false);
           } else {
+            console.log(value);
             setEditAnswersFlag(false);
             GetQuestions();
           }

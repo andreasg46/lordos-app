@@ -29,10 +29,10 @@ export async function findRole(RoleId) { // Retrieve user
   return { ...role };
 }
 
-export async function findUserAnswered(session_id, code, phase, startDate, endDate) { // Retrieve other users
+export async function findUserAnswered(session_id, code, phase, startDate, endDate, type) { // Retrieve other users
   console.log('Getting user answers...');
 
-  const user = await GetApi(api_server_url + '/questions/user/answered/' + session_id + '/' + code + '/' + phase + '/' + startDate + '/' + endDate)
+  const user = await GetApi(api_server_url + '/questions/user/answered/' + session_id + '/' + code + '/' + phase + '/' + startDate + '/' + endDate + '/' + type)
     .then(value => value);
 
   return user;
