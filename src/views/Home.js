@@ -216,20 +216,22 @@ const Home = () => {
       setCookie('index', index, 1);
 
       console.log(correct_option);
-      if (correct_option == true) { // yes/no question
-        if (selected_options == '2') { // No => skip questions where
+      if (correct_option == 1) { // yes/no question
+        if (selected_options == '2') { // No => skip questions where true
           index = getCookie('index');
           index++;
           setCookie('index', index, 1);
-          setCorrectOption(questions[index].correct_option);
+          //setCorrectOption(questions[index].correct_option);
 
-          if (correct_option == true) {
+          let tmp_correct_option = questions[index].correct_option;
+          //console.log(questions);
+
+          while (tmp_correct_option == "true") {
             index = getCookie('index');
             index++;
             setCookie('index', index, 1);
-            setCorrectOption(questions[index].correct_option);
+            tmp_correct_option = questions[index].correct_option;
           }
-
         }
       }
 
