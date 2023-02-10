@@ -41,6 +41,7 @@ const Home = () => {
   const [title, setTitle] = useState('');
   const [typeOfQuestion, setTypeOfQuestion] = useState('');
   const [options, setOptions] = useState([]);
+  const [correct_option, setCorrectOption] = useState(0);
 
   if (!getCookie('index')) { setCookie('index', 0, 1); }
   const [indexText, setIndexText] = useState((getCookie('index')));
@@ -140,6 +141,7 @@ const Home = () => {
               setTitle(tmp_questions[indexText].title);
               setTypeOfQuestion(tmp_questions[indexText].response);
               setOptions(tmp_questions[indexText].options);
+              setCorrectOption(tmp_questions[indexText].correct_option);
               setTotal(value.count);
             } else {
               setTitle('No available questions');
@@ -191,6 +193,7 @@ const Home = () => {
       setTitle(questions[index].title);
       setTypeOfQuestion(questions[index].response);
       setOptions(questions[index].options);
+      setCorrectOption(questions[index].correct_option);
       setQuestionId(questions[index].id);
     }
     if (index === 0) {
@@ -212,11 +215,30 @@ const Home = () => {
       index++;
       setCookie('index', index, 1);
 
+      console.log(correct_option);
+      if (correct_option == true) { // yes/no question
+        if (selected_options == '2') { // No => skip questions where
+          index = getCookie('index');
+          index++;
+          setCookie('index', index, 1);
+          setCorrectOption(questions[index].correct_option);
+
+          if (correct_option == true) {
+            index = getCookie('index');
+            index++;
+            setCookie('index', index, 1);
+            setCorrectOption(questions[index].correct_option);
+          }
+
+        }
+      }
+
       if (index < total) {
         setIndexText(index);
         setTitle(questions[index].title);
         setTypeOfQuestion(questions[index].response);
         setOptions(questions[index].options);
+        setCorrectOption(questions[index].correct_option);
         setQuestionId(questions[index].id);
       }
       else {
@@ -230,6 +252,7 @@ const Home = () => {
         setTitle('');
         setTypeOfQuestion('');
         setOptions([]);
+        setCorrectOption(0);
         setIndexText(0);
         setTotal(0);
       }
