@@ -15,7 +15,7 @@ export const HomeCard = (props) => {
         <hr style={{ height: '4px', background: '#9ef1e2' }} />
         <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Pending: <CBadge color='warning-gradient'>Phase {props.pendingPhaseText}</CBadge></p>
         <hr style={{ height: '4px', background: '#9ef1e2' }} />
-        <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Previous phase completed:</p>
+        {/* <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Previous phase completed:</p>
         {props.otherUsers.map((user, index) => {
           return (
             <div key={index}>
@@ -30,7 +30,7 @@ export const HomeCard = (props) => {
           )
         })}
 
-        <hr style={{ height: '4px', background: '#9ef1e2' }} />
+        <hr style={{ height: '4px', background: '#9ef1e2' }} /> */}
         <p style={{ color: 'white', padding: '0' }}>You will receive a push notification when new questions are available <CIcon icon={cilBell} /></p>
       </CCard>
     </>
