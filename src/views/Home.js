@@ -188,6 +188,7 @@ const Home = () => {
     index--;
     setCookie('index', index, 1);
 
+
     if (index >= 0) {
       setIndexText(index);
       setTitle(questions[index].title);
@@ -215,16 +216,18 @@ const Home = () => {
       index++;
       setCookie('index', index, 1);
 
-      console.log(correct_option);
       if (correct_option == 1) { // yes/no question
-        if (selected_options == '2') { // No => skip questions where true
+        if (selected_options == '2' && role == 'parent') { // No => skip questions where true
+          index = getCookie('index');
+          index = total;
+          setCookie('index', index, 1);
+        }
+
+        if (selected_options == '2' && role == 'child') { // No => skip questions where true
           index = getCookie('index');
           index++;
           setCookie('index', index, 1);
-          //setCorrectOption(questions[index].correct_option);
-
           let tmp_correct_option = questions[index].correct_option;
-          //console.log(questions);
 
           while (tmp_correct_option == "true") {
             index = getCookie('index');
