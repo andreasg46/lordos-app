@@ -90,9 +90,9 @@ export function StartCampaign(code, phone) {
 
   //Welcome Message
   if (isIOS) {
-    SendSMSByCode(phone, 'Welcome to Lordos App!', null, app_url);
+    SendSMSByCode(phone, 'Welcome to Family Moments Experience!', null, app_url);
   } else {
-    SendWebPushByCode(code, headings, "Welcome to Lordos App!", campaign, datetime, topic, app_url);
+    SendWebPushByCode(code, headings, "Welcome to Family Moments Experience!", campaign, datetime, topic, app_url);
   }
 
   var d = new Date();

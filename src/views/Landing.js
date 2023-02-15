@@ -55,10 +55,10 @@ const Landing = () => {
 
     Swal.fire({
       title: 'Welcome',
-      text: 'to Lordos App',
+      text: 'to Family Moments Experience',
       imageUrl: 'logo-2.png',
       imageWidth: 80,
-      imageAlt: 'Lordos App',
+      imageAlt: 'Family Moments Experience',
       showConfirmButton: true,
       confirmButtonText: "Proceed",
       confirmButtonColor: '#198754',
@@ -265,7 +265,7 @@ const Landing = () => {
               <CCardGroup>
 
                 <CRow style={{ verticalAlign: 'baseline' }} >
-                  <CCard className='landing-card-lg' style={{ writingMode: 'vertical-rl', background: '#014d4d' }}>
+                  <CCard className='landing-card-lg' style={{ writingMode: 'vertical-rl', background: '#a0bcc2' }}>
                     <CCardBody className="text-center" >
                       <CImage src='logo.png' style={{ width: '100%', height: '150px', objectFit: 'cover' }} />
                     </CCardBody>
@@ -277,7 +277,7 @@ const Landing = () => {
                     <CImage rounded={true} src='logo-2.png' className='landing-card' style={{ width: '30%', objectFit: 'cover' }} />
                     <br className='landing-card' ></br>
                     <CForm onSubmit={handleSubmit}>
-                      <h4>Welcome to Lordos App</h4>
+                      <h4>Welcome to Family Moments Experience</h4>
                       <br />
                       {other_users.map((user, index) => {
                         return (

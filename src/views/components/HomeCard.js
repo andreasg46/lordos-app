@@ -11,7 +11,7 @@ export const HomeCard = (props) => {
   return (
     <>
       <CCard style={{ backgroundColor: 'rgba(0,0,0,0.8)', padding: '30px 18px' }}>
-        <h1 style={{ color: 'white' }}>Thank you for participating in Lordos Application!</h1>
+        <h1 style={{ color: 'white' }}>Thank you for participating in Family Moments Experience!</h1>
         <hr style={{ height: '4px', background: '#9ef1e2' }} />
         <p style={{ color: 'white', padding: '0', marginBottom: '0' }}>Pending: <CBadge color='warning-gradient'>Phase {props.pendingPhaseText}</CBadge></p>
         <hr style={{ height: '4px', background: '#9ef1e2' }} />
