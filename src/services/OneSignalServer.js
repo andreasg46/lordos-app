@@ -81,10 +81,10 @@ export function StartCampaign(code, phone) {
   const reminderContent = 'Have you completed your task? If not do it now!';
 
   const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 0);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
 
-  const total_days = 1; // total campaign days
+  const total_days = 7; // total campaign days
   tomorrow.setDate(tomorrow.getDate());
 
 
