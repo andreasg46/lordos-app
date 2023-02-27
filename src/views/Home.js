@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
-import { getCookie, setCookie } from 'src/services/Cookies';
+import { getCookie, setCookie, setCookieByHours } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, GetSettings, settings } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
@@ -13,6 +13,7 @@ import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import { IdleTimer } from 'src/services/IdleTimer';
 
 const Home = () => {
+  var now = Date.now();
   CheckSession();
 
   const [loader, setLoader] = useState(true);
@@ -67,10 +68,18 @@ const Home = () => {
   }, []);
 
   const GetPhase = () => {
-    previousPhase = GetPreviousPhase();
-    currentPhase = GetCurrentPhase();
-    pendingPhase = GetPendingPhase();
-    pendingPhaseTime = GetPendingPhaseTime();
+    if ((getCookie('starting_date') > now) == false) {
+      previousPhase = 'N/A';
+      currentPhase = 'N/A';
+      pendingPhase = 'A';
+      pendingPhaseTime = '09:00';
+    } else {
+      previousPhase = GetPreviousPhase();
+      currentPhase = GetCurrentPhase();
+      pendingPhase = GetPendingPhase();
+      pendingPhaseTime = GetPendingPhaseTime();
+    }
+
 
     setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
 
@@ -98,32 +107,34 @@ const Home = () => {
   }
 
   const GetOtherUsersResponses = () => {
-    // Check if other users completed the task
-    let tmpOtherUsers = [];
+    // // Check if other users completed the task
+    // let tmpOtherUsers = [];
 
-    Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
-      .then(value1 => {
-        tmpOtherUsers = value1 || [];
-        for (let i = 0; i < tmpOtherUsers.length; i++) {
-          tmpOtherUsers[i]['answered'] = false;
-        }
-        Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase, today, tomorrow))
-          .then(value2 => {
-            value1.map((user, index) => {
-              value2.map((answer) => {
-                if (user.code === answer.code) {
-                  tmpOtherUsers[index]['answered'] = true;
-                }
-              })
-            })
-            setOtherUsers(tmpOtherUsers);
-            setLoader(false);
-          }).catch((e) => {
-            setLoader(false);
-          });
-      }).catch((e) => {
-        setLoader(false);
-      });
+    // Promise.resolve(findOtherUsers(getCookie('session_id'), getCookie('code')))
+    //   .then(value1 => {
+    //     tmpOtherUsers = value1 || [];
+    //     for (let i = 0; i < tmpOtherUsers.length; i++) {
+    //       tmpOtherUsers[i]['answered'] = false;
+    //     }
+    //     Promise.resolve(findOtherUsersAnswered(getCookie('session_id'), getCookie('code'), previousPhase, today, tomorrow))
+    //       .then(value2 => {
+    //         value1.map((user, index) => {
+    //           value2.map((answer) => {
+    //             if (user.code === answer.code) {
+    //               tmpOtherUsers[index]['answered'] = true;
+    //             }
+    //           })
+    //         })
+    //         setOtherUsers(tmpOtherUsers);
+    //         setLoader(false);
+    //       }).catch((e) => {
+    //         setLoader(false);
+    //       });
+    //   }).catch((e) => {
+    //     setLoader(false);
+    //   });
+
+    setLoader(false);
   }
 
   const GetQuestions = () => {
@@ -131,7 +142,11 @@ const Home = () => {
       GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
         .then(function (value) {
 
-          if (value.questions) {
+          if (getCookie('completed') || !(getCookie('starting_date') > now)) {
+            setQuestionsAvailable(false);
+          }
+
+          if (value.questions && !getCookie('completed')) {
             if (value.questions.length !== 0) {
               tmp_questions = value.questions;
               setQuestions(tmp_questions);
@@ -218,12 +233,14 @@ const Home = () => {
 
       if (correct_option == 1) { // yes/no question
         if (selected_options == '2' && role == 'parent') { // No => skip questions where true
+          alert("The following questions were skipped!");
           index = getCookie('index');
           index = total;
           setCookie('index', index, 1);
         }
 
         if (selected_options == '2' && role == 'child') { // No => skip questions where true
+          alert("The following questions were skipped!");
           index = getCookie('index');
           index++;
           setCookie('index', index, 1);
@@ -253,6 +270,7 @@ const Home = () => {
         setEditAnswersFlag(true);
 
         setCookie('index', 0, 1);
+        setCookieByHours('completed', true, 4);
 
         setTitle('');
         setTypeOfQuestion('');

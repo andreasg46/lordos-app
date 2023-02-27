@@ -37,3 +37,25 @@ export function Alert2(title, icon) {
     title: title
   })
 }
+
+export function AlertYesNo() {
+  Swal.fire({
+    title: 'By clicking no you will skip the following questions',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Ok',
+    denyButtonText: 'No',
+    customClass: {
+      actions: 'my-actions',
+      cancelButton: 'order-1 right-gap',
+      confirmButton: 'order-2',
+      denyButton: 'order-3',
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      return 'skipped';
+    } else if (result.isDenied) {
+      return 'not_skipped';
+    }
+  })
+}

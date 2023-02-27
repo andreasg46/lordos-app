@@ -22,6 +22,13 @@ export function setCookie(cname, cvalue, exdays) {
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+export function setCookieByHours(cname, cvalue, exhours) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exhours * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
 export function resetCookies() {
   setCookie('session_id', '', 7);
   setCookie('code', '', 7);

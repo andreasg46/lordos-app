@@ -234,6 +234,14 @@ const Landing = () => {
                 setCookie('status', 'Active', 180);
                 setLoader(false);
 
+                var tomorrow = new Date();
+                tomorrow.setHours(0, 0, 0, 0);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+
+                setCookie('starting_date', tomorrow, 7);
+
+                console.log(tomorrow);
+
                 Alert2('Session established!', 'success');
 
                 StartCampaign(code_S, phone_S); // Start Notifications campaign
