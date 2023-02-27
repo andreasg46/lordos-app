@@ -84,9 +84,8 @@ export function StartCampaign(code, phone) {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
 
-  const total_days = 7; // total campaign days
+  const total_days = 2; // total campaign days
   tomorrow.setDate(tomorrow.getDate());
-
 
   //Welcome Message
   if (isIOS) {
@@ -106,10 +105,11 @@ export function StartCampaign(code, phone) {
     // let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
     // let phaseC_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseC_time));
+    let reminderTime = (settings.deadline) / 2;
 
-    let phaseA_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseA_time));
-    let phaseB_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseB_time));
-    let phaseC_meritTime = addMinutes(10, new Date(next + 'T' + settings.phaseC_time));
+    let phaseA_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseA_time));
+    let phaseB_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseB_time));
+    let phaseC_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseC_time));
 
     if (isIOS) {
       SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
@@ -136,4 +136,3 @@ export function StartCampaign(code, phone) {
     tomorrow.setDate(tomorrow.getDate() + 1)
   }
 }
-
