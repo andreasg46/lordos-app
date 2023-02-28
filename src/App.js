@@ -16,10 +16,10 @@ const App = () => {
   useEffect(() => {
     GetSettings();
 
-    OneSignal.init({
-      appId: "569117be-390c-4e5b-b865-f7522b09dcf2",
-      allowLocalhostAsSecureOrigin: true
-    });
+    // OneSignal.init({
+    //   appId: "569117be-390c-4e5b-b865-f7522b09dcf2",
+    //   allowLocalhostAsSecureOrigin: true
+    // });
     // OneSignal.showSlidedownPrompt();
   }, []);
 

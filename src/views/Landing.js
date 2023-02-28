@@ -119,65 +119,65 @@ const Landing = () => {
                         //===== CASE 2 =====// Session Found 
                         else if (session_id) { // (iPhone User)
 
-                          if (isIOS) {
-                            swalQueue.fire({
-                              title: "What's your phone number?",
-                              input: "text",
-                              inputPlaceholder: '99123456',
-                              currentProgressStep: 1,
-                              inputValidator: (value) => {
+                          // if (isIOS) {
+                          swalQueue.fire({
+                            title: "What's your phone number?",
+                            input: "text",
+                            inputPlaceholder: '99123456',
+                            currentProgressStep: 1,
+                            inputValidator: (value) => {
 
-                                if (!value) {
-                                  return 'You need to write something!'
-                                }
-                                else {
-                                  phone = '+357' + value;
-                                  setPhone_S('+357' + value);
-                                  AddDevice('+357' + value, code, session_id).then(value => {
-                                    if (value.response !== '') {
-                                      Alert(value.response.message, 'success')
-                                      setUserReady(true);
-                                      console.log(value);
-                                    } else {
-                                      swalQueue.fire({
-                                        title: "Oops. Something went wrong. Please try again!",
-                                        currentProgressStep: 1,
-                                      }).then((result) => {
-                                        if (result.isConfirmed) {
-                                          WelcomeAlert();
-                                        }
-                                      })
-                                    }
+                              if (!value) {
+                                return 'You need to write something!'
+                              }
+                              else {
+                                phone = '+357' + value;
+                                setPhone_S('+357' + value);
+                                AddDevice('+357' + value, code, session_id).then(value => {
+                                  if (value.response !== '') {
+                                    Alert(value.response.message, 'success')
+                                    setUserReady(true);
+                                    console.log(value);
+                                  } else {
+                                    swalQueue.fire({
+                                      title: "Oops. Something went wrong. Please try again!",
+                                      currentProgressStep: 1,
+                                    }).then((result) => {
+                                      if (result.isConfirmed) {
+                                        WelcomeAlert();
+                                      }
+                                    })
                                   }
-                                  );
                                 }
+                                );
                               }
-                            })
-                          }
+                            }
+                          })
+                          // }
 
-                          else { // (Not iPhone User)
-                            swalQueue.fire({
-                              title: "Please subscribe to the push notification service before joining the session...",
-                              currentProgressStep: 1,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                OneSignal.showNativePrompt().then(() => {
-                                  Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
-                                    console.log('Checking push notifications status... => ', value)
-                                    if (value) {
-                                      setUserReady(true);
-                                    } else {
-                                      Alert('Push Notifications must be enabled!', 'info')
-                                    }
-                                  })
-                                    .catch(() => {
-                                      Alert('Push Notifications must be enabled!', 'info')
-                                    });
-                                });
+                          // else { // (Not iPhone User)
+                          //   swalQueue.fire({
+                          //     title: "Please subscribe to the push notification service before joining the session...",
+                          //     currentProgressStep: 1,
+                          //   }).then((result) => {
+                          //     if (result.isConfirmed) {
+                          //       OneSignal.showNativePrompt().then(() => {
+                          //         Promise.resolve(OneSignal.isPushNotificationsEnabled()).then((value) => {
+                          //           console.log('Checking push notifications status... => ', value)
+                          //           if (value) {
+                          //             setUserReady(true);
+                          //           } else {
+                          //             Alert('Push Notifications must be enabled!', 'info')
+                          //           }
+                          //         })
+                          //           .catch(() => {
+                          //             Alert('Push Notifications must be enabled!', 'info')
+                          //           });
+                          //       });
 
-                              }
-                            })
-                          }
+                          //     }
+                          //   })
+                          // }
 
                         }
 
