@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { findOtherUsers, findOtherUsersAnswered, findUserAnswered } from 'src/services/APIs';
-import { getCookie, setCookie, setCookieByHours } from 'src/services/Cookies';
+import { getCookie, setCookie, setCookieByHours, setCookieByMinutes } from 'src/services/Cookies';
 import { GetCurrentDeadline, GetCurrentPhase, GetPendingPhase, GetPendingPhaseTime, GetPreviousPhase, GetSettings, settings } from 'src/config/globals';
 import { CheckSession } from 'src/services/Auth';
 import Questions from './components/Questions';
@@ -13,7 +13,7 @@ import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import { IdleTimer } from 'src/services/IdleTimer';
 
 const Home = () => {
-  var now = Date.now();
+  var now = new Date();
   CheckSession();
 
   const [loader, setLoader] = useState(true);
@@ -44,7 +44,7 @@ const Home = () => {
   const [options, setOptions] = useState([]);
   const [correct_option, setCorrectOption] = useState(0);
 
-  if (!getCookie('index')) { setCookie('index', 0, 1); }
+  if (!getCookie('index')) { setCookieByHours('index', 0, 4); }
   const [indexText, setIndexText] = useState((getCookie('index')));
   let index = getCookie('index');
 
@@ -68,7 +68,8 @@ const Home = () => {
   }, []);
 
   const GetPhase = () => {
-    if ((getCookie('starting_date') > now) == false) {
+
+    if ((getCookie('starting_date') < now)) {
       previousPhase = 'N/A';
       currentPhase = 'N/A';
       pendingPhase = 'A';
@@ -92,7 +93,7 @@ const Home = () => {
             setQuestionsAvailable(false);
           } else {
             console.log(value);
-            setCookie('index', value.count[0].count, 1);
+            //setCookieByMinutes('index', value.count[0].count, 1);
             setIndexText(getCookie('index'));
             index = getCookie('index');
             setEditAnswersFlag(false);
@@ -142,7 +143,7 @@ const Home = () => {
       GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
         .then(function (value) {
 
-          if (getCookie('completed') || !(getCookie('starting_date') > now)) {
+          if (getCookie('completed') || (getCookie('starting_date') > now)) {
             setQuestionsAvailable(false);
           }
 
@@ -201,7 +202,7 @@ const Home = () => {
   function previousQuestion() {
     index = getCookie('index');
     index--;
-    setCookie('index', index, 1);
+    setCookieByHours('index', index, 4);
 
 
     if (index >= 0) {
@@ -229,27 +230,27 @@ const Home = () => {
 
       index = getCookie('index');
       index++;
-      setCookie('index', index, 1);
+      setCookieByHours('index', index, 4);
 
       if (correct_option == 1) { // yes/no question
         if (selected_options == '2' && role == 'parent') { // No => skip questions where true
           alert("The following questions were skipped!");
           index = getCookie('index');
           index = total;
-          setCookie('index', index, 1);
+          setCookieByHours('index', index, 4);
         }
 
         if (selected_options == '2' && role == 'child') { // No => skip questions where true
           alert("The following questions were skipped!");
           index = getCookie('index');
           index++;
-          setCookie('index', index, 1);
+          setCookieByHours('index', index, 4);
           let tmp_correct_option = questions[index].correct_option;
 
           while (tmp_correct_option == "true") {
             index = getCookie('index');
             index++;
-            setCookie('index', index, 1);
+            setCookieByHours('index', index, 4);
             tmp_correct_option = questions[index].correct_option;
           }
         }
@@ -269,7 +270,7 @@ const Home = () => {
         setPreviousQuestionFlag(true);
         setEditAnswersFlag(true);
 
-        setCookie('index', 0, 1);
+        setCookieByHours('index', 0, 4);
         setCookieByHours('completed', true, 4);
 
         setTitle('');
