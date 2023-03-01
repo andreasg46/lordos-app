@@ -12,6 +12,7 @@ import { CBadge } from '@coreui/react-pro';
 import { getRandomInt, setupWindowHistoryTricks } from 'src/helpers';
 import { IdleTimer } from 'src/services/IdleTimer';
 
+
 const Home = () => {
   var now = new Date();
   CheckSession();
@@ -44,7 +45,7 @@ const Home = () => {
   const [options, setOptions] = useState([]);
   const [correct_option, setCorrectOption] = useState(0);
 
-  if (!getCookie('index')) { setCookieByHours('index', 0, 4); }
+  if (!getCookie('index')) { setCookieByHours('index', 0, 1); }
   const [indexText, setIndexText] = useState((getCookie('index')));
   let index = getCookie('index');
 
@@ -202,7 +203,7 @@ const Home = () => {
   function previousQuestion() {
     index = getCookie('index');
     index--;
-    setCookieByHours('index', index, 4);
+    setCookieByHours('index', index, 1);
 
 
     if (index >= 0) {
@@ -230,27 +231,27 @@ const Home = () => {
 
       index = getCookie('index');
       index++;
-      setCookieByHours('index', index, 4);
+      setCookieByHours('index', index, 1);
 
       if (correct_option == 1) { // yes/no question
         if (selected_options == '2' && role == 'parent') { // No => skip questions where true
           alert("The following questions were skipped!");
           index = getCookie('index');
           index = total;
-          setCookieByHours('index', index, 4);
+          setCookieByHours('index', index, 1);
         }
 
         if (selected_options == '2' && role == 'child') { // No => skip questions where true
           alert("The following questions were skipped!");
           index = getCookie('index');
           index++;
-          setCookieByHours('index', index, 4);
+          setCookieByHours('index', index, 1);
           let tmp_correct_option = questions[index].correct_option;
 
           while (tmp_correct_option == "true") {
             index = getCookie('index');
             index++;
-            setCookieByHours('index', index, 4);
+            setCookieByHours('index', index, 1);
             tmp_correct_option = questions[index].correct_option;
           }
         }
@@ -270,8 +271,8 @@ const Home = () => {
         setPreviousQuestionFlag(true);
         setEditAnswersFlag(true);
 
-        setCookieByHours('index', 0, 4);
-        setCookieByHours('completed', true, 4);
+        setCookieByHours('index', 0, 1);
+        setCookieByHours('completed', true, 1);
 
         setTitle('');
         setTypeOfQuestion('');

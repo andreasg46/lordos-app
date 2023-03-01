@@ -111,13 +111,13 @@ export function StartCampaign(code, phone) {
 
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
+  var reminderTime = (settings.deadline) / 2;
 
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
     // let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
     // let phaseC_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseC_time));
-    let reminderTime = (settings.deadline) / 2;
 
     let phaseA_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseA_time));
     let phaseB_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseB_time));
