@@ -70,7 +70,7 @@ const Home = () => {
 
   const GetPhase = () => {
 
-    if ((getCookie('starting_date') < now)) {
+    if ((getCookie('starting_date') > now.getTime())) {
       previousPhase = 'N/A';
       currentPhase = 'N/A';
       pendingPhase = 'A';
@@ -81,7 +81,6 @@ const Home = () => {
       pendingPhase = GetPendingPhase();
       pendingPhaseTime = GetPendingPhaseTime();
     }
-
 
     setPendingPhaseText(pendingPhase + ' starts at ' + pendingPhaseTime);
 
@@ -105,7 +104,6 @@ const Home = () => {
     setCurrentPhaseText(currentPhase);
     setCurrentDeadlineText(GetCurrentDeadline());
     setQuestionsAvailable(currentPhase !== 'N/A' ? true : false);
-
   }
 
   const GetOtherUsersResponses = () => {
@@ -144,7 +142,7 @@ const Home = () => {
       GetApi(api_server_url + '/questions/' + type + '/' + currentPhase)
         .then(function (value) {
 
-          if (getCookie('completed') || (getCookie('starting_date') > now)) {
+          if (getCookie('completed') || (getCookie('starting_date') > now.getTime())) {
             setQuestionsAvailable(false);
           }
 

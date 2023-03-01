@@ -201,17 +201,17 @@ const Landing = () => {
         setButtonText('Waiting for others to join...'); // Wait for others to join
         setButtonStatus(true);
 
-        if (!isIOS) {
-          OneSignal.getUserId(function (userId) {
-            AddTags(userId, session_id_S, code_S).then(() => {
-              openListener(); // Wait for others to join
-            });
-          });
-        }
+        // if (!isIOS) {
+        //   OneSignal.getUserId(function (userId) {
+        //     AddTags(userId, session_id_S, code_S).then(() => {
+        //       openListener(); // Wait for others to join
+        //     });
+        //   });
+        // }
 
-        if (isIOS) {
+        // if (isIOS) {
           openListener(); // Wait for others to join
-        }
+        // }
       }).catch(error => {
         alert(error);
       });
@@ -238,7 +238,7 @@ const Landing = () => {
                 tomorrow.setHours(0, 0, 0, 0);
                 tomorrow.setDate(tomorrow.getDate() + 1);
 
-                setCookie('starting_date', tomorrow, 7);
+                setCookie('starting_date', tomorrow.getTime(), 7);
 
                 console.log(tomorrow);
 

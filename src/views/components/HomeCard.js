@@ -31,7 +31,7 @@ export const HomeCard = (props) => {
         })}
 
         <hr style={{ height: '4px', background: '#9ef1e2' }} /> */}
-        <p style={{ color: 'white', padding: '0' }}>You will receive a push notification when new questions are available <CIcon icon={cilBell} /></p>
+        <p style={{ color: 'white', padding: '0' }}>You will receive a notification when new questions are available <CIcon icon={cilBell} /></p>
       </CCard>
     </>
   )
