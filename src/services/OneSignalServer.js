@@ -28,7 +28,7 @@ export async function SendWelcomeSMS(phone, message, datetime, click_url) {
     datetime: datetime || null,
     click_url: click_url
   }
-  await PostApi(api_server_url + '/sms-push', body)
+  await PostApi(api_server_url + '/sms-start', body)
     .then(function (value) {
       console.log("Sending SMS Push... => ", value);
     });
@@ -104,7 +104,7 @@ export function StartCampaign(code, phone) {
   //Welcome Message
   // if (isIOS) {
   // TODO ADD NEW
-  SendSMSByCode(phone, 'Welcome to Family Moments Experience!', null, app_url);
+  SendWelcomeSMS(phone, 'Welcome to Family Moments Experience!', null, app_url);
   // } else {
   //   SendWebPushByCode(code, headings, "Welcome to Family Moments Experience!", campaign, datetime, topic, app_url);
   // }
@@ -112,11 +112,8 @@ export function StartCampaign(code, phone) {
   var d = new Date();
   var n = d.toLocaleTimeString('en-US', { hour12: false });
 
-
-
   for (let i = 0; i < total_days; i++) {
     const [next] = tomorrow.toISOString().split('T');
-
     // let phaseA_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseA_time));
     // let phaseB_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseB_time));
     // let phaseC_meritTime = addMinutes(15, new Date(next + 'T' + settings.phaseC_time));
@@ -147,7 +144,6 @@ export function StartCampaign(code, phone) {
     //   SendWebPushByCode(code, headings, reminderContent, campaign, phaseC_meritTime, topic, clickUrl); // Phase C Campaign Merit Time
 
     // }
-
     tomorrow.setDate(tomorrow.getDate() + 1)
   }
 }
