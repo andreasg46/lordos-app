@@ -16,7 +16,7 @@ export function IdleTimer() {
     function resetTimer() {
       console.log("Idle timer started...");
       clearTimeout(time);
-      time = setTimeout(logout, 60000)
+      time = setTimeout(logout, 600000);
     }
   };
   inactivityTime();

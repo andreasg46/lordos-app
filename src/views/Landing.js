@@ -118,7 +118,7 @@ const Landing = () => {
 
                         //===== CASE 2 =====// Session Found 
                         else if (session_id) { // (iPhone User)
-
+                          
                           // if (isIOS) {
                           swalQueue.fire({
                             title: "What's your phone number?",
