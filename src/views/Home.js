@@ -220,7 +220,7 @@ const Home = () => {
   function submitAnswer() {
     setPreviousQuestionFlag(false);
 
-    console.log(selected_options);
+    //console.log(selected_options);
 
     if (selected_options.length === 0) {
       Alert("You must submit an answer!", 'warning');
@@ -233,14 +233,13 @@ const Home = () => {
 
       if (correct_option == 1) { // yes/no question
         if (selected_options == '2' && role == 'parent') { // No => skip questions where true
-          alert("The following questions were skipped!");
+          Alert('Completed!', 'success');
           index = getCookie('index');
           index = total;
           setCookieByHours('index', index, 1);
         }
 
         if (selected_options == '2' && role == 'child') { // No => skip questions where true
-          alert("The following questions were skipped!");
           index = getCookie('index');
           index++;
           setCookieByHours('index', index, 1);

@@ -118,41 +118,47 @@ const Landing = () => {
 
                         //===== CASE 2 =====// Session Found 
                         else if (session_id) { // (iPhone User)
-                          
-                          // if (isIOS) {
-                          swalQueue.fire({
-                            title: "What's your phone number?",
-                            input: "text",
-                            inputPlaceholder: '99123456',
-                            currentProgressStep: 1,
-                            inputValidator: (value) => {
-
-                              if (!value) {
-                                return 'You need to write something!'
-                              }
-                              else {
-                                phone = '+357' + value;
-                                setPhone_S('+357' + value);
-                                AddDevice('+357' + value, code, session_id).then(value => {
-                                  if (value.response !== '') {
-                                    Alert(value.response.message, 'success')
-                                    setUserReady(true);
-                                    console.log(value);
-                                  } else {
-                                    swalQueue.fire({
-                                      title: "Oops. Something went wrong. Please try again!",
-                                      currentProgressStep: 1,
-                                    }).then((result) => {
-                                      if (result.isConfirmed) {
-                                        WelcomeAlert();
+                          GetApi(api_server_url + '/session/user/' + code).then(user => {
+                            if (user.start_date === null) {  //if campaign not started yet
+                              swalQueue.fire({
+                                title: "What's your phone number?",
+                                input: "text",
+                                inputPlaceholder: '99123456',
+                                currentProgressStep: 1,
+                                inputValidator: (value) => {
+    
+                                  if (!value) {
+                                    return 'You need to write something!'
+                                  }
+                                  else {
+                                    phone = '+357' + value;
+                                    setPhone_S('+357' + value);
+                                    AddDevice('+357' + value, code, session_id).then(value => {
+                                      if (value.response !== '') {
+                                        Alert(value.response.message, 'success')
+                                        setUserReady(true);
+                                        console.log(value);
+                                      } else {
+                                        swalQueue.fire({
+                                          title: "Oops. Something went wrong. Please try again!",
+                                          currentProgressStep: 1,
+                                        }).then((result) => {
+                                          if (result.isConfirmed) {
+                                            WelcomeAlert();
+                                          }
+                                        })
                                       }
-                                    })
+                                    }
+                                    );
                                   }
                                 }
-                                );
-                              }
+                              })
+                            } else { //if campaign started already -> skip phone prompt
+                              setUserReady(true);
                             }
-                          })
+                          });
+                          // if (isIOS) {
+                          
                           // }
 
                           // else { // (Not iPhone User)
@@ -230,32 +236,47 @@ const Landing = () => {
           .then(function (value) {
             if (value) {
               if (value.count === 0) { // Check if session has all members joined
-                PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
-                setCookie('status', 'Active', 180);
-                setLoader(false);
+                GetApi(api_server_url + '/session/user/' + code_S).then(user => {
+                  if (user.start_date === null) {
+                    PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
+                    setCookie('status', 'Active', 180);
+                    setLoader(false);
+    
+                    var tomorrow = new Date();
+                    tomorrow.setHours(0, 0, 0, 0);
+                    tomorrow.setDate(tomorrow.getDate() + 1);    
+                    setCookie('starting_date', tomorrow.getTime(), 7);
+        
+                    Alert2('Session established!', 'success');
+    
+                    StartCampaign(code_S, phone_S); // Start Notifications campaign
+                    //console.log("Send sms");
+    
+                    setLoader(false);
+                    navigate('/');
+                    clearInterval(interval);
 
-                var tomorrow = new Date();
-                tomorrow.setHours(0, 0, 0, 0);
-                tomorrow.setDate(tomorrow.getDate() + 1);
+                  } else { // Don't Start Notifications campaign
+                    setCookie('status', 'Active', 180);
+                    setLoader(false);    
 
-                setCookie('starting_date', tomorrow.getTime(), 7);
+                    var startTime = new Date().getTime();
+                    startTime = startTime - 30;    
+                    setCookie('starting_date', startTime, 7); 
 
-                console.log(tomorrow);
+                    Alert2('Session established!', 'success');
 
-                Alert2('Session established!', 'success');
+                    //console.log("Do not Send sms");
 
-                StartCampaign(code_S, phone_S); // Start Notifications campaign
-
-                setLoader(false);
-                navigate('/');
-                clearInterval(interval);
-
+                    setLoader(false);
+                    navigate('/');
+                    clearInterval(interval);
+                  }                  
+                });
               }
             }
           })
-
       })
-
     }, 5000);
   }
 
