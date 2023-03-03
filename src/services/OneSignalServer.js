@@ -103,7 +103,6 @@ export function StartCampaign(code, phone) {
 
   //Welcome Message
   // if (isIOS) {
-  // TODO ADD NEW
   SendWelcomeSMS(phone, 'Welcome to Family Moments Experience!', null, app_url);
   // } else {
   //   SendWebPushByCode(code, headings, "Welcome to Family Moments Experience!", campaign, datetime, topic, app_url);

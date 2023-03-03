@@ -30,6 +30,7 @@ const getBadge = (status) => {
 }
 
 const Landing = () => {
+  const CAMPAIGN_EXPIRE = 3;
   const navigate = useNavigate();
 
   const [userReady, setUserReady] = useState(false);
@@ -37,6 +38,9 @@ const Landing = () => {
   const [loader, setLoader] = useState(false);
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
+
+
+
 
   let code = ''
   let phone = '';
@@ -90,11 +94,11 @@ const Landing = () => {
 
             findUser(code) // Step 1  => Get User Info
               .then(value => {
-                setCookie('code', code, 180);
+                setCookie('code', code, CAMPAIGN_EXPIRE);
 
                 findRole(value.RoleId) // Step 2  => Get Role Info
                   .then(value => {
-                    setCookie('role', value.title, 180);
+                    setCookie('role', value.title, CAMPAIGN_EXPIRE);
 
                     findSession(code) // Step 3  => Get Session Info
                       .then(value => {
@@ -102,7 +106,7 @@ const Landing = () => {
                         session_id = value.id || '';
                         setSessionId_S(value.id || '');
 
-                        setCookie('is_admin', (session_id === 9000) ? true : false, 180);
+                        setCookie('is_admin', (session_id === 9000) ? true : false, CAMPAIGN_EXPIRE);
 
                         //===== CASE 1 =====// Session not found
                         if (session_id === '') {
@@ -199,7 +203,7 @@ const Landing = () => {
   const joinSession = async (e) => { // Retrieve user session
     e.preventDefault();
 
-    setCookie('session_id', session_id_S, 180);
+    setCookie('session_id', session_id_S, CAMPAIGN_EXPIRE);
     setLoader(true);
 
     PutApi(api_server_url + '/session/update/' + session_id_S + '/' + code_S, { activated: true }) // Update session status
@@ -239,35 +243,33 @@ const Landing = () => {
                 GetApi(api_server_url + '/session/user/' + code_S).then(user => {
                   if (user.start_date === null) {
                     PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
-                    setCookie('status', 'Active', 180);
+                    setCookie('status', 'Active', CAMPAIGN_EXPIRE);
                     setLoader(false);
     
                     var tomorrow = new Date();
                     tomorrow.setHours(0, 0, 0, 0);
                     tomorrow.setDate(tomorrow.getDate() + 1);    
-                    setCookie('starting_date', tomorrow.getTime(), 7);
+                    setCookie('starting_date', tomorrow.getTime(), CAMPAIGN_EXPIRE);
         
                     Alert2('Session established!', 'success');
     
                     StartCampaign(code_S, phone_S); // Start Notifications campaign
-                    //console.log("Send sms");
-    
+                    //console.log("Send sms");    
                     setLoader(false);
                     navigate('/');
                     clearInterval(interval);
 
                   } else { // Don't Start Notifications campaign
-                    setCookie('status', 'Active', 180);
+                    setCookie('status', 'Active', CAMPAIGN_EXPIRE);
                     setLoader(false);    
 
                     var startTime = new Date().getTime();
                     startTime = startTime - 30;    
-                    setCookie('starting_date', startTime, 7); 
+                    setCookie('starting_date', startTime, CAMPAIGN_EXPIRE);
 
                     Alert2('Session established!', 'success');
 
                     //console.log("Do not Send sms");
-
                     setLoader(false);
                     navigate('/');
                     clearInterval(interval);

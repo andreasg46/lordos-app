@@ -14,6 +14,7 @@ import { IdleTimer } from 'src/services/IdleTimer';
 
 
 const Home = () => {
+  const HOURS_EXPIRE = 1;  
   var now = new Date();
   CheckSession();
 
@@ -45,7 +46,7 @@ const Home = () => {
   const [options, setOptions] = useState([]);
   const [correct_option, setCorrectOption] = useState(0);
 
-  if (!getCookie('index')) { setCookieByHours('index', 0, 1); }
+  if (!getCookie('index')) { setCookieByHours('index', 0, HOURS_EXPIRE); }
   const [indexText, setIndexText] = useState((getCookie('index')));
   let index = getCookie('index');
 
@@ -74,7 +75,7 @@ const Home = () => {
       previousPhase = 'N/A';
       currentPhase = 'N/A';
       pendingPhase = 'A';
-      pendingPhaseTime = '09:00';
+      pendingPhaseTime = '12:00';
     } else {
       previousPhase = GetPreviousPhase();
       currentPhase = GetCurrentPhase();
@@ -201,7 +202,7 @@ const Home = () => {
   function previousQuestion() {
     index = getCookie('index');
     index--;
-    setCookieByHours('index', index, 1);
+    setCookieByHours('index', index, HOURS_EXPIRE);
 
 
     if (index >= 0) {
@@ -229,26 +230,26 @@ const Home = () => {
 
       index = getCookie('index');
       index++;
-      setCookieByHours('index', index, 1);
+      setCookieByHours('index', index, HOURS_EXPIRE);
 
       if (correct_option == 1) { // yes/no question
         if (selected_options == '2' && role == 'parent') { // No => skip questions where true
           Alert('Completed!', 'success');
           index = getCookie('index');
           index = total;
-          setCookieByHours('index', index, 1);
+          setCookieByHours('index', index, HOURS_EXPIRE);
         }
 
         if (selected_options == '2' && role == 'child') { // No => skip questions where true
           index = getCookie('index');
           index++;
-          setCookieByHours('index', index, 1);
+          setCookieByHours('index', index, HOURS_EXPIRE);
           let tmp_correct_option = questions[index].correct_option;
 
           while (tmp_correct_option == "true") {
             index = getCookie('index');
             index++;
-            setCookieByHours('index', index, 1);
+            setCookieByHours('index', index, HOURS_EXPIRE);
             tmp_correct_option = questions[index].correct_option;
           }
         }
@@ -268,8 +269,8 @@ const Home = () => {
         setPreviousQuestionFlag(true);
         setEditAnswersFlag(true);
 
-        setCookieByHours('index', 0, 1);
-        setCookieByHours('completed', true, 1);
+        setCookieByHours('index', 0, HOURS_EXPIRE);
+        setCookieByHours('completed', true, HOURS_EXPIRE);
 
         setTitle('');
         setTypeOfQuestion('');

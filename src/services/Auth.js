@@ -7,7 +7,7 @@ import { getCookie } from './Cookies';
 export const CheckSession = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
+  useEffect(() => { 
     if (!getCookie('session_id')) {
       navigate('/landing');
     }
