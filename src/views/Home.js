@@ -14,7 +14,7 @@ import { IdleTimer } from 'src/services/IdleTimer';
 
 
 const Home = () => {
-  const HOURS_EXPIRE = 1;  
+  const HOURS_EXPIRE = 3;  
   var now = new Date();
   CheckSession();
 

@@ -30,7 +30,9 @@ const getBadge = (status) => {
 }
 
 const Landing = () => {
-  const CAMPAIGN_EXPIRE = 3;
+  const CAMPAIGN_EXPIRE = 8;
+  const CAMPAIGN_LAST = 7;
+  const CAMPAIGN_VISIBILITY = 1;
   const navigate = useNavigate();
 
   const [userReady, setUserReady] = useState(false);
@@ -229,7 +231,7 @@ const Landing = () => {
 
   function openListener() { // Check if all users are activated and update db
     let day = new Date();
-    let end_date = day.getTime() + 7 * 24 * 60 * 60 * 1000; // End date time
+    let end_date = day.getTime() + CAMPAIGN_LAST * 24 * 60 * 60 * 1000; // End date time
     end_date = new Date(end_date);
 
     const interval = setInterval(() => {
@@ -242,13 +244,13 @@ const Landing = () => {
               if (value.count === 0) { // Check if session has all members joined
                 GetApi(api_server_url + '/session/user/' + code_S).then(user => {
                   if (user.start_date === null) {
-                    PutApi(api_server_url + '/sessions/update/' + getCookie('session_id'), { start_date: new Date(day), end_date: end_date, status: 'Active' });
+                    PutApi(api_server_url + '/session/update/' + getCookie('session_id'), code_S, { activated: true, start_date: new Date(day), end_date: end_date, status: 'Active' });
                     setCookie('status', 'Active', CAMPAIGN_EXPIRE);
                     setLoader(false);
     
                     var tomorrow = new Date();
                     tomorrow.setHours(0, 0, 0, 0);
-                    tomorrow.setDate(tomorrow.getDate() + 1);    
+                    tomorrow.setDate(tomorrow.getDate() + CAMPAIGN_VISIBILITY);    
                     setCookie('starting_date', tomorrow.getTime(), CAMPAIGN_EXPIRE);
         
                     Alert2('Session established!', 'success');

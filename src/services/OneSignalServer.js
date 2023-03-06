@@ -83,6 +83,8 @@ export async function AddDevice(phone, code, session_id) {
 }
 
 export function StartCampaign(code, phone) {
+
+  //console.log("campaign will start");
   // Start Push Server Campaign
   const headings = 'Knock Knock!'
   const subtitle = 'Questions are now available!';
