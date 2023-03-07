@@ -244,7 +244,7 @@ const Landing = () => {
               if (value.count === 0) { // Check if session has all members joined
                 GetApi(api_server_url + '/session/user/' + code_S).then(user => {
                   if (user.start_date === null) {
-                    PutApi(api_server_url + '/session/update/' + getCookie('session_id'), code_S, { activated: true, start_date: new Date(day), end_date: end_date, status: 'Active' });
+                    PutApi(api_server_url + '/session/update/' + getCookie('session_id') +'/'+ code_S, { activated: true, start_date: new Date(day), end_date: end_date, status: 'Active' });
                     setCookie('status', 'Active', CAMPAIGN_EXPIRE);
                     setLoader(false);
     

@@ -75,7 +75,7 @@ const Home = () => {
       previousPhase = 'N/A';
       currentPhase = 'N/A';
       pendingPhase = 'A';
-      pendingPhaseTime = '12:00';
+      pendingPhaseTime = '09:00';
     } else {
       previousPhase = GetPreviousPhase();
       currentPhase = GetCurrentPhase();
