@@ -47,7 +47,7 @@ const Questions = (props) => {
                     return (
                       <div key={index}>
                         <CButton className='question-card' style={{ cursor: 'initial' }}>
-                          <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} />
+                          <CFormCheck className='question-checkbox' id={(index).toString()} value={option} key={option} label={option} onChange={props.handleSelect} />
                         </CButton>
                       </div>
                     )
@@ -55,7 +55,7 @@ const Questions = (props) => {
                     return (
                       <div key={index}>
                         <CButton className='question-card' style={{ cursor: 'initial' }}>
-                          <CFormCheck className='question-checkbox' id={(index + 1).toString()} value={option} key={option} label={option} onChange={props.handleSelect} name="flexRadioDefault" type="radio" />
+                          <CFormCheck className='question-checkbox' id={(index).toString()} value={option} key={option} label={option} onChange={props.handleSelect} name="flexRadioDefault" type="radio" />
                         </CButton>
                       </div>
                     )

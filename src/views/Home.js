@@ -233,14 +233,14 @@ const Home = () => {
       setCookieByHours('index', index, HOURS_EXPIRE);
 
       if (correct_option == 1) { // yes/no question
-        if (selected_options == '2' && role == 'parent') { // No => skip questions where true
+        if (selected_options == '1' && role == 'parent') { // No => skip questions where true
           Alert('Completed!', 'success');
           index = getCookie('index');
           index = total;
           setCookieByHours('index', index, HOURS_EXPIRE);
         }
 
-        if (selected_options == '2' && role == 'child') { // No => skip questions where true
+        if (selected_options == '1' && role == 'child') { // No => skip questions where true
           index = getCookie('index');
           index++;
           setCookieByHours('index', index, HOURS_EXPIRE);
