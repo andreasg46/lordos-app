@@ -30,9 +30,9 @@ const getBadge = (status) => {
 }
 
 const Landing = () => {
-  const CAMPAIGN_EXPIRE = 8;
-  const CAMPAIGN_LAST = 7;
-  const CAMPAIGN_VISIBILITY = 1;
+  const CAMPAIGN_EXPIRE = 8; //set to 8
+  const CAMPAIGN_LAST = 7; //set to 7
+  const CAMPAIGN_VISIBILITY = 1; //set to 1
   const navigate = useNavigate();
 
   const [userReady, setUserReady] = useState(false);
@@ -40,9 +40,6 @@ const Landing = () => {
   const [loader, setLoader] = useState(false);
   const [buttonText, setButtonText] = useState('Join');
   const [buttonStatus, setButtonStatus] = useState(false);
-
-
-
 
   let code = ''
   let phone = '';
