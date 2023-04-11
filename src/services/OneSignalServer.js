@@ -97,6 +97,7 @@ export function StartCampaign(code, phone) {
   const reminderContent = 'Have you completed your task? If not do it now!';
 
   const tomorrow = new Date(today);
+  console.log("today is: " + tomorrow);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
 
@@ -123,9 +124,11 @@ export function StartCampaign(code, phone) {
     let phaseA_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseA_time));
     let phaseB_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseB_time));
     let phaseC_meritTime = addMinutes(reminderTime, new Date(next + 'T' + settings.phaseC_time));
+    let x = new Date(next + 'T' + settings.phaseA_time);
+    console.log(x);
 
     //if (isIOS) {
-    SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
+    //SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
     //SendSMSByCode(phone, reminderContent, phaseA_meritTime, clickUrl); // Phase A Campaign Merit Time
 
     // SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
@@ -145,7 +148,8 @@ export function StartCampaign(code, phone) {
     //   SendWebPushByCode(code, headings, reminderContent, campaign, phaseC_meritTime, topic, clickUrl); // Phase C Campaign Merit Time
 
     // }
-    console.log(tomorrow.getDate());
+  
+    
     tomorrow.setDate(tomorrow.getDate() + 1);
   }
 }
