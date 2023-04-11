@@ -126,13 +126,13 @@ export function StartCampaign(code, phone) {
 
     //if (isIOS) {
     SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseA_time), clickUrl); // Phase A Campaign
-    SendSMSByCode(phone, reminderContent, phaseA_meritTime, clickUrl); // Phase A Campaign Merit Time
+    //SendSMSByCode(phone, reminderContent, phaseA_meritTime, clickUrl); // Phase A Campaign Merit Time
 
-    SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
-    SendSMSByCode(phone, reminderContent, phaseB_meritTime, clickUrl); // Phase B Campaign Merit Time
+    // SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseB_time), clickUrl); // Phase B Campaign
+    // SendSMSByCode(phone, reminderContent, phaseB_meritTime, clickUrl); // Phase B Campaign Merit Time
 
-    SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
-    SendSMSByCode(phone, reminderContent, phaseC_meritTime, clickUrl); // Phase C Campaign Merit Time
+    // SendSMSByCode(phone, messageContent, new Date(next + 'T' + settings.phaseC_time), clickUrl); // Phase C Campaign
+    // SendSMSByCode(phone, reminderContent, phaseC_meritTime, clickUrl); // Phase C Campaign Merit Time
 
     // } else {
     //   SendWebPushByCode(code, headings, messageContent, campaign, new Date(next + 'T' + settings.phaseA_time), topic, clickUrl); // Phase A Campaign
@@ -145,6 +145,7 @@ export function StartCampaign(code, phone) {
     //   SendWebPushByCode(code, headings, reminderContent, campaign, phaseC_meritTime, topic, clickUrl); // Phase C Campaign Merit Time
 
     // }
-    tomorrow.setDate(tomorrow.getDate() + 1)
+    console.log(tomorrow.getDate());
+    tomorrow.setDate(tomorrow.getDate() + 1);
   }
 }

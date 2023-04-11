@@ -14,13 +14,13 @@ import { cilArrowCircleLeft, cilArrowCircleRight } from '@coreui/icons'
 
 const Questions = (props) => {
   var title_texts_pre = props.title.split('|')
-  console.log(title_texts_pre[2]);
+
   var color =
     title_texts_pre.length > 2  && /^\s*#[0-9A-F]{6}\s*$/i.test(title_texts_pre[2]) 
       ? title_texts_pre[2]
       : 'black'
   
-  console.log(color);
+
   var title_texts = title_texts_pre.slice(0, 2).map(function (word, index) {
     if (index === 0) {
       return (
